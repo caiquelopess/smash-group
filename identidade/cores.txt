@@ -1,0 +1,19 @@
+SMASH CLIENT - IDENTIDADE VISUAL
+================================
+
+CORES OFICIAIS (hex)
+- Principal: #FF7A00  (laranja - "SMASH" da logo, embeds do Discord)
+- Destaque:  #FEE516  (amarelo - topo do "SMASH" da logo)
+- Fundo:     #130001  (preto avermelhado - fundo do ícone)
+- Extra:     #CF0A05  (vermelho - raposa da logo)
+
+ARQUIVOS
+- logo.png         logo colorida (raposa + SMASH CLIENT), fundo transparente
+- logo-branca.png  logo branca monocromática, fundo transparente (marca d'água, 30-50% de opacidade)
+- icone.png        ícone (selo da raposa), fundo transparente
+
+LINKS OFICIAIS
+- Download do APK (Smash Client): em breve
+- Discord: https://discord.gg/5F77ZhZuv3
+- YouTube: https://youtube.com/@smashrankup
+- Servidor: SmashMC.blazebr.com  porta 26685
