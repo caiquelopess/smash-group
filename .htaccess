@@ -1,0 +1,6 @@
+# Apache: tipos certos para o Python no navegador
+AddType application/wasm .wasm
+AddType application/zip .zip .whl
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html application/javascript application/wasm application/json
+</IfModule>

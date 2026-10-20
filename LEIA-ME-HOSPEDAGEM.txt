@@ -1,0 +1,38 @@
+SMASH TEXTURAS - site do conversor (Java 1.8.9 -> MCPE 1.1.5)
+
+E um site 100% estatico: so arquivos. A conversao roda no navegador de quem usa
+(Python + Pillow + NumPy compilados para o navegador, pasta pyodide/). O servidor so
+entrega os arquivos; nao precisa de PHP, banco de dados nem Python no servidor.
+Tamanho: ~30 MB (o navegador baixa uma vez e guarda em cache).
+
+Arquivos:
+  index.html          pagina (no topo do <script>: SMASH = nome, servidor, porta, linkCliente)
+                      cores: no topo do <style>, --smash e --smash-2
+  worker.js           roda o conversor fora da tela principal
+  conversor.zip       converter.py + ui_scale.py + web.py + base/ (texturas do Bedrock)
+  pyodide/            Python do navegador (nao mexer)
+  .htaccess           so para Apache
+
+IMPORTANTE: precisa ser aberto por http:// ou https:// (abrir o index.html direto do
+arquivo nao funciona). O .wasm precisa ir com o tipo application/wasm.
+
+1) VPS / maquina propria (o servidor do Minecraft roda numa VPS com IP proprio)
+   Teste rapido:   cd smash-texturas && python3 -m http.server 8080
+                   -> http://IP_DA_VPS:8080   (libere a porta 8080 no firewall)
+   Fixo com nginx: copie a pasta para /var/www/smash-texturas e use:
+       server {
+         listen 80;  server_name texturas.seudominio.com;
+         root /var/www/smash-texturas;
+         types { application/wasm wasm; }   # se o mime.types for antigo
+         gzip on; gzip_types application/javascript application/wasm application/json;
+       }
+   Com Caddy (ja faz https sozinho):  texturas.seudominio.com { root * /var/www/smash-texturas  file_server }
+
+2) Hospedagem de Minecraft com painel (Pterodactyl etc.), onde so a porta do jogo fica aberta:
+   normalmente NAO da para servir site ai. Use uma hospedagem estatica gratis:
+   - Cloudflare Pages / Netlify: arraste a pasta inteira no painel deles.
+   - GitHub Pages: suba a pasta num repositorio e ative Pages.
+   Depois aponte um subdominio (ex.: texturas.smash...) para la.
+
+Limites: packs ate 128x vao bem no celular; 256x e pesado e pode faltar memoria no
+celular (no PC funciona). Navegadores atuais (Chrome, Edge, Firefox, Safari 15+).
