@@ -71,8 +71,9 @@ a { color: var(--smash-2); }
 .intro p { margin: 0; color: var(--muted); max-width: 62ch; }
 
 /* ferramenta */
-.grade { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 18px; align-items: start; }
-@media (max-width: 820px) { .grade { grid-template-columns: minmax(0, 1fr); } }
+.grade { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); grid-template-areas: "a pack" "b pack"; gap: 18px; align-items: start; }
+.area-a { grid-area: a; } .area-b { grid-area: b; } .area-pack { grid-area: pack; }
+@media (max-width: 820px) { .grade { grid-template-columns: minmax(0, 1fr); grid-template-areas: "a" "pack" "b"; } }
 .cartao { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; min-width: 0; }
 .passos { display: grid; gap: 18px; }
 .passo { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; }
@@ -138,14 +139,31 @@ section.bloco-sec h2 { margin: 0; font: 700 24px/1.2 var(--f-display); text-wrap
 .dois ol { margin: 0; padding-left: 18px; color: var(--muted); }
 .dois ol b, .dois ol code { color: var(--text); }
 code { font-size: .92em; overflow-wrap: anywhere; }
-.novidades { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
-@media (max-width: 820px) { .novidades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.novidades { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
+@media (max-width: 960px) { .novidades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .novidades { grid-template-columns: minmax(0, 1fr); } }
 .novidades li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 14px; }
 .novidades svg { width: 22px; height: 22px; color: var(--smash-2); }
 .cta a.btn { text-decoration: none; }
 .cta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--smash); border-radius: var(--r); padding: 16px 18px; }
 .cta p { margin: 0; }
+.saidas { border: 0; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.saidas legend { color: var(--muted); padding: 0 0 6px; }
+@media (max-width: 460px) { .saidas { grid-template-columns: minmax(0, 1fr); } }
+.saida { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); cursor: pointer; }
+.saida input { margin: 3px 0 0; accent-color: var(--smash); }
+.saida b { display: block; font-weight: 600; }
+.saida small { color: var(--muted); font-size: 12px; }
+.saida:has(input:checked) { border-color: var(--smash); box-shadow: inset 0 0 0 1px var(--smash); }
+.saida.off { cursor: not-allowed; opacity: .6; }
+.btn.largo { width: 100%; padding-block: 13px; font-size: 16px; }
+.nota { margin: 0; color: var(--muted); font-size: 14px; max-width: 70ch; }
+.nota b, .nota code { color: var(--text); }
+.dois ol { display: grid; gap: 6px; }
+.dois .nota { margin-top: 10px; font-size: 13px; }
+.problemas h3 { margin: 0 0 6px; font: 600 16px var(--f-display); }
+.problemas ul { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 4px; font-size: 14px; }
+.problemas code { color: var(--text); }
 footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); margin-top: 34px; }
 </style>
 </head>
@@ -171,42 +189,53 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
   </div>
 
   <div class="grade">
-    <div class="cartao passos" aria-live="polite">
+    <div class="cartao passos area-a" aria-live="polite">
 
       <div class="passo ativo" id="p1">
         <div class="num">1</div>
-        <div>
-          <h2>Versões</h2>
+        <div style="display:grid;gap:12px">
+          <h2>Versão e formato</h2>
           <div class="versoes">
             <span class="chip on">Java 1.8.9</span>
             <span class="seta" aria-hidden="true">→</span>
             <span class="chip on">MCPE 1.1.5</span>
             <span class="chip off" title="Em breve">Java 1.9 a 1.21 · em breve</span>
           </div>
+          <fieldset class="saidas">
+            <legend class="pixel">Como você quer receber</legend>
+            <label class="saida">
+              <input type="radio" name="saida" id="saidaZip" value="zip" checked>
+              <span><b>Pack em .zip</b><small>Para colocar na pasta resource_packs do celular</small></span>
+            </label>
+            <label class="saida off" title="Em breve">
+              <input type="radio" name="saida" id="saidaApk" value="apk" disabled>
+              <span><b>Direto no APK</b><small>Disponível em breve</small></span>
+            </label>
+          </fieldset>
         </div>
       </div>
 
       <div class="passo" id="p2">
         <div class="num">2</div>
         <div style="display:grid;gap:10px">
-          <h2>Envie o pack (.zip)</h2>
+          <h2>Envie o pack do Java (.zip)</h2>
           <label class="drop" id="drop" for="arquivo">
             <input type="file" id="arquivo" accept=".zip,application/zip">
             <strong>Toque para escolher ou arraste o .zip aqui</strong>
             <span>O mesmo arquivo que você colocaria na pasta resourcepacks do Java</span>
           </label>
-          <div class="status" id="status"><span class="giro" id="giro" hidden></span><span id="statusTexto">O conversor começa a carregar assim que a página abre (cerca de 30 MB na primeira vez).</span></div>
-          <div class="linha">
-            <button class="btn" id="converter" type="button" disabled>Converter</button>
-          </div>
+          <div class="status" id="status"><span class="giro" id="giro" hidden></span><span id="statusTexto">Carregando… 0%</span></div>
         </div>
       </div>
 
+    </div>
+
+    <div class="cartao passos area-b" aria-live="polite">
       <div class="passo" id="p3">
         <div class="num">3</div>
         <div style="display:grid;gap:10px">
-          <h2>Baixe o resultado</h2>
-          <p class="vazio" id="semResultado">Os arquivos aparecem aqui quando a conversão terminar.</p>
+          <h2>Baixe e instale</h2>
+          <p class="vazio" id="semResultado">O .zip aparece aqui quando a conversão terminar. Depois siga o passo a passo de instalação logo abaixo.</p>
           <div class="baixar" id="baixar" hidden></div>
           <div class="resumo" id="resumo" hidden></div>
           <ul class="avisos" id="avisos" hidden></ul>
@@ -214,10 +243,10 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
       </div>
     </div>
 
-    <aside class="cartao pack" id="cartaoPack">
+    <aside class="cartao pack area-pack" id="cartaoPack">
       <span class="pixel" style="color:var(--muted)">Pack escolhido</span>
       <div class="pack-topo">
-        <img class="icone" id="packIcone" alt="" width="72" height="72" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%231f1b2a'/%3E%3Cpath d='M1 1h3v3H1zM4 4h3v3H4z' fill='%232c2639'/%3E%3C/svg%3E">
+        <img class="icone" id="packIcone" alt="" width="72" height="72" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%23280d09'/%3E%3Cpath d='M1 1h3v3H1zM4 4h3v3H4z' fill='%23401912'/%3E%3C/svg%3E">
         <div style="min-width:0">
           <h3 id="packNome">Nenhum pack ainda</h3>
           <div class="mcdesc" id="packDesc">Escolha um .zip para ver o nome e a descrição</div>
@@ -229,33 +258,47 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
         <div class="dado"><small>Arquivos</small><b id="packArq">—</b></div>
       </div>
       <span class="chip selo" id="packSelo" hidden></span>
+      <button class="btn largo" id="converter" type="button" disabled>Converter</button>
     </aside>
   </div>
 
-  <section class="bloco-sec">
-    <h2>Como usar no jogo</h2>
+  <section class="bloco-sec" id="instalar">
+    <h2>Como instalar o pack</h2>
+    <p class="nota">O MCPE 1.1.5 não abre arquivos <b>.mcpack</b>. O pack vai como pasta, dentro de <code>games/com.mojang/resource_packs</code> no celular.</p>
     <div class="dois">
       <div class="cartao">
-        <h3>Pelo .mcpack (mais fácil)</h3>
+        <h3>No celular (Android)</h3>
         <ol>
-          <li>Baixe o arquivo <b>.mcpack</b>.</li>
-          <li>Toque nele e escolha abrir com o <b>Smash Client</b>; o jogo importa sozinho.</li>
-          <li>No jogo: <b>Configurações › Recursos Globais</b>, ative o pack e coloque no topo.</li>
+          <li>Baixe o <b>.zip</b> do pack aqui no site.</li>
+          <li>Abra um gerenciador de arquivos (Arquivos do Google, ZArchiver ou o do próprio celular), toque no .zip e escolha <b>Extrair</b>.</li>
+          <li>Mova a pasta que saiu (<code>NomeDoPack_MCPE_1.1.5</code>) para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code></li>
+          <li>Abra o Smash Client: <b>Configurações › Recursos Globais</b>, toque no pack, ative e deixe no topo da lista.</li>
         </ol>
       </div>
       <div class="cartao">
-        <h3>Direto no APK (substitui as texturas padrão)</h3>
+        <h3>No PC (passando para o celular)</h3>
         <ol>
-          <li>Baixe o <b>_APK.zip</b>.</li>
-          <li>Extraia por cima de <code>Area 51/jogo/assets/resource_packs/vanilla/</code>.</li>
-          <li>No Termux, rode <code>mc</code> e instale o <code>novo.apk</code>.</li>
+          <li>Converta e baixe o <b>.zip</b> no PC.</li>
+          <li>Clique com o botão direito no .zip › <b>Extrair tudo</b>.</li>
+          <li>Ligue o celular no cabo USB e escolha <b>Transferência de arquivos</b> na notificação do celular.</li>
+          <li>Em <b>Este Computador</b>, abra o celular e copie a pasta do pack para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code></li>
+          <li>No Smash Client: <b>Configurações › Recursos Globais</b> e ative o pack.</li>
         </ol>
+        <p class="nota">Sem cabo: mande o .zip para o celular (Google Drive ou WhatsApp como documento) e siga o passo a passo do celular.</p>
       </div>
+    </div>
+    <div class="cartao problemas">
+      <h3>Se o pack não aparecer</h3>
+      <ul>
+        <li>Abra a pasta do pack: o <code>manifest.json</code> tem que estar logo ali dentro. Se tiver uma pasta dentro de outra (<code>Pack/Pack/manifest.json</code>), tire a de dentro para fora.</li>
+        <li>Feche o jogo por completo e abra de novo depois de copiar.</li>
+        <li>Pack 256x é pesado: se o jogo ficar lento ou fechar, use uma versão 32x ou 64x do mesmo pack.</li>
+      </ul>
     </div>
   </section>
 
   <section class="bloco-sec">
-    <h2>O que tem no Smash Client 1.1.5 (64 bits)</h2>
+    <h2>O que tem no Smash Client 1.1.5</h2>
     <ul class="novidades" id="novidades"></ul>
     <div class="cta">
       <p><b>Minecraft PE com a jogabilidade do Java.</b> <span style="color:var(--muted)">Servidor SMASH já vem na lista.</span></p>
@@ -292,7 +335,6 @@ const NOVIDADES = [
   ['chat', 'Histórico do chat com os botões Anterior e Próximo'],
   ['spark', 'Partículas configuráveis nas configurações de vídeo'],
   ['sun', 'Tela sempre acesa: não apaga mais quando você fica AFK'],
-  ['sign', 'Placa corrigida: fecha ao tocar fora e não derruba o jogo'],
   ['server', 'Servidor SMASH fixo na lista de servidores'],
 ];
 /* ============================== */
@@ -344,10 +386,18 @@ function passo(n) {
 }
 function kb(n) { return n > 1048576 ? (n / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
 
+// carregamento: so a porcentagem (etapas pesam pelo tamanho dos arquivos: Python ~14 MB, NumPy/Pillow ~15 MB, conversor ~2 MB)
+let pct = 0, teto = 0, relogio = null;
+function mostraPct() { if (!pronto && !caminho) status('Carregando… ' + Math.floor(pct) + '%', true); }
+function carga(ate) {
+  teto = ate; clearInterval(relogio);
+  relogio = setInterval(() => { pct += Math.max(0.05, (teto - 1 - pct) * 0.04); if (pct > teto - 1) pct = teto - 1; mostraPct(); }, 120);
+}
 worker.onmessage = (ev) => {
   const m = ev.data;
-  if (m.tipo === 'etapa') status(m.texto + '…', true);
-  else if (m.tipo === 'pronto') { pronto = true; if (!caminho) status('Conversor pronto. Escolha o .zip do pack.', false); }
+  if (m.tipo === 'carga') carga(m.ate);
+  else if (m.tipo === 'etapa') status(m.texto + '…', true);
+  else if (m.tipo === 'pronto') { clearInterval(relogio); pct = 100; mostraPct(); pronto = true; if (!caminho) status('Conversor pronto (100%). Escolha o .zip do pack.', false); }
   else if (m.tipo === 'info') mostrarPack(m.info, m.caminho);
   else if (m.tipo === 'feito') mostrarResultado(m);
   else if (m.tipo === 'erro') {
@@ -357,7 +407,7 @@ worker.onmessage = (ev) => {
   }
 };
 worker.postMessage({ tipo: 'preparar' });
-status('Carregando o conversor (cerca de 30 MB na primeira vez)…', true);
+carga(45); mostraPct();
 
 function escolher(f) {
   if (!f) return;
@@ -381,7 +431,7 @@ function mostrarPack(info, cam) {
   else { selo.textContent = 'Pack do Java 1.8 – pronto para converter'; selo.style.color = 'var(--ok)'; }
   if (info.resolucao >= 256) { selo.textContent += ' · pack ' + info.resolucao + 'x é pesado: no celular pode faltar memória'; }
   caminho = cam; $('converter').disabled = !ok;
-  status(ok ? 'Tudo certo. Toque em Converter.' : 'Escolha um pack do Java.', false);
+  status(ok ? 'Tudo certo. Toque em Converter no cartão do pack.' : 'Escolha um pack do Java.', false);
 }
 $('arquivo').addEventListener('change', (e) => escolher(e.target.files[0]));
 const drop = $('drop');
@@ -392,7 +442,7 @@ drop.addEventListener('drop', (e) => escolher(e.dataTransfer.files[0]));
 $('converter').onclick = () => {
   if (!caminho || ocupado) return;
   ocupado = true; $('converter').disabled = true;
-  status(pronto ? 'Convertendo texturas… (pode levar alguns minutos em packs grandes)' : 'Esperando o conversor terminar de carregar…', true);
+  status(pronto ? 'Convertendo texturas… (pode levar alguns minutos em packs grandes)' : 'Carregando… ' + Math.floor(pct) + '%', true);
   worker.postMessage({ tipo: 'converter', caminho });
 };
 
@@ -401,8 +451,7 @@ function mostrarResultado(m) {
   urls.forEach(URL.revokeObjectURL); urls = [];
   const box = $('baixar'); box.innerHTML = ''; box.hidden = false; $('semResultado').hidden = true;
   const itens = [
-    [m.arquivos.mcpack, 'Resource pack para importar no jogo', 'application/octet-stream', true],
-    [m.arquivos.apk, 'Pasta textures/font/ui para colocar direto no APK', 'application/zip', false],
+    [m.arquivos.pack, 'Pack pronto: extraia em games/com.mojang/resource_packs', 'application/zip', true],
     [m.arquivos.relatorio, 'Relatório: o que foi convertido e o que ficou original', 'text/plain', false],
   ];
   itens.forEach(([a, desc, tipo, principal]) => {
@@ -422,7 +471,7 @@ function mostrarResultado(m) {
   Object.entries(r.categorias || {}).forEach(([k, v]) => add(`${nomes[k] || k} <b>${v}</b>`));
   const av = $('avisos'); av.innerHTML = ''; av.hidden = !(r.avisos && r.avisos.length);
   (r.avisos || []).forEach((t) => { const li = document.createElement('li'); li.textContent = t; av.appendChild(li); });
-  status('Pronto! Baixe o .mcpack ou o _APK.zip.', false);
+  status('Pronto! Baixe o .zip e siga o passo a passo de instalação.', false);
 }
 </script>
 </body>
