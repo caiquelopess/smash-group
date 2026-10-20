@@ -264,34 +264,35 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
 
   <section class="bloco-sec" id="instalar">
     <h2>Como instalar o pack</h2>
-    <p class="nota">O MCPE 1.1.5 não abre arquivos <b>.mcpack</b>. O pack vai como pasta, dentro de <code>games/com.mojang/resource_packs</code> no celular.</p>
+    <p class="nota">O MCPE 1.1.5 não abre arquivos <b>.mcpack</b>: o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
     <div class="dois">
       <div class="cartao">
-        <h3>No celular (Android)</h3>
+        <h3>No celular (Smash Client)</h3>
         <ol>
-          <li>Baixe o <b>.zip</b> do pack aqui no site.</li>
-          <li>Abra um gerenciador de arquivos (Arquivos do Google, ZArchiver ou o do próprio celular), toque no .zip e escolha <b>Extrair</b>.</li>
-          <li>Mova a pasta que saiu (<code>NomeDoPack_MCPE_1.1.5</code>) para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code></li>
+          <li>Baixe o <b>.zip</b> do pack aqui no site. Não precisa extrair.</li>
+          <li>Abra um gerenciador de arquivos (Arquivos do Google, ZArchiver ou o do próprio celular) e mova o .zip da pasta <b>Download</b> para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code></li>
           <li>Abra o Smash Client: <b>Configurações › Recursos Globais</b>, toque no pack, ative e deixe no topo da lista.</li>
+          <li><b>Feche o jogo por completo</b> (tire dos apps recentes) e abra de novo.</li>
         </ol>
       </div>
       <div class="cartao">
-        <h3>No PC (passando para o celular)</h3>
+        <h3>No PC (Minecraft for Windows 10)</h3>
         <ol>
-          <li>Converta e baixe o <b>.zip</b> no PC.</li>
-          <li>Clique com o botão direito no .zip › <b>Extrair tudo</b>.</li>
-          <li>Ligue o celular no cabo USB e escolha <b>Transferência de arquivos</b> na notificação do celular.</li>
-          <li>Em <b>Este Computador</b>, abra o celular e copie a pasta do pack para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code></li>
-          <li>No Smash Client: <b>Configurações › Recursos Globais</b> e ative o pack.</li>
+          <li>Baixe o <b>.zip</b> do pack aqui no site.</li>
+          <li>Aperte <b>Windows + R</b>, cole o caminho abaixo e dê Enter:<br><code>%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs</code></li>
+          <li>Clique com o botão direito no .zip › <b>Extrair tudo</b> e escolha essa pasta como destino.</li>
+          <li>No jogo: <b>Configurações › Recursos Globais</b>, ative o pack e deixe no topo.</li>
+          <li><b>Feche o Minecraft</b> e abra de novo.</li>
         </ol>
-        <p class="nota">Sem cabo: mande o .zip para o celular (Google Drive ou WhatsApp como documento) e siga o passo a passo do celular.</p>
+        <p class="nota">O pack é feito para a versão 1.1.5. Em versões mais novas do Windows 10 algumas texturas podem não aparecer.</p>
       </div>
     </div>
     <div class="cartao problemas">
-      <h3>Se o pack não aparecer</h3>
+      <h3>Se o pack não aparecer ou o jogo fechar</h3>
       <ul>
-        <li>Abra a pasta do pack: o <code>manifest.json</code> tem que estar logo ali dentro. Se tiver uma pasta dentro de outra (<code>Pack/Pack/manifest.json</code>), tire a de dentro para fora.</li>
-        <li>Feche o jogo por completo e abra de novo depois de copiar.</li>
+        <li>Confira se o pack está em <code>games/com.mojang/resource_packs</code>, e não em <code>resource_packs</code> de outra pasta.</li>
+        <li>No PC, abra a pasta extraída: o <code>manifest.json</code> tem que estar logo ali dentro. Se tiver uma pasta dentro de outra (<code>Pack/Pack/manifest.json</code>), tire a de dentro para fora.</li>
+        <li>Ativou e o jogo travou ou fechou: abra de novo, que na segunda vez ele carrega o pack inteiro.</li>
         <li>Pack 256x é pesado: se o jogo ficar lento ou fechar, use uma versão 32x ou 64x do mesmo pack.</li>
       </ul>
     </div>
@@ -451,7 +452,7 @@ function mostrarResultado(m) {
   urls.forEach(URL.revokeObjectURL); urls = [];
   const box = $('baixar'); box.innerHTML = ''; box.hidden = false; $('semResultado').hidden = true;
   const itens = [
-    [m.arquivos.pack, 'Pack pronto: extraia em games/com.mojang/resource_packs', 'application/zip', true],
+    [m.arquivos.pack, 'Pack pronto: coloque em games/com.mojang/resource_packs (sem extrair)', 'application/zip', true],
     [m.arquivos.relatorio, 'Relatório: o que foi convertido e o que ficou original', 'text/plain', false],
   ];
   itens.forEach(([a, desc, tipo, principal]) => {
