@@ -2,6 +2,7 @@
 importScripts('pyodide/pyodide.js');
 
 let py = null;
+const titulos = {};
 const diga = (tipo, dados) => self.postMessage(Object.assign({ tipo }, dados || {}));
 
 async function preparar() {
@@ -28,11 +29,12 @@ self.onmessage = async (ev) => {
       const nome = '/work/' + m.nome.replace(/[^\w.\- ]+/g, '_');
       p.FS.writeFile(nome, new Uint8Array(m.dados));
       const info = JSON.parse(p.runPython(`web.inspecionar(${JSON.stringify(nome)})`));
+      titulos[nome] = m.nome.replace(/\.zip$/i, '');
       diga('info', { info, caminho: nome });
     } else if (m.tipo === 'converter') {
       diga('etapa', { texto: 'Convertendo texturas' });
       const t0 = performance.now();
-      const res = JSON.parse(p.runPython(`web.converter(${JSON.stringify(m.caminho)})`));
+      const res = JSON.parse(p.runPython(`web.converter(${JSON.stringify(m.caminho)}, titulo=${JSON.stringify(titulos[m.caminho] || null).replace(/^null$/, 'None')})`));
       const ler = (c) => (c ? p.FS.readFile(c) : null);
       const arquivos = {
         pack: { nome: res.pack.split('/').pop(), dados: ler(res.pack) },

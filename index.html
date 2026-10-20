@@ -378,7 +378,7 @@ function textoMC(s) {
 }
 
 const worker = new Worker('worker.js');
-let pronto = false, caminho = null, ocupado = false, urls = [];
+let pronto = false, caminho = null, ocupado = false, urls = [], nomeArq = '';
 function status(t, girando, erro) {
   $('statusTexto').textContent = t; $('giro').hidden = !girando; $('statusTexto').className = erro ? 'erro' : '';
 }
@@ -413,12 +413,13 @@ carga(45); mostraPct();
 function escolher(f) {
   if (!f) return;
   if (!/\.zip$/i.test(f.name)) { status('Esse arquivo não é .zip. Envie o pack compactado em .zip.', false, true); return; }
+  nomeArq = f.name.replace(/\.zip$/i, '');
   caminho = null; $('converter').disabled = true; passo(2);
   status('Lendo ' + f.name + '…', true);
   f.arrayBuffer().then((buf) => worker.postMessage({ tipo: 'inspecionar', nome: f.name, dados: buf }, [buf]));
 }
 function mostrarPack(info, cam) {
-  $('packNome').textContent = info.nome;
+  $('packNome').textContent = nomeArq || info.nome;
   const d = $('packDesc'); d.textContent = ''; d.appendChild(info.descricao ? textoMC(info.descricao) : document.createTextNode('(sem descrição)'));
   if (info.icone) $('packIcone').src = 'data:image/png;base64,' + info.icone;
   $('packRes').textContent = info.resolucao ? info.resolucao + 'x' : '?';
