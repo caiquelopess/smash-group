@@ -27,6 +27,7 @@ self.onmessage = async (ev) => {
     const p = await preparar();
     if (m.tipo === 'inspecionar') {
       const nome = '/work/' + m.nome.replace(/[^\w.\- ]+/g, '_');
+      for (const f of p.FS.readdir('/work')) if (f.endsWith('.zip')) { try { p.FS.unlink('/work/' + f); } catch (e) {} }  // so o pack atual fica guardado
       p.FS.writeFile(nome, new Uint8Array(m.dados));
       const info = JSON.parse(p.runPython(`web.inspecionar(${JSON.stringify(nome)})`));
       titulos[nome] = m.nome.replace(/\.zip$/i, '');
@@ -34,7 +35,7 @@ self.onmessage = async (ev) => {
     } else if (m.tipo === 'converter') {
       diga('etapa', { texto: 'Convertendo texturas' });
       const t0 = performance.now();
-      const res = JSON.parse(p.runPython(`web.converter(${JSON.stringify(m.caminho)}, titulo=${JSON.stringify(titulos[m.caminho] || null).replace(/^null$/, 'None')})`));
+      const res = JSON.parse(p.runPython(`web.converter(${JSON.stringify(m.caminho)}, titulo=${JSON.stringify(titulos[m.caminho] || null).replace(/^null$/, 'None')}, alvo=${JSON.stringify(m.alvo || '1.1.5')})`));
       const ler = (c) => (c ? p.FS.readFile(c) : null);
       const arquivos = {
         pack: { nome: res.pack.split('/').pop(), dados: ler(res.pack) },
@@ -43,7 +44,6 @@ self.onmessage = async (ev) => {
       const transf = [arquivos.pack.dados.buffer];
       if (arquivos.relatorio) transf.push(arquivos.relatorio.dados.buffer);
       self.postMessage({ tipo: 'feito', res, arquivos, segundos: (performance.now() - t0) / 1000 }, transf);
-      try { p.FS.unlink(m.caminho); } catch (e) {}
     }
   } catch (e) {
     let msg = String(e && e.message || e);

@@ -17,16 +17,16 @@ IMPORTANTE: precisa ser aberto por http:// ou https:// (abrir o index.html diret
 arquivo nao funciona). O .wasm precisa ir com o tipo application/wasm.
 
 1) VPS / maquina propria (o servidor do Minecraft roda numa VPS com IP proprio)
-   Teste rapido:   cd smash-texturas && python3 -m http.server 8080
+   Teste rapido:   cd smash-group && python3 -m http.server 8080
                    -> http://IP_DA_VPS:8080   (libere a porta 8080 no firewall)
-   Fixo com nginx: copie a pasta para /var/www/smash-texturas e use:
+   Fixo com nginx: copie a pasta para /var/www/smash-group e use:
        server {
          listen 80;  server_name texturas.seudominio.com;
-         root /var/www/smash-texturas;
+         root /var/www/smash-group;
          types { application/wasm wasm; }   # se o mime.types for antigo
          gzip on; gzip_types application/javascript application/wasm application/json;
        }
-   Com Caddy (ja faz https sozinho):  texturas.seudominio.com { root * /var/www/smash-texturas  file_server }
+   Com Caddy (ja faz https sozinho):  texturas.seudominio.com { root * /var/www/smash-group  file_server }
 
 2) Hospedagem de Minecraft com painel (Pterodactyl etc.), onde so a porta do jogo fica aberta:
    normalmente NAO da para servir site ai. Use uma hospedagem estatica gratis:

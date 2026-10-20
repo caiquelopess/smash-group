@@ -245,7 +245,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
     <div class="intro">
       <span class="pixel" style="color:var(--smash-2)">Conversor de resource packs</span>
       <h1>Seu pack do Java no <em>Smash Client</em>, sem perder qualidade</h1>
-      <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
+      <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5 ou 0.15.10. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
     </div>
 
     <div class="grade">
@@ -257,11 +257,19 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
             <h2>Versão e formato</h2>
             <div class="versoes">
               <span class="chip on">Java 1.8.9</span>
-              <span class="seta" aria-hidden="true">→</span>
-              <span class="chip on">MCPE 1.1.5</span>
-              <span class="chip off" title="Em breve">MCPE 0.15.10 · em breve</span>
               <span class="chip off" title="Em breve">Java 1.9 a 1.21 · em breve</span>
             </div>
+            <fieldset class="saidas">
+              <legend class="pixel">Converter para</legend>
+              <label class="saida">
+                <input type="radio" name="alvo" id="alvo115" value="1.1.5" checked>
+                <span><b>MCPE 1.1.5</b><small>Smash Client e MCPE 1.1.x</small></span>
+              </label>
+              <label class="saida">
+                <input type="radio" name="alvo" id="alvo015" value="0.15.10">
+                <span><b>MCPE 0.15.10</b><small>Versão clássica 0.15</small></span>
+              </label>
+            </fieldset>
             <fieldset class="saidas">
               <legend class="pixel">Como você quer receber</legend>
               <label class="saida">
@@ -325,10 +333,10 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
 
     <section class="bloco-sec" id="instalar">
       <h2>Como instalar o pack</h2>
-      <p class="nota">O MCPE 1.1.5 não abre arquivos <b>.mcpack</b>: o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
+      <p class="nota">O MCPE 1.1.5 e o 0.15.10 não abrem arquivos <b>.mcpack</b>: o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
       <div class="dois">
         <div class="cartao">
-          <h3>No celular (Smash Client)</h3>
+          <h3>No celular (Smash Client, MCPE 1.1.5 ou 0.15.10)</h3>
           <ol>
             <li>Baixe o <b>.zip</b> do pack aqui no site. Não precisa extrair.</li>
             <li>Abra um gerenciador de arquivos (Arquivos do Google, ZArchiver ou o do próprio celular) e mova o .zip da pasta <b>Download</b> para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code></li>
@@ -373,8 +381,8 @@ const SMASH = {
   servidor: 'SmashMC.blazebr.com',
   porta: 26685,
   // link do APK. Com o arquivo publicado no GitHub Releases deste repositorio com o nome SmashClient.apk, use:
-  // 'https://github.com/caiquelopess/smash-texturas/releases/latest/download/SmashClient.apk'
-  linkCliente: '',          // vazio = mostra "Download do APK · em breve"
+  // 'https://github.com/caiquelopess/smash-group/releases/latest/download/SmashClient.apk'
+  linkCliente: 'https://github.com/caiquelopess/smash-group/releases/download/1.1.5/Smash-Client-v2.0-beta.apk',  // vazio = "em breve"
   discord: 'https://discord.gg/5F77ZhZuv3',
   youtube: 'https://youtube.com/@smashrankup',
 };
@@ -505,7 +513,7 @@ function mostrarPack(info, cam) {
   caminho = cam; $('converter').disabled = !ok;
   status(ok ? 'Tudo certo. Toque em Converter no cartão do pack.' : 'Escolha um pack do Java.', false);
 }
-$('arquivo').addEventListener('change', (e) => escolher(e.target.files[0]));
+$('arquivo').addEventListener('change', (e) => { escolher(e.target.files[0]); e.target.value = ''; });
 const drop = $('drop');
 ['dragenter', 'dragover'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('sobre'); }));
 ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('sobre'); }));
@@ -515,15 +523,16 @@ $('converter').onclick = () => {
   if (!caminho || ocupado) return;
   ocupado = true; $('converter').disabled = true;
   status(pronto ? 'Convertendo texturas… (pode levar alguns minutos em packs grandes)' : 'Carregando… ' + Math.floor(pct) + '%', true);
-  worker.postMessage({ tipo: 'converter', caminho });
+  const alvo = (document.querySelector('input[name=alvo]:checked') || {}).value || '1.1.5';
+  worker.postMessage({ tipo: 'converter', caminho, alvo });
 };
 
 function mostrarResultado(m) {
-  ocupado = false; passo(3); caminho = null;
+  ocupado = false; passo(3); $('converter').disabled = false;  // da para converter o mesmo pack para a outra versao
   urls.forEach(URL.revokeObjectURL); urls = [];
   const box = $('baixar'); box.innerHTML = ''; box.hidden = false; $('semResultado').hidden = true;
   const itens = [
-    [m.arquivos.pack, 'Pack pronto: coloque em games/com.mojang/resource_packs (sem extrair)', 'application/zip', true],
+    [m.arquivos.pack, 'Pack para o MCPE ' + (m.res.alvo || '1.1.5') + ': coloque em games/com.mojang/resource_packs (sem extrair)', 'application/zip', true],
     [m.arquivos.relatorio, 'Relatório: o que foi convertido e o que ficou original', 'text/plain', false],
   ];
   itens.forEach(([a, desc, tipo, principal]) => {
