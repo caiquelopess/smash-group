@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Smash Texturas</title>
+<title>Smash Client</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Converta resource packs do Minecraft Java 1.8.9 para o MCPE 1.1.5 do Smash Client, sem reduzir as imagens.">
 <link rel="icon" type="image/png" href="img/icone-64.png">
 <link rel="apple-touch-icon" href="img/icone-180.png">
 <meta name="theme-color" content="#130001">
-<meta property="og:title" content="Smash Texturas">
+<meta property="og:title" content="Smash Client">
 <meta property="og:description" content="Converta packs do Java 1.8.9 para o Smash Client (MCPE 1.1.5) sem perder qualidade.">
 <meta property="og:image" content="img/icone-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,23 @@ a { color: var(--smash-2); }
 /* topo */
 .topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 18px; border-bottom: 1px solid var(--line); }
 .marca { display: flex; align-items: center; gap: 12px; font: 700 20px/1 var(--f-display); letter-spacing: .02em; }
-.marca img { height: 44px; width: auto; display: block; }
+.marca { flex-wrap: wrap; row-gap: 10px; }
+.marca-logo img { height: 44px; width: auto; display: block; }
+.abas { display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 4px; }
+.aba { padding: 8px 14px; border-radius: 7px; color: var(--muted); text-decoration: none; font: 600 14px var(--f-display); letter-spacing: .02em; white-space: nowrap; }
+.aba:hover { color: var(--text); }
+.aba.on { background: var(--smash); color: var(--on-smash); }
+@media (max-width: 480px) { .abas { width: 100%; } .aba { flex: 1; text-align: center; padding-inline: 8px; font-size: 13px; } }
+.hero-cli { padding-block: 34px 10px; display: grid; gap: 14px; justify-items: start; }
+.logo-grande { width: min(100%, 460px); height: auto; filter: drop-shadow(0 6px 24px color-mix(in srgb, var(--smash) 30%, transparent)); }
+.hero-cli h1 { margin: 0; font: 700 clamp(26px, 4.4vw, 40px)/1.1 var(--f-display); text-wrap: balance; max-width: 22ch; }
+.hero-cli p { margin: 0; color: var(--muted); max-width: 62ch; }
+.btn.grande { padding: 14px 22px; font-size: 17px; }
+.linha a.btn { text-decoration: none; }
+.ficha { display: flex; flex-wrap: wrap; gap: 8px; }
+.ficha .pixel { color: var(--smash-2); border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 5px 9px; }
+.passos-lista { margin: 0; padding-left: 20px; display: grid; gap: 8px; color: var(--muted); }
+.passos-lista b { color: var(--text); }
 .marca small { color: var(--muted); font: 500 13px var(--f-body); letter-spacing: 0; }
 .servidor { display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 14px; min-width: 0; }
 .servidor code { font: 500 13px var(--f-body); color: var(--text); overflow-wrap: anywhere; }
@@ -170,10 +186,15 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
 <body>
 <div class="wrap">
 
+<div class="wrap">
+
   <header class="topo">
     <div class="marca">
-      <img src="img/logo.png" alt="Smash Client" width="111" height="44">
-      <small>Texturas</small>
+      <a href="#cliente" class="marca-logo" aria-label="Smash Client"><img src="img/logo.png" alt="Smash Client" width="111" height="44"></a>
+      <nav class="abas" aria-label="Seções do site">
+        <a href="#cliente" class="aba" data-v="cliente">Smash Client</a>
+        <a href="#conversor" class="aba" data-v="conversor">Conversor de Texturas</a>
+      </nav>
     </div>
     <div class="servidor">
       <span class="pixel">Servidor</span>
@@ -182,135 +203,162 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
     </div>
   </header>
 
-  <div class="intro">
-    <span class="pixel" style="color:var(--smash-2)">Conversor de resource packs</span>
-    <h1>Seu pack do Java no <em>Smash Client</em>, sem perder qualidade</h1>
-    <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
-  </div>
-
-  <div class="grade">
-    <div class="cartao passos area-a" aria-live="polite">
-
-      <div class="passo ativo" id="p1">
-        <div class="num">1</div>
-        <div style="display:grid;gap:12px">
-          <h2>Versão e formato</h2>
-          <div class="versoes">
-            <span class="chip on">Java 1.8.9</span>
-            <span class="seta" aria-hidden="true">→</span>
-            <span class="chip on">MCPE 1.1.5</span>
-            <span class="chip off" title="Em breve">Java 1.9 a 1.21 · em breve</span>
-          </div>
-          <fieldset class="saidas">
-            <legend class="pixel">Como você quer receber</legend>
-            <label class="saida">
-              <input type="radio" name="saida" id="saidaZip" value="zip" checked>
-              <span><b>Pack em .zip</b><small>Para colocar na pasta resource_packs do celular</small></span>
-            </label>
-            <label class="saida off" title="Em breve">
-              <input type="radio" name="saida" id="saidaApk" value="apk" disabled>
-              <span><b>Direto no APK</b><small>Disponível em breve</small></span>
-            </label>
-          </fieldset>
-        </div>
-      </div>
-
-      <div class="passo" id="p2">
-        <div class="num">2</div>
-        <div style="display:grid;gap:10px">
-          <h2>Envie o pack do Java (.zip)</h2>
-          <label class="drop" id="drop" for="arquivo">
-            <input type="file" id="arquivo" accept=".zip,application/zip">
-            <strong>Toque para escolher ou arraste o .zip aqui</strong>
-            <span>O mesmo arquivo que você colocaria na pasta resourcepacks do Java</span>
-          </label>
-          <div class="status" id="status"><span class="giro" id="giro" hidden></span><span id="statusTexto">Carregando… 0%</span></div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="cartao passos area-b" aria-live="polite">
-      <div class="passo" id="p3">
-        <div class="num">3</div>
-        <div style="display:grid;gap:10px">
-          <h2>Baixe e instale</h2>
-          <p class="vazio" id="semResultado">O .zip aparece aqui quando a conversão terminar. Depois siga o passo a passo de instalação logo abaixo.</p>
-          <div class="baixar" id="baixar" hidden></div>
-          <div class="resumo" id="resumo" hidden></div>
-          <ul class="avisos" id="avisos" hidden></ul>
-        </div>
-      </div>
-    </div>
-
-    <aside class="cartao pack area-pack" id="cartaoPack">
-      <span class="pixel" style="color:var(--muted)">Pack escolhido</span>
-      <div class="pack-topo">
-        <img class="icone" id="packIcone" alt="" width="72" height="72" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%23280d09'/%3E%3Cpath d='M1 1h3v3H1zM4 4h3v3H4z' fill='%23401912'/%3E%3C/svg%3E">
-        <div style="min-width:0">
-          <h3 id="packNome">Nenhum pack ainda</h3>
-          <div class="mcdesc" id="packDesc">Escolha um .zip para ver o nome e a descrição</div>
-        </div>
-      </div>
-      <div class="dados">
-        <div class="dado"><small>Resolução</small><b id="packRes">—</b></div>
-        <div class="dado"><small>Formato</small><b id="packFmt">—</b></div>
-        <div class="dado"><small>Arquivos</small><b id="packArq">—</b></div>
-      </div>
-      <span class="chip selo" id="packSelo" hidden></span>
-      <button class="btn largo" id="converter" type="button" disabled>Converter</button>
-    </aside>
-  </div>
-
-  <section class="bloco-sec" id="instalar">
-    <h2>Como instalar o pack</h2>
-    <p class="nota">O MCPE 1.1.5 não abre arquivos <b>.mcpack</b>: o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
-    <div class="dois">
-      <div class="cartao">
-        <h3>No celular (Smash Client)</h3>
-        <ol>
-          <li>Baixe o <b>.zip</b> do pack aqui no site. Não precisa extrair.</li>
-          <li>Abra um gerenciador de arquivos (Arquivos do Google, ZArchiver ou o do próprio celular) e mova o .zip da pasta <b>Download</b> para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code></li>
-          <li>Abra o Smash Client: <b>Configurações › Recursos Globais</b>, toque no pack, ative e deixe no topo da lista.</li>
-          <li><b>Feche o jogo por completo</b> (tire dos apps recentes) e abra de novo.</li>
-        </ol>
-      </div>
-      <div class="cartao">
-        <h3>No PC (Minecraft for Windows 10)</h3>
-        <ol>
-          <li>Baixe o <b>.zip</b> do pack aqui no site.</li>
-          <li>Aperte <b>Windows + R</b>, cole o caminho abaixo e dê Enter:<br><code>%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs</code></li>
-          <li>Clique com o botão direito no .zip › <b>Extrair tudo</b> e escolha essa pasta como destino.</li>
-          <li>No jogo: <b>Configurações › Recursos Globais</b>, ative o pack e deixe no topo.</li>
-          <li><b>Feche o Minecraft</b> e abra de novo.</li>
-        </ol>
-        <p class="nota">O pack é feito para a versão 1.1.5. Em versões mais novas do Windows 10 algumas texturas podem não aparecer.</p>
-      </div>
-    </div>
-    <div class="cartao problemas">
-      <h3>Se o pack não aparecer ou o jogo fechar</h3>
-      <ul>
-        <li>Confira se o pack está em <code>games/com.mojang/resource_packs</code>, e não em <code>resource_packs</code> de outra pasta.</li>
-        <li>No PC, abra a pasta extraída: o <code>manifest.json</code> tem que estar logo ali dentro. Se tiver uma pasta dentro de outra (<code>Pack/Pack/manifest.json</code>), tire a de dentro para fora.</li>
-        <li>Ativou e o jogo travou ou fechou: abra de novo, que na segunda vez ele carrega o pack inteiro.</li>
-        <li>Pack 256x é pesado: se o jogo ficar lento ou fechar, use uma versão 32x ou 64x do mesmo pack.</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="bloco-sec">
-    <h2>O que tem no Smash Client 1.1.5</h2>
-    <ul class="novidades" id="novidades"></ul>
-    <div class="cta">
-      <p><b>Minecraft PE com a jogabilidade do Java.</b> <span style="color:var(--muted)">Servidor SMASH já vem na lista.</span></p>
+  <main class="vista" id="v-cliente">
+    <section class="hero-cli">
+      <img class="logo-grande" src="img/logo-grande.png" alt="Smash Client" width="605" height="240">
+      <h1>Minecraft PE com a jogabilidade do Java</h1>
+      <p>O Smash Client é o Minecraft PE 1.1.5 para Android com mineração e alcance iguais ao Java, teclado corrigido, câmera sem pulos e o servidor SMASH já na lista.</p>
       <div class="linha">
-        <span class="chip off" id="apkBreve">APK do Smash Client · em breve</span>
-        <a class="btn" id="baixarCliente" href="#" hidden>Baixar o Smash Client</a>
+        <a class="btn grande" id="baixarCliente" href="#" hidden>Baixar o Smash Client</a>
+        <span class="chip off" id="apkBreve">Download do APK · em breve</span>
         <a class="btn sec" id="lnkDiscord" href="#" target="_blank" rel="noopener">Discord</a>
         <a class="btn sec" id="lnkYoutube" href="#" target="_blank" rel="noopener">YouTube</a>
       </div>
+      <div class="ficha">
+        <span class="pixel">Versão 1.1.5</span><span class="pixel">Android</span><span class="pixel">Servidor SMASH incluso</span>
+      </div>
+    </section>
+
+    <section class="bloco-sec">
+      <h2>O que tem no Smash Client</h2>
+      <ul class="novidades" id="novidades"></ul>
+    </section>
+
+    <section class="bloco-sec">
+      <h2>Como instalar o Smash Client</h2>
+      <div class="cartao">
+        <ol class="passos-lista">
+          <li>Toque em <b>Baixar o Smash Client</b> e espere o download do APK terminar.</li>
+          <li>Abra o arquivo baixado. Se o Android pedir, permita <b>Instalar apps desconhecidos</b> para o navegador ou o gerenciador de arquivos e volte.</li>
+          <li>Toque em <b>Instalar</b> e depois em <b>Abrir</b>.</li>
+          <li>Em <b>Jogar › Servidores</b>, o <b>SMASH</b> já está na lista. É só entrar.</li>
+        </ol>
+      </div>
+      <div class="cta">
+        <p><b>Tem um pack de textura do Java?</b> <span style="color:var(--muted)">Converta para o Smash Client sem perder qualidade.</span></p>
+        <a class="btn" href="#conversor">Abrir o conversor</a>
+      </div>
+    </section>
+  </main>
+
+  <main class="vista" id="v-conversor" hidden>
+    <div class="intro">
+      <span class="pixel" style="color:var(--smash-2)">Conversor de resource packs</span>
+      <h1>Seu pack do Java no <em>Smash Client</em>, sem perder qualidade</h1>
+      <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
     </div>
-  </section>
+
+    <div class="grade">
+      <div class="cartao passos area-a" aria-live="polite">
+
+        <div class="passo ativo" id="p1">
+          <div class="num">1</div>
+          <div style="display:grid;gap:12px">
+            <h2>Versão e formato</h2>
+            <div class="versoes">
+              <span class="chip on">Java 1.8.9</span>
+              <span class="seta" aria-hidden="true">→</span>
+              <span class="chip on">MCPE 1.1.5</span>
+              <span class="chip off" title="Em breve">MCPE 0.15.10 · em breve</span>
+              <span class="chip off" title="Em breve">Java 1.9 a 1.21 · em breve</span>
+            </div>
+            <fieldset class="saidas">
+              <legend class="pixel">Como você quer receber</legend>
+              <label class="saida">
+                <input type="radio" name="saida" id="saidaZip" value="zip" checked>
+                <span><b>Pack em .zip</b><small>Para colocar na pasta resource_packs do celular</small></span>
+              </label>
+              <label class="saida off" title="Em breve">
+                <input type="radio" name="saida" id="saidaApk" value="apk" disabled>
+                <span><b>Direto no APK</b><small>Disponível em breve</small></span>
+              </label>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="passo" id="p2">
+          <div class="num">2</div>
+          <div style="display:grid;gap:10px">
+            <h2>Envie o pack do Java (.zip)</h2>
+            <label class="drop" id="drop" for="arquivo">
+              <input type="file" id="arquivo" accept=".zip,application/zip">
+              <strong>Toque para escolher ou arraste o .zip aqui</strong>
+              <span>O mesmo arquivo que você colocaria na pasta resourcepacks do Java</span>
+            </label>
+            <div class="status" id="status"><span class="giro" id="giro" hidden></span><span id="statusTexto">Carregando… 0%</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="cartao passos area-b" aria-live="polite">
+        <div class="passo" id="p3">
+          <div class="num">3</div>
+          <div style="display:grid;gap:10px">
+            <h2>Baixe e instale</h2>
+            <p class="vazio" id="semResultado">O .zip aparece aqui quando a conversão terminar. Depois siga o passo a passo de instalação logo abaixo.</p>
+            <div class="baixar" id="baixar" hidden></div>
+            <div class="resumo" id="resumo" hidden></div>
+            <ul class="avisos" id="avisos" hidden></ul>
+          </div>
+        </div>
+      </div>
+
+      <aside class="cartao pack area-pack" id="cartaoPack">
+        <span class="pixel" style="color:var(--muted)">Pack escolhido</span>
+        <div class="pack-topo">
+          <img class="icone" id="packIcone" alt="" width="72" height="72" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%23280d09'/%3E%3Cpath d='M1 1h3v3H1zM4 4h3v3H4z' fill='%23401912'/%3E%3C/svg%3E">
+          <div style="min-width:0">
+            <h3 id="packNome">Nenhum pack ainda</h3>
+            <div class="mcdesc" id="packDesc">Escolha um .zip para ver o nome e a descrição</div>
+          </div>
+        </div>
+        <div class="dados">
+          <div class="dado"><small>Resolução</small><b id="packRes">—</b></div>
+          <div class="dado"><small>Formato</small><b id="packFmt">—</b></div>
+          <div class="dado"><small>Arquivos</small><b id="packArq">—</b></div>
+        </div>
+        <span class="chip selo" id="packSelo" hidden></span>
+        <button class="btn largo" id="converter" type="button" disabled>Converter</button>
+      </aside>
+    </div>
+
+    <section class="bloco-sec" id="instalar">
+      <h2>Como instalar o pack</h2>
+      <p class="nota">O MCPE 1.1.5 não abre arquivos <b>.mcpack</b>: o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
+      <div class="dois">
+        <div class="cartao">
+          <h3>No celular (Smash Client)</h3>
+          <ol>
+            <li>Baixe o <b>.zip</b> do pack aqui no site. Não precisa extrair.</li>
+            <li>Abra um gerenciador de arquivos (Arquivos do Google, ZArchiver ou o do próprio celular) e mova o .zip da pasta <b>Download</b> para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code></li>
+            <li>Abra o Smash Client: <b>Configurações › Recursos Globais</b>, toque no pack, ative e deixe no topo da lista.</li>
+            <li><b>Feche o jogo por completo</b> (tire dos apps recentes) e abra de novo.</li>
+          </ol>
+        </div>
+        <div class="cartao">
+          <h3>No PC (Minecraft for Windows 10)</h3>
+          <ol>
+            <li>Baixe o <b>.zip</b> do pack aqui no site.</li>
+            <li>Aperte <b>Windows + R</b>, cole o caminho abaixo e dê Enter:<br><code>%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs</code></li>
+            <li>Clique com o botão direito no .zip › <b>Extrair tudo</b> e escolha essa pasta como destino.</li>
+            <li>No jogo: <b>Configurações › Recursos Globais</b>, ative o pack e deixe no topo.</li>
+            <li><b>Feche o Minecraft</b> e abra de novo.</li>
+          </ol>
+          <p class="nota">O pack é feito para a versão 1.1.5. Em versões mais novas do Windows 10 algumas texturas podem não aparecer.</p>
+        </div>
+      </div>
+      <div class="cartao problemas">
+        <h3>Se o pack não aparecer ou o jogo fechar</h3>
+        <ul>
+          <li>Confira se o pack está em <code>games/com.mojang/resource_packs</code>, e não em <code>resource_packs</code> de outra pasta.</li>
+          <li>No PC, abra a pasta extraída: o <code>manifest.json</code> tem que estar logo ali dentro. Se tiver uma pasta dentro de outra (<code>Pack/Pack/manifest.json</code>), tire a de dentro para fora.</li>
+          <li>Ativou e o jogo travou ou fechou: abra de novo, que na segunda vez ele carrega o pack inteiro.</li>
+          <li>Pack 256x é pesado: se o jogo ficar lento ou fechar, use uma versão 32x ou 64x do mesmo pack.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
 
   <footer>
     Ferramenta da comunidade Smash. Não é afiliada à Mojang nem à Microsoft. Minecraft é marca registrada da Mojang Synergies AB.
@@ -324,7 +372,9 @@ const SMASH = {
   nome: 'Smash Client',
   servidor: 'SmashMC.blazebr.com',
   porta: 26685,
-  linkCliente: '',          // link de download do APK do Smash Client (vazio = mostra "APK em breve")
+  // link do APK. Com o arquivo publicado no GitHub Releases deste repositorio com o nome SmashClient.apk, use:
+  // 'https://github.com/caiquelopess/smash-texturas/releases/latest/download/SmashClient.apk'
+  linkCliente: '',          // vazio = mostra "Download do APK · em breve"
   discord: 'https://discord.gg/5F77ZhZuv3',
   youtube: 'https://youtube.com/@smashrankup',
 };
@@ -377,7 +427,7 @@ function textoMC(s) {
   return out;
 }
 
-const worker = new Worker('worker.js');
+let worker = null;
 let pronto = false, caminho = null, ocupado = false, urls = [], nomeArq = '';
 function status(t, girando, erro) {
   $('statusTexto').textContent = t; $('giro').hidden = !girando; $('statusTexto').className = erro ? 'erro' : '';
@@ -394,7 +444,7 @@ function carga(ate) {
   teto = ate; clearInterval(relogio);
   relogio = setInterval(() => { pct += Math.max(0.05, (teto - 1 - pct) * 0.04); if (pct > teto - 1) pct = teto - 1; mostraPct(); }, 120);
 }
-worker.onmessage = (ev) => {
+function aoMensagem(ev) {
   const m = ev.data;
   if (m.tipo === 'carga') carga(m.ate);
   else if (m.tipo === 'etapa') status(m.texto + '…', true);
@@ -406,9 +456,28 @@ worker.onmessage = (ev) => {
     const mem = m.mensagem.startsWith('MEMORIA');
     status(mem ? 'Faltou memória no navegador para um pack deste tamanho. Tente pelo computador, ou use o conversor do Termux/PC.' : 'Não deu para converter: ' + m.mensagem, false, true);
   }
-};
-worker.postMessage({ tipo: 'preparar' });
-carga(45); mostraPct();
+}
+function iniciarConversor() {
+  if (worker) return;
+  worker = new Worker('worker.js'); worker.onmessage = aoMensagem;
+  worker.postMessage({ tipo: 'preparar' }); carga(45); mostraPct();
+}
+
+// abas: #cliente e #conversor (o conversor so carrega quando a aba dele abre)
+function mostrarVista() {
+  const v = location.hash === '#conversor' || location.hash === '#instalar' ? 'conversor' : 'cliente';
+  $('v-cliente').hidden = v !== 'cliente'; $('v-conversor').hidden = v !== 'conversor';
+  document.querySelectorAll('.aba').forEach((a) => { const on = a.dataset.v === v; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  document.title = v === 'conversor' ? 'Smash Texturas · Conversor' : 'Smash Client';
+  if (v === 'conversor') iniciarConversor();
+}
+addEventListener('hashchange', () => { mostrarVista(); scrollTo(0, 0); });
+mostrarVista();
+
+// guarda o Python e o conversor no aparelho: da segunda vez abre sem baixar de novo
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 
 function escolher(f) {
   if (!f) return;
@@ -416,6 +485,7 @@ function escolher(f) {
   nomeArq = f.name.replace(/\.zip$/i, '');
   caminho = null; $('converter').disabled = true; passo(2);
   status('Lendo ' + f.name + '…', true);
+  iniciarConversor();
   f.arrayBuffer().then((buf) => worker.postMessage({ tipo: 'inspecionar', nome: f.name, dados: buf }, [buf]));
 }
 function mostrarPack(info, cam) {
