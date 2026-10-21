@@ -1,7 +1,7 @@
 // Smash Client - guarda o conversor no aparelho.
 // pyodide/ nunca muda (versao fixa): sai do cache direto, sem internet.
 // pagina, worker e conversor.zip: tenta a rede primeiro (pega atualizacoes) e usa o cache se estiver sem internet.
-const VERSAO = 'smash-v2';
+const VERSAO = 'smash-v3';
 const FIXOS = 'smash-pyodide-0.26.4';
 
 self.addEventListener('install', () => self.skipWaiting());
