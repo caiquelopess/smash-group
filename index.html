@@ -182,12 +182,14 @@ code { font-size: .92em; overflow-wrap: anywhere; }
 .problemas ul { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 4px; font-size: 14px; }
 .problemas code { color: var(--text); }
 /* janela "qual versao baixar" */
-.janela { width: min(100% - 32px, 460px); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); color: var(--text); }
+.janela { position: fixed; inset: 0; z-index: 50; margin: auto; height: fit-content; overflow: auto; width: min(100% - 32px, 460px); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); color: var(--text); }
+.janela:not([open]) { display: none; }  /* navegador sem <dialog> */
 .janela::backdrop { background: rgb(0 0 0 / .7); }
 .janela-corpo { padding: 20px; display: grid; gap: 14px; }
 .janela-topo { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
 .janela h2 { margin: 0; font: 700 20px/1.25 var(--f-display); text-wrap: balance; }
 .fechar { appearance: none; flex: none; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; }
+.janela a.btn { display: block; text-align: center; text-decoration: none; }
 .opcoes { display: grid; gap: 10px; }
 .opcao { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); color: var(--text); text-decoration: none; }
 .opcao:hover { border-color: var(--smash); }
@@ -302,6 +304,10 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
                 <input type="radio" name="saida" id="saidaZip" value="zip" checked>
                 <span><b>Pack em .zip</b><small>Para colocar na pasta resource_packs do celular</small></span>
               </label>
+              <label class="saida" id="rotuloMcpack">
+                <input type="radio" name="saida" id="saidaMcpack" value="mcpack">
+                <span><b>Pack em .mcpack</b><small id="mcpackTexto">Abra o arquivo com o Minecraft e ele importa o pack</small></span>
+              </label>
               <label class="saida off" title="Em breve">
                 <input type="radio" name="saida" id="saidaApk" value="apk" disabled>
                 <span><b>Direto no APK</b><small>Disponível em breve</small></span>
@@ -364,18 +370,18 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
           <button class="fechar" id="fecharAviso" type="button" aria-label="Fechar">×</button>
         </div>
         <ol class="passos-lista">
-          <li>Coloque o .zip em <b>games › com.mojang › resource_packs</b> (no celular não precisa extrair).</li>
+          <li id="avisoPasso1"></li>
           <li>No jogo, ative o pack em <b>Configurações › Recursos Globais</b>.</li>
           <li><b>Feche o jogo por completo</b> (tire dos apps recentes) e abra de novo.</li>
         </ol>
         <p class="nota">Sem fechar, o jogo carrega o pack pela metade e pode travar ou fechar sozinho (crash).</p>
-        <button class="btn largo" id="entendiAviso" type="button">Entendi</button>
+        <a class="btn largo" id="avisoBaixar" href="#" download>Entendi, baixar o pack</a>
       </div>
     </dialog>
 
     <section class="bloco-sec" id="instalar">
       <h2>Como instalar o pack</h2>
-      <p class="nota">O MCPE 1.1.5 e o 0.15.10 não abrem arquivos <b>.mcpack</b>: o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
+      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. Em <b>.mcpack</b> (só MCPE 1.1.5) é só abrir o arquivo com o Minecraft, que ele importa o pack. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
       <div class="dois">
         <div class="cartao">
           <h3>No celular (Smash Client, MCPE 1.1.5 ou 0.15.10)</h3>
@@ -446,6 +452,9 @@ const NOVIDADES = [
 /* ============================== */
 
 const $ = (id) => document.getElementById(id);
+// janelas: <dialog> nativo; navegador sem showModal so mostra por cima (CSS .janela)
+const abrir = (d) => { if (d.showModal) d.showModal(); else d.setAttribute('open', ''); };
+const fechar = (d) => { if (d.close) d.close(); else d.removeAttribute('open'); };
 const ICONES = {
   pick: '<path d="M4 20 14 10M13 4c3 0 6 1 7 3-2-1-4-1-6 0l-4 4-1-1 4-4c1-1 1-1 0-2Z"/>',
   reach: '<path d="M3 12h14M13 7l5 5-5 5M21 5v14"/>',
@@ -466,10 +475,10 @@ if (SMASH.apks.length) {
   $('baixarCliente').hidden = false; $('apkBreve').hidden = true;
   $('opcoesApk').innerHTML = SMASH.apks.map((a) =>
     `<a class="opcao${a.recomendado ? ' rec' : ''}" href="${a.link}"><span><b>${a.titulo}</b>${a.recomendado ? '<span class="tag">Recomendado</span>' : ''}<small>${a.desc}</small></span><span class="opcao-mb">${a.mb} MB</span></a>`).join('');
-  $('baixarCliente').onclick = () => { if (SMASH.apks.length === 1) location.href = SMASH.apks[0].link; else janela.showModal(); };
-  $('fecharApk').onclick = () => janela.close();
-  janela.onclick = (e) => { if (e.target === janela) janela.close(); };  // toque fora fecha
-  $('opcoesApk').onclick = (e) => { if (e.target.closest('.opcao')) setTimeout(() => janela.close(), 300); };
+  $('baixarCliente').onclick = () => { if (SMASH.apks.length === 1) location.href = SMASH.apks[0].link; else abrir(janela); };
+  $('fecharApk').onclick = () => fechar(janela);
+  janela.onclick = (e) => { if (e.target === janela) fechar(janela); };  // toque fora fecha
+  $('opcoesApk').onclick = (e) => { if (e.target.closest('.opcao')) setTimeout(() => fechar(janela), 300); };
 }
 $('lnkDiscord').href = SMASH.discord; $('lnkYoutube').href = SMASH.youtube;
 $('copiarIp').onclick = async () => {
@@ -583,8 +592,31 @@ const drop = $('drop');
 drop.addEventListener('drop', (e) => escolher(e.dataTransfer.files[0]));
 
 const aviso = $('avisoFechar');
-$('fecharAviso').onclick = $('entendiAviso').onclick = () => aviso.close();
-aviso.onclick = (e) => { if (e.target === aviso) aviso.close(); };  // toque fora fecha
+$('fecharAviso').onclick = () => fechar(aviso);
+aviso.onclick = (e) => { if (e.target === aviso) fechar(aviso); };  // toque fora fecha
+$('avisoBaixar').addEventListener('click', () => setTimeout(() => fechar(aviso), 400));
+// o aviso de fechar o jogo abre ANTES do download: o pack so baixa pelo botao da janela
+function avisoAntes(url, nome, mcpack) {
+  $('avisoPasso1').innerHTML = mcpack
+    ? 'Abra o <b>.mcpack</b> baixado (pela notificação do download ou pelo gerenciador de arquivos) e escolha o <b>Minecraft</b>: ele importa o pack.'
+    : 'Coloque o .zip em <b>games › com.mojang › resource_packs</b> (no celular não precisa extrair).';
+  const a = $('avisoBaixar'); a.href = url; a.download = nome;
+  a.textContent = 'Entendi, baixar o ' + (mcpack ? '.mcpack' : '.zip');
+  abrir(aviso);
+}
+
+// .mcpack so existe no MCPE 1.1.5 (o 0.15.10 so aceita a pasta resource_packs)
+let ultimo = null;  // ultimo resultado: trocar .zip/.mcpack depois de converter so refaz o download
+const formato = () => (document.querySelector('input[name=saida]:checked') || {}).value || 'zip';
+function ajustarSaida() {
+  const so115 = ((document.querySelector('input[name=alvo]:checked') || {}).value || '1.1.5') === '1.1.5';
+  const r = $('saidaMcpack'); r.disabled = !so115; $('rotuloMcpack').classList.toggle('off', !so115);
+  $('mcpackTexto').textContent = so115 ? 'Abra o arquivo com o Minecraft e ele importa o pack' : 'Só no MCPE 1.1.5';
+  if (!so115 && r.checked) { $('saidaZip').checked = true; if (ultimo && !ocupado) mostrarResultado(ultimo); }
+}
+document.querySelectorAll('input[name=alvo]').forEach((r) => r.addEventListener('change', ajustarSaida));
+document.querySelectorAll('input[name=saida]').forEach((r) => r.addEventListener('change', () => { if (ultimo && !ocupado) mostrarResultado(ultimo); }));
+ajustarSaida();
 
 $('converter').onclick = () => {
   if (!caminho || ocupado) return;
@@ -595,22 +627,24 @@ $('converter').onclick = () => {
 };
 
 function mostrarResultado(m) {
-  ocupado = false; passo(3); $('converter').disabled = false;  // da para converter o mesmo pack para a outra versao
+  ultimo = m; ocupado = false; passo(3); $('converter').disabled = false;  // da para converter o mesmo pack para a outra versao
   urls.forEach(URL.revokeObjectURL); urls = [];
   const box = $('baixar'); box.innerHTML = ''; box.hidden = false; $('semResultado').hidden = true;
+  const alvo = m.res.alvo || '1.1.5', mcpack = formato() === 'mcpack' && alvo === '1.1.5';
+  const pack = m.arquivos.pack && { nome: m.arquivos.pack.nome.replace(/\.zip$/i, mcpack ? '.mcpack' : '.zip'), dados: m.arquivos.pack.dados };  // .mcpack = o mesmo zip (manifest.json na raiz)
   const itens = [
-    [m.arquivos.pack, 'Pack para o MCPE ' + (m.res.alvo || '1.1.5') + ': coloque em games/com.mojang/resource_packs (sem extrair)', 'application/zip', true],
+    [pack, 'Pack para o MCPE ' + alvo + (mcpack ? ': abra com o Minecraft para importar' : ': coloque em games/com.mojang/resource_packs (sem extrair)'), mcpack ? 'application/octet-stream' : 'application/zip', true],
     [m.arquivos.relatorio, 'Relatório: o que foi convertido e o que ficou original', 'text/plain', false],
   ];
   itens.forEach(([a, desc, tipo, principal]) => {
     if (!a) return;
     const url = URL.createObjectURL(new Blob([a.dados], { type: tipo })); urls.push(url);
     const div = document.createElement('div'); div.className = 'arquivo';
-    div.innerHTML = `<div><b></b><small></small></div><a class="btn ${principal ? '' : 'sec'}" download>Baixar</a>`;
+    div.innerHTML = `<div><b></b><small></small></div>` + (principal ? '<button class="btn" type="button">Baixar</button>' : '<a class="btn sec" download>Baixar</a>');
     div.querySelector('b').textContent = a.nome;
     div.querySelector('small').textContent = desc + ' · ' + kb(a.dados.byteLength);
-    const link = div.querySelector('a'); link.href = url; link.download = a.nome;
-    if (principal) link.addEventListener('click', () => $('avisoFechar').showModal());  // o download segue normalmente
+    if (principal) div.querySelector('button').onclick = () => avisoAntes(url, a.nome, mcpack);
+    else { const link = div.querySelector('a'); link.href = url; link.download = a.nome; }
     box.appendChild(div);
   });
   const r = m.res, res = $('resumo'); res.innerHTML = ''; res.hidden = false;
@@ -621,7 +655,7 @@ function mostrarResultado(m) {
   if (r.ceu) add('<b>skybox</b> do OptiFine');
   const av = $('avisos'); av.innerHTML = ''; av.hidden = !(r.avisos && r.avisos.length);
   (r.avisos || []).forEach((t) => { const li = document.createElement('li'); li.textContent = t; av.appendChild(li); });
-  status('Pronto! Baixe o .zip e siga o passo a passo de instalação.', false);
+  status('Pronto! Baixe o pack e siga o passo a passo de instalação.', false);
 }
 </script>
 </body>

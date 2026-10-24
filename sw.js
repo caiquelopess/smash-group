@@ -1,7 +1,7 @@
 // Smash Client - guarda o conversor no aparelho.
 // pyodide/ nunca muda (versao fixa): sai do cache direto, sem internet.
 // pagina, worker e conversor.zip: tenta a rede primeiro (pega atualizacoes) e usa o cache se estiver sem internet.
-const VERSAO = 'smash-v8';
+const VERSAO = 'smash-v9';
 const FIXOS = 'smash-pyodide-0.26.4';
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -29,7 +29,8 @@ self.addEventListener('fetch', (e) => {
   e.respondWith((async () => {
     const c = await caches.open(VERSAO);
     try {
-      const r = await fetch(req);
+      // no-cache: o GitHub Pages manda max-age=600; sem isso a pagina nova so chegava depois de 10 min
+      const r = await fetch(req.mode === 'navigate' ? req.url : req, { cache: 'no-cache' });
       if (r.ok) c.put(req, r.clone());
       return r;
     } catch (err) {
