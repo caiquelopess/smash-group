@@ -12,7 +12,7 @@ async function preparar() {
   diga('carga', { ate: 92 });
   await py.loadPackage(['numpy', 'pillow']);
   diga('carga', { ate: 99 });
-  const r = await fetch('conversor.zip?v=5');
+  const r = await fetch('conversor.zip?v=6');
   if (!r.ok) throw new Error('nao achei conversor.zip no servidor');
   py.unpackArchive(await r.arrayBuffer(), 'zip', { extractDir: '/app' });
   py.runPython("import sys; sys.path.insert(0, '/app/conversor'); import web");
@@ -47,6 +47,7 @@ self.onmessage = async (ev) => {
     }
   } catch (e) {
     let msg = String(e && e.message || e);
+    const se = msg.match(/SystemExit: ([^\n]+)/); if (se) msg = se[1];   // erro do conversor: so a frase, sem o traceback
     if (/MemoryError|memory access out of bounds|Cannot enlarge memory/i.test(msg)) msg = 'MEMORIA: ' + msg;
     diga('erro', { mensagem: msg });
   }

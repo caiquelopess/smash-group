@@ -550,7 +550,7 @@ function mostrarResultado(m) {
   const r = m.res, res = $('resumo'); res.innerHTML = ''; res.hidden = false;
   const nomes = { blocks: 'blocos', items: 'itens', entity: 'entidades', font: 'fonte', gui: 'interface', environment: 'ambiente', particle: 'partículas', painting: 'quadros', colormap: 'cores', efeitos: 'efeitos', models: 'modelos', misc: 'outros', map: 'mapa' };
   const add = (t) => { const s = document.createElement('span'); s.innerHTML = t; res.appendChild(s); };
-  add(`<b>${r.total ?? '?'}</b> texturas`); add(`<b>${m.segundos.toFixed(0)} s</b>`);
+  if (r.total !== 0) add(`<b>${r.total ?? '?'}</b> texturas`); add(`<b>${m.segundos.toFixed(0)} s</b>`);
   Object.entries(r.categorias || {}).forEach(([k, v]) => add(`${nomes[k] || k} <b>${v}</b>`));
   if (r.ceu) add('<b>skybox</b> do OptiFine');
   const av = $('avisos'); av.innerHTML = ''; av.hidden = !(r.avisos && r.avisos.length);

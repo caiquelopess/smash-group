@@ -47,6 +47,7 @@ self.onmessage = async (ev) => {
     }
   } catch (e) {
     let msg = String(e && e.message || e);
+    const se = msg.match(/SystemExit: ([^\n]+)/); if (se) msg = se[1];   // erro do conversor: so a frase, sem o traceback
     if (/MemoryError|memory access out of bounds|Cannot enlarge memory/i.test(msg)) msg = 'MEMORIA: ' + msg;
     diga('erro', { mensagem: msg });
   }
