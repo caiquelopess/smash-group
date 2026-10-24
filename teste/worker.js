@@ -12,7 +12,7 @@ async function preparar() {
   diga('carga', { ate: 92 });
   await py.loadPackage(['numpy', 'pillow']);
   diga('carga', { ate: 99 });
-  const r = await fetch('conversor.zip');
+  const r = await fetch('conversor.zip?v=2');
   if (!r.ok) throw new Error('nao achei conversor.zip no servidor');
   py.unpackArchive(await r.arrayBuffer(), 'zip', { extractDir: '/app' });
   py.runPython("import sys; sys.path.insert(0, '/app/conversor'); import web");
