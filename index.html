@@ -109,6 +109,7 @@ a { color: var(--smash-2); }
 .drop strong { font: 600 15px var(--f-display); }
 .drop span { color: var(--muted); font-size: 13px; }
 .drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.drop.travado, .drop.travado:hover { cursor: not-allowed; opacity: .55; border-color: var(--line); background: var(--panel-2); }  /* conversor ainda carregando */
 
 .btn { appearance: none; border: 0; border-radius: 8px; padding: 11px 18px; font: 600 15px var(--f-display); letter-spacing: .02em; cursor: pointer; background: var(--smash); color: var(--on-smash); }
 .btn:hover { filter: brightness(1.12); }
@@ -313,10 +314,10 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
           <div class="num">2</div>
           <div style="display:grid;gap:10px">
             <h2>Envie o pack do Java (.zip)</h2>
-            <label class="drop" id="drop" for="arquivo">
-              <input type="file" id="arquivo" accept=".zip,application/zip">
-              <strong>Toque para escolher ou arraste o .zip aqui</strong>
-              <span>O mesmo arquivo que você colocaria na pasta resourcepacks do Java</span>
+            <label class="drop travado" id="drop" for="arquivo" aria-disabled="true">
+              <input type="file" id="arquivo" accept=".zip,application/zip" disabled>
+              <strong id="dropTitulo">Aguarde o conversor carregar 100%</strong>
+              <span id="dropTexto">Depois disso você pode escolher o .zip do pack</span>
             </label>
             <div class="status" id="status"><span class="giro" id="giro" hidden></span><span id="statusTexto">Carregando… 0%</span></div>
           </div>
@@ -355,6 +356,22 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
         <button class="btn largo" id="converter" type="button" disabled>Converter</button>
       </aside>
     </div>
+
+    <dialog class="janela" id="avisoFechar" aria-labelledby="avisoTitulo">
+      <div class="janela-corpo">
+        <div class="janela-topo">
+          <h2 id="avisoTitulo">Importante: feche o jogo depois de ativar o pack</h2>
+          <button class="fechar" id="fecharAviso" type="button" aria-label="Fechar">×</button>
+        </div>
+        <ol class="passos-lista">
+          <li>Coloque o .zip em <b>games › com.mojang › resource_packs</b> (no celular não precisa extrair).</li>
+          <li>No jogo, ative o pack em <b>Configurações › Recursos Globais</b>.</li>
+          <li><b>Feche o jogo por completo</b> (tire dos apps recentes) e abra de novo.</li>
+        </ol>
+        <p class="nota">Sem fechar, o jogo carrega o pack pela metade e pode travar ou fechar sozinho (crash).</p>
+        <button class="btn largo" id="entendiAviso" type="button">Entendi</button>
+      </div>
+    </dialog>
 
     <section class="bloco-sec" id="instalar">
       <h2>Como instalar o pack</h2>
@@ -495,7 +512,7 @@ function aoMensagem(ev) {
   const m = ev.data;
   if (m.tipo === 'carga') carga(m.ate);
   else if (m.tipo === 'etapa') status(m.texto + '…', true);
-  else if (m.tipo === 'pronto') { clearInterval(relogio); pct = 100; mostraPct(); pronto = true; if (!caminho) status('Conversor pronto (100%). Escolha o .zip do pack.', false); }
+  else if (m.tipo === 'pronto') { clearInterval(relogio); pct = 100; mostraPct(); pronto = true; liberarEnvio(); if (!caminho) status('Conversor pronto (100%). Escolha o .zip do pack.', false); }
   else if (m.tipo === 'info') mostrarPack(m.info, m.caminho);
   else if (m.tipo === 'feito') mostrarResultado(m);
   else if (m.tipo === 'erro') {
@@ -526,8 +543,15 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
+// o pack so pode ser enviado com o conversor 100% carregado
+function liberarEnvio() {
+  $('arquivo').disabled = false; drop.classList.remove('travado'); drop.removeAttribute('aria-disabled');
+  $('dropTitulo').textContent = 'Toque para escolher ou arraste o .zip aqui';
+  $('dropTexto').textContent = 'O mesmo arquivo que você colocaria na pasta resourcepacks do Java';
+}
 function escolher(f) {
   if (!f) return;
+  if (!pronto) { status('Espere o conversor chegar a 100% antes de enviar o pack.', false, true); setTimeout(mostraPct, 2500); return; }
   if (!/\.zip$/i.test(f.name)) { status('Esse arquivo não é .zip. Envie o pack compactado em .zip.', false, true); return; }
   nomeArq = f.name.replace(/\.zip$/i, '');
   caminho = null; $('converter').disabled = true; passo(2);
@@ -558,6 +582,10 @@ const drop = $('drop');
 ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('sobre'); }));
 drop.addEventListener('drop', (e) => escolher(e.dataTransfer.files[0]));
 
+const aviso = $('avisoFechar');
+$('fecharAviso').onclick = $('entendiAviso').onclick = () => aviso.close();
+aviso.onclick = (e) => { if (e.target === aviso) aviso.close(); };  // toque fora fecha
+
 $('converter').onclick = () => {
   if (!caminho || ocupado) return;
   ocupado = true; $('converter').disabled = true;
@@ -582,6 +610,7 @@ function mostrarResultado(m) {
     div.querySelector('b').textContent = a.nome;
     div.querySelector('small').textContent = desc + ' · ' + kb(a.dados.byteLength);
     const link = div.querySelector('a'); link.href = url; link.download = a.nome;
+    if (principal) link.addEventListener('click', () => $('avisoFechar').showModal());  // o download segue normalmente
     box.appendChild(div);
   });
   const r = m.res, res = $('resumo'); res.innerHTML = ''; res.hidden = false;
