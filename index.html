@@ -180,6 +180,21 @@ code { font-size: .92em; overflow-wrap: anywhere; }
 .problemas h3 { margin: 0 0 6px; font: 600 16px var(--f-display); }
 .problemas ul { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 4px; font-size: 14px; }
 .problemas code { color: var(--text); }
+/* janela "qual versao baixar" */
+.janela { width: min(100% - 32px, 460px); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); color: var(--text); }
+.janela::backdrop { background: rgb(0 0 0 / .7); }
+.janela-corpo { padding: 20px; display: grid; gap: 14px; }
+.janela-topo { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.janela h2 { margin: 0; font: 700 20px/1.25 var(--f-display); text-wrap: balance; }
+.fechar { appearance: none; flex: none; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; }
+.opcoes { display: grid; gap: 10px; }
+.opcao { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); color: var(--text); text-decoration: none; }
+.opcao:hover { border-color: var(--smash); }
+.opcao.rec { border-color: var(--smash); box-shadow: inset 0 0 0 1px var(--smash); }
+.opcao b { font: 700 17px var(--f-display); }
+.opcao small { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
+.opcao .tag { display: inline-block; margin-left: 8px; padding: 2px 7px; border-radius: 4px; background: var(--smash); color: var(--on-smash); font: 600 11px var(--f-display); letter-spacing: .04em; text-transform: uppercase; vertical-align: 2px; }
+.opcao-mb { color: var(--muted); font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); margin-top: 34px; }
 </style>
 </head>
@@ -209,7 +224,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
       <h1>Minecraft PE com a jogabilidade do Java</h1>
       <p>O Smash Client é o Minecraft PE 1.1.5 para Android com mineração e alcance iguais ao Java, teclado corrigido, câmera sem pulos e o servidor SMASH já na lista.</p>
       <div class="linha">
-        <a class="btn grande" id="baixarCliente" href="#" hidden>Baixar o Smash Client</a>
+        <button class="btn grande" id="baixarCliente" type="button" hidden>Baixar o Smash Client</button>
         <span class="chip off" id="apkBreve">Download do APK · em breve</span>
         <a class="btn sec" id="lnkDiscord" href="#" target="_blank" rel="noopener">Discord</a>
         <a class="btn sec" id="lnkYoutube" href="#" target="_blank" rel="noopener">YouTube</a>
@@ -217,6 +232,16 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
       <div class="ficha">
         <span class="pixel">Versão 1.1.5</span><span class="pixel">Android</span><span class="pixel">Servidor SMASH incluso</span>
       </div>
+      <dialog class="janela" id="escolherApk" aria-labelledby="escolherTitulo">
+        <div class="janela-corpo">
+          <div class="janela-topo">
+            <h2 id="escolherTitulo">Qual versão você quer baixar?</h2>
+            <button class="fechar" id="fecharApk" type="button" aria-label="Fechar">×</button>
+          </div>
+          <div class="opcoes" id="opcoesApk"></div>
+          <p class="nota">Não sabe qual é? Baixe a de <b>64 bits</b>. Se o Android avisar que o app não é compatível ou não instalar, baixe a de <b>32 bits</b>.</p>
+        </div>
+      </dialog>
     </section>
 
     <section class="bloco-sec">
@@ -228,7 +253,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
       <h2>Como instalar o Smash Client</h2>
       <div class="cartao">
         <ol class="passos-lista">
-          <li>Toque em <b>Baixar o Smash Client</b> e espere o download do APK terminar.</li>
+          <li>Toque em <b>Baixar o Smash Client</b>, escolha a versão (<b>64 bits</b> serve na maioria dos celulares; <b>32 bits</b> para os mais antigos) e espere o download do APK terminar.</li>
           <li>Abra o arquivo baixado. Se o Android pedir, permita <b>Instalar apps desconhecidos</b> para o navegador ou o gerenciador de arquivos e volte.</li>
           <li>Toque em <b>Instalar</b> e depois em <b>Abrir</b>.</li>
           <li>Em <b>Jogar › Servidores</b>, o <b>SMASH</b> já está na lista. É só entrar.</li>
@@ -380,9 +405,14 @@ const SMASH = {
   nome: 'Smash Client',
   servidor: 'SmashMC.blazebr.com',
   porta: 26685,
-  // link do APK. Com o arquivo publicado no GitHub Releases deste repositorio com o nome SmashClient.apk, use:
-  // 'https://github.com/caiquelopess/smash-group/releases/latest/download/SmashClient.apk'
-  linkCliente: 'https://github.com/caiquelopess/smash-group/releases/download/1.1.5/Smash-Client-v2.0-beta.apk',  // vazio = "em breve"
+  // APKs do botao Baixar (arquivos no GitHub Releases, tag 1.1.5). Com mais de um, o site pergunta qual versao.
+  // Lista vazia = "em breve".
+  apks: [
+    { titulo: '64 bits', desc: 'Para a maioria dos celulares', mb: 86, recomendado: true,
+      link: 'https://github.com/caiquelopess/smash-group/releases/download/1.1.5/Smash-Client-v2.0-beta.apk' },
+    { titulo: '32 bits', desc: 'Para celulares mais antigos ou se a de 64 bits não instalar', mb: 50,
+      link: 'https://github.com/caiquelopess/smash-group/releases/download/1.1.5/Smash-Client-v2.0-beta-32bits.apk' },
+  ],
   discord: 'https://discord.gg/5F77ZhZuv3',
   youtube: 'https://youtube.com/@smashrankup',
 };
@@ -414,7 +444,16 @@ $('novidades').innerHTML = NOVIDADES.map(([i, t]) =>
   `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[i]}</svg><span>${t}</span></li>`).join('');
 const ip = SMASH.servidor + ':' + SMASH.porta;
 $('ipServidor').textContent = ip;
-if (SMASH.linkCliente) { $('baixarCliente').href = SMASH.linkCliente; $('baixarCliente').hidden = false; $('apkBreve').hidden = true; }
+if (SMASH.apks.length) {
+  const janela = $('escolherApk');
+  $('baixarCliente').hidden = false; $('apkBreve').hidden = true;
+  $('opcoesApk').innerHTML = SMASH.apks.map((a) =>
+    `<a class="opcao${a.recomendado ? ' rec' : ''}" href="${a.link}"><span><b>${a.titulo}</b>${a.recomendado ? '<span class="tag">Recomendado</span>' : ''}<small>${a.desc}</small></span><span class="opcao-mb">${a.mb} MB</span></a>`).join('');
+  $('baixarCliente').onclick = () => { if (SMASH.apks.length === 1) location.href = SMASH.apks[0].link; else janela.showModal(); };
+  $('fecharApk').onclick = () => janela.close();
+  janela.onclick = (e) => { if (e.target === janela) janela.close(); };  // toque fora fecha
+  $('opcoesApk').onclick = (e) => { if (e.target.closest('.opcao')) setTimeout(() => janela.close(), 300); };
+}
 $('lnkDiscord').href = SMASH.discord; $('lnkYoutube').href = SMASH.youtube;
 $('copiarIp').onclick = async () => {
   try { await navigator.clipboard.writeText(ip); $('copiarIp').textContent = 'Copiado'; }
