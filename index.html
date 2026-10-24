@@ -245,7 +245,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
     <div class="intro">
       <span class="pixel" style="color:var(--smash-2)">Conversor de resource packs</span>
       <h1>Seu pack do Java no <em>Smash Client</em>, sem perder qualidade</h1>
-      <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5 ou 0.15.10. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
+      <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5 ou 0.15.10. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. Se o pack tiver céu do OptiFine, ele vira skybox no MCPE 1.1.5. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
     </div>
 
     <div class="grade">
@@ -550,6 +550,7 @@ function mostrarResultado(m) {
   const add = (t) => { const s = document.createElement('span'); s.innerHTML = t; res.appendChild(s); };
   add(`<b>${r.total ?? '?'}</b> texturas`); add(`<b>${m.segundos.toFixed(0)} s</b>`);
   Object.entries(r.categorias || {}).forEach(([k, v]) => add(`${nomes[k] || k} <b>${v}</b>`));
+  if (r.ceu) add('<b>skybox</b> do OptiFine');
   const av = $('avisos'); av.innerHTML = ''; av.hidden = !(r.avisos && r.avisos.length);
   (r.avisos || []).forEach((t) => { const li = document.createElement('li'); li.textContent = t; av.appendChild(li); });
   status('Pronto! Baixe o .zip e siga o passo a passo de instalação.', false);
