@@ -198,6 +198,16 @@ code { font-size: .92em; overflow-wrap: anywhere; }
 .opcao small { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
 .opcao .tag { display: inline-block; margin-left: 8px; padding: 2px 7px; border-radius: 4px; background: var(--smash); color: var(--on-smash); font: 600 11px var(--f-display); letter-spacing: .04em; text-transform: uppercase; vertical-align: 2px; }
 .opcao-mb { color: var(--muted); font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* versoes de teste (so na pagina /teste/) */
+.testes { display: grid; gap: 12px; }
+.teste { display: grid; gap: 10px; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--smash-2); border-radius: var(--r); padding: 16px 18px; }
+.teste-topo { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.teste h3 { margin: 0; font: 600 17px/1.3 var(--f-display); overflow-wrap: anywhere; }
+.teste time { color: var(--muted); font-size: 13px; }
+.teste details { color: var(--muted); font-size: 14px; }
+.teste summary { cursor: pointer; color: var(--text); }
+.teste .notas { margin: 8px 0 0; white-space: pre-line; overflow-wrap: anywhere; }
+.teste .linha a.btn { text-decoration: none; }
 footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); margin-top: 34px; }
 </style>
 </head>
@@ -229,6 +239,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
       <div class="linha">
         <button class="btn grande" id="baixarCliente" type="button" hidden>Baixar o Smash Client</button>
         <span class="chip off" id="apkBreve">Download do APK · em breve</span>
+        <button class="btn sec" id="irTestes" type="button" hidden>Versões de teste</button>
         <a class="btn sec" id="lnkDiscord" href="#" target="_blank" rel="noopener">Discord</a>
         <a class="btn sec" id="lnkYoutube" href="#" target="_blank" rel="noopener">YouTube</a>
       </div>
@@ -245,6 +256,12 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
           <p class="nota">Não sabe qual é? Baixe a de <b>64 bits</b>. Se o Android avisar que o app não é compatível ou não instalar, baixe a de <b>32 bits</b>.</p>
         </div>
       </dialog>
+    </section>
+
+    <section class="bloco-sec" id="testes" hidden>
+      <h2>Versões de teste</h2>
+      <p class="nota">Pré-lançamentos do Smash Client para testar antes de todo mundo. Podem ter bugs: se algo der errado, avise no Discord.</p>
+      <div class="testes" id="listaTestes"><p class="vazio">Buscando as versões de teste…</p></div>
     </section>
 
     <section class="bloco-sec">
@@ -436,6 +453,8 @@ const SMASH = {
     { titulo: '32 bits', desc: 'Para celulares mais antigos ou se a de 64 bits não instalar', mb: 50,
       link: 'https://github.com/caiquelopess/smash-group/releases/download/1.1.5/Smash-Client-v2.0-beta-32bits.apk' },
   ],
+  repo: 'caiquelopess/smash-group',
+  versoesTeste: false,  // true so na pagina /teste/: lista as pre-releases (APKs de teste) do GitHub
   discord: 'https://discord.gg/5F77ZhZuv3',
   youtube: 'https://youtube.com/@smashrankup',
 };
@@ -480,6 +499,41 @@ if (SMASH.apks.length) {
   janela.onclick = (e) => { if (e.target === janela) fechar(janela); };  // toque fora fecha
   $('opcoesApk').onclick = (e) => { if (e.target.closest('.opcao')) setTimeout(() => fechar(janela), 300); };
 }
+// pagina /teste/: pre-releases com APK, lidas na hora pela API do GitHub (a mais nova primeiro)
+async function carregarTestes() {
+  const lista = $('listaTestes'), todas = 'https://github.com/' + SMASH.repo + '/releases';
+  $('testes').hidden = false; $('irTestes').hidden = false;
+  $('irTestes').onclick = () => $('testes').scrollIntoView({ behavior: 'smooth' });
+  try {
+    const r = await fetch('https://api.github.com/repos/' + SMASH.repo + '/releases?per_page=30');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const ehApk = (a) => /\.apk$/i.test(a.name), eh32 = (a) => /32\s*bits/i.test(a.name);
+    const rels = (await r.json()).filter((v) => v.prerelease && !v.draft && v.assets.some(ehApk));
+    lista.textContent = '';
+    if (!rels.length) { lista.innerHTML = '<p class="vazio">Nenhuma versão de teste no momento.</p>'; return; }
+    rels.forEach((v, i) => {
+      const apks = v.assets.filter(ehApk).sort((a, b) => eh32(a) - eh32(b)), tem32 = apks.some(eh32);  // 64 bits primeiro
+      const card = document.createElement('article'); card.className = 'teste';
+      card.innerHTML = '<div class="teste-topo"><h3></h3><time></time></div><details><summary>O que mudou</summary><p class="notas"></p></details><div class="linha"></div>';
+      card.querySelector('h3').textContent = v.name || v.tag_name;
+      const t = card.querySelector('time'); t.dateTime = v.published_at; t.textContent = new Date(v.published_at).toLocaleDateString('pt-BR');
+      if (i === 0) card.querySelector('.teste-topo').insertAdjacentHTML('beforeend', '<span class="chip on">Mais nova</span>');
+      const notas = (v.body || '').replace(/\*\*/g, '').trim();
+      if (notas) card.querySelector('.notas').textContent = notas; else card.querySelector('details').remove();
+      apks.forEach((a) => {
+        const tipo = eh32(a) ? '32 bits' : tem32 ? '64 bits' : /multi/i.test(v.name) ? '32 e 64 bits' : 'APK';
+        const b = document.createElement('a'); b.className = 'btn' + (eh32(a) ? ' sec' : ''); b.href = a.browser_download_url;
+        b.textContent = 'Baixar ' + tipo + ' · ' + Math.round(a.size / 1048576) + ' MB';
+        card.querySelector('.linha').appendChild(b);
+      });
+      lista.appendChild(card);
+    });
+    lista.insertAdjacentHTML('beforeend', `<p class="nota"><a href="${todas}" target="_blank" rel="noopener">Todas as versões no GitHub</a></p>`);
+  } catch (e) {
+    lista.innerHTML = `<p class="vazio">Não deu para carregar a lista agora. <a href="${todas}" target="_blank" rel="noopener">Ver as versões no GitHub</a>.</p>`;
+  }
+}
+if (SMASH.versoesTeste) carregarTestes();
 $('lnkDiscord').href = SMASH.discord; $('lnkYoutube').href = SMASH.youtube;
 $('copiarIp').onclick = async () => {
   try { await navigator.clipboard.writeText(ip); $('copiarIp').textContent = 'Copiado'; }
