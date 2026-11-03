@@ -262,7 +262,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
 
     <section class="bloco-sec" id="testes" hidden>
       <h2>Versões de teste</h2>
-      <p class="nota">Pré-lançamentos do Smash Client para testar antes de todo mundo. Podem ter bugs: se algo der errado, avise no Discord.</p>
+      <p class="nota">Pré-lançamentos do Smash Client e APKs do MCPE 1.1.5 e 0.15.10 para testar antes de todo mundo. Confira o selo da versão do jogo antes de baixar. Podem ter bugs: se algo der errado, avise no Discord.</p>
       <div class="testes" id="listaTestes"><p class="vazio">Buscando as versões de teste…</p></div>
     </section>
 
@@ -511,15 +511,18 @@ async function carregarTestes() {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const ehApk = (a) => /\.apk$/i.test(a.name), eh32 = (a) => /32\s*bits/i.test(a.name);
     const rels = (await r.json()).filter((v) => v.prerelease && !v.draft && v.assets.some(ehApk));
-    lista.textContent = '';
+    lista.textContent = ''; const familias = new Set();
     if (!rels.length) { lista.innerHTML = '<p class="vazio">Nenhuma versão de teste no momento.</p>'; return; }
-    rels.forEach((v, i) => {
+    rels.forEach((v) => {
       const apks = v.assets.filter(ehApk).sort((a, b) => eh32(a) - eh32(b)), tem32 = apks.some(eh32);  // 64 bits primeiro
       const card = document.createElement('article'); card.className = 'teste';
       card.innerHTML = '<div class="teste-topo"><h3></h3><time></time></div><details><summary>O que mudou</summary><p class="notas"></p></details><div class="linha"></div>';
       card.querySelector('h3').textContent = v.name || v.tag_name;
       const t = card.querySelector('time'); t.dateTime = v.published_at; t.textContent = new Date(v.published_at).toLocaleDateString('pt-BR');
-      if (i === 0) card.querySelector('.teste-topo').insertAdjacentHTML('beforeend', '<span class="chip on">Mais nova</span>');
+      // selo da versao do jogo; "Mais nova" uma vez por familia (versao do jogo + Smash Client ou outro APK)
+      const jogo = /0\.15/.test(v.name + ' ' + v.tag_name) ? 'MCPE 0.15.10' : 'MCPE 1.1.5', fam = jogo + /smash client/i.test(v.name);
+      const topo = card.querySelector('.teste-topo'); topo.insertAdjacentHTML('beforeend', '<span class="chip">' + jogo + '</span>');
+      if (!familias.has(fam)) { familias.add(fam); topo.insertAdjacentHTML('beforeend', '<span class="chip on">Mais nova</span>'); }
       const notas = (v.body || '').replace(/\*\*/g, '').trim();
       if (notas) card.querySelector('.notas').textContent = notas; else card.querySelector('details').remove();
       apks.forEach((a) => {
