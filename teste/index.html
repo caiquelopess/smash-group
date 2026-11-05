@@ -79,7 +79,7 @@ a { color: var(--smash-2); }
 .online.off b { color: var(--bad); }
 .online.off .ponto { background: var(--bad); box-shadow: 0 0 8px var(--bad); }
 .hero .servidor { flex-wrap: wrap; justify-content: center; row-gap: 4px; }
-@media (max-width: 480px) { .hero .servidor > .pixel { display: none; } }  /* cabe numa linha so no celular */
+@media (max-width: 480px) { .hero .servidor > .pixel { display: none; } .hero .servidor > .online { flex-basis: 100%; justify-content: center; } }  /* no celular: jogadores em cima, IP + Copiar embaixo */
 .ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); flex: none; }
 @media (max-width: 720px) { .topo-dir .servidor { display: none; } }
 
@@ -286,6 +286,17 @@ footer { margin-top: 46px; padding-block: 30px 28px; background: #000; color: va
 footer p { margin: 0 auto; max-width: 80ch; }
 footer .credito { margin-top: 8px; opacity: .8; }
 
+/* numeros grandes logo abaixo do topo: curiosidade em 1 segundo */
+.numeros { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 26px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); }
+@media (max-width: 640px) { .numeros { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.numeros div { padding: 16px 12px; text-align: center; border-right: 1px solid var(--line); }
+.numeros div:last-child { border-right: 0; }
+@media (max-width: 640px) { .numeros div:nth-child(2) { border-right: 0; } .numeros div:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
+.numeros b { display: block; font: 900 clamp(26px, 4vw, 38px)/1 var(--f-titulo); color: var(--smash-2); }
+.numeros span { display: block; margin-top: 6px; font: 600 11px/1.3 var(--f-titulo); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.faixa-rk .rotulo { color: #ffaa00; }
+.faixa-rk a { background: #c40e0e; color: #fff; }
+
 /* cards pequenos (destaques do RankUp e modulos do Client): item do jogo + titulo + frase */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 10px; }
 .card { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 12px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
@@ -358,10 +369,10 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="hero">
       <div class="wrap hero-in">
         <img class="hero-logo" src="../img/logo-branca.png" alt="Smash Client" width="840" height="319">
-        <h1>O Minecraft PE 1.1.5 com cara de PC</h1>
-        <p>Mineração do Java, mouse e teclado, um menu completo e o servidor SMASH já na lista.</p>
+        <h1>Jogue no celular como se fosse no PC</h1>
+        <p>Mineração do Java 1.8.9, mouse e teclado, 9 módulos no menu de pausa e o servidor SMASH a um toque. Grátis, para Android.</p>
         <div class="hero-botoes">
-          <button class="btn grande js-baixar" id="baixarCliente" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar</button>
+          <button class="btn grande js-baixar" id="baixarCliente" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar grátis</button>
           <span class="chip off" id="apkBreve">Download do APK · em breve</span>
           <a class="btn grande discord js-discord" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>Discord</a>
           <button class="btn grande sec" id="irTestes" type="button" hidden>Versões de teste</button>
@@ -374,6 +385,13 @@ footer .credito { margin-top: 8px; opacity: .8; }
     </section>
 
     <div class="wrap">
+    <div class="numeros">
+      <div><b>9</b><span>módulos no menu</span></div>
+      <div><b>1.8.9</b><span>mineração do Java</span></div>
+      <div><b>64 e 32</b><span>bits, até em celular antigo</span></div>
+      <div><b>100%</b><span>grátis</span></div>
+    </div>
+
     <section class="bloco-sec" id="testes" hidden>
       <h2>Versões de teste</h2>
       <p class="nota">Pré-lançamentos do Smash Client e APKs do MCPE 1.1.5 e 0.15.10 para testar antes de todo mundo. Confira o selo da versão do jogo antes de baixar. Podem ter bugs: se algo der errado, avise no Discord.</p>
@@ -381,22 +399,23 @@ footer .credito { margin-top: 8px; opacity: .8; }
     </section>
 
     <section class="bloco-sec">
-      <h2>O que tem no Smash Client</h2>
-      <p class="nota">Tudo que faz o MCPE parecer o Minecraft do computador, sem perder o jeito do celular.</p>
+      <span class="kicker">O que tem no Smash Client</span>
+      <h2>O MCPE que você sempre quis</h2>
+      <p class="nota">Tudo que faltava no Minecraft PE pra ele parecer o do computador, sem perder o jeito do celular.</p>
       <div class="destaques" id="destaques"></div>
     </section>
 
     <section class="bloco-sec" id="modulos">
-      <span class="kicker">No menu de pausa</span>
-      <h2>Módulos do Smash Client</h2>
+      <span class="kicker">Liga e desliga no menu de pausa</span>
+      <h2>9 módulos, zero complicação</h2>
       <div class="cards" id="cardsModulos"></div>
-      <h3 class="sub-sec">E ainda</h3>
+      <h3 class="sub-sec">E tem mais</h3>
       <ul class="mais" id="novidades"></ul>
     </section>
 
     <section class="bloco-sec" id="como-instalar">
-      <span class="kicker">Em 1 minuto</span>
-      <h2>Como instalar o Smash Client</h2>
+      <span class="kicker">Como instalar · leva 1 minuto</span>
+      <h2>Baixou, instalou, jogou</h2>
       <ol class="passos-cli">
         <li>Toque em <b>Baixar</b> e escolha a versão: <b>64 bits</b> serve na maioria dos celulares; <b>32 bits</b> para os mais antigos.</li>
         <li>Abra o arquivo baixado. Se o Android pedir, permita <b>Instalar apps desconhecidos</b> para o navegador ou o gerenciador de arquivos e volte.</li>
@@ -408,13 +427,18 @@ footer .credito { margin-top: 8px; opacity: .8; }
         <p><b>Tem um pack de textura do Java?</b> Converta para o Smash Client sem perder qualidade, direto no navegador.</p>
         <a href="#conversor">Abrir o conversor ›</a>
       </div>
+      <div class="faixa-conv faixa-rk">
+        <span class="rotulo"><img src="../img/mc/nether_star.png" alt="" width="16" height="16">Servidor SMASH</span>
+        <p><b>6 bosses por dia, 56 degraus de rank e PvP com a física do Java 1.8.</b> E ele já vem na lista do Smash Client.</p>
+        <a href="#rankup">Conhecer o RankUp ›</a>
+      </div>
     </section>
 
     <section class="bloco-sec">
       <div class="chamada">
         <img src="../img/icone-branco.png" alt="" width="170" height="192">
-        <p><b>Baixe grátis e entre no SMASH com um toque.</b> Escolha 64 ou 32 bits. Na dúvida, comece pelo 64.</p>
-        <button class="btn-contorno js-baixar" type="button" hidden>Baixar</button>
+        <p><b>Mineração do Java, mouse e teclado, 9 módulos e o servidor SMASH na lista.</b> E é grátis. O que você está esperando? Baixe agora!</p>
+        <button class="btn-contorno js-baixar" type="button" hidden>Baixar grátis</button>
       </div>
     </section>
     </div>
@@ -424,7 +448,8 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="hero hero-rankup">
       <div class="wrap hero-in">
         <h1 class="hero-titulo"><img class="hero-logo" src="../img/logo-rankup.png" alt="Smash RankUp" width="840" height="372"></h1>
-        <p class="hero-frase">Começa do zero, minera, sobe de rank e chega no Blaze. RankUp brasileiro de MCPE, com combate do Java 1.8.</p>
+        <p class="hero-frase">Do Carvão ao Blaze. Até onde você chega?</p>
+        <p>56 degraus de rank, 6 bosses por dia e PvP com a física do Java 1.8. A temporada já começou: ainda dá tempo de chegar no topo.</p>
         <div class="hero-botoes">
           <button class="btn grande js-baixar" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar o Smash Client</button>
           <a class="btn grande discord js-discord" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>Entrar no Discord</a>
@@ -434,19 +459,28 @@ footer .credito { margin-top: 8px; opacity: .8; }
     </section>
 
     <div class="wrap">
+    <div class="numeros">
+      <div><b>14</b><span>ranks</span></div>
+      <div><b>56</b><span>degraus até o Blaze</span></div>
+      <div><b>6</b><span>bosses por dia</span></div>
+      <div><b>15</b><span>tipos de spawner</span></div>
+    </div>
+
     <section class="bloco-sec">
-      <h2>O que tem no Smash RankUp</h2>
+      <span class="kicker">O que tem no Smash RankUp</span>
+      <h2>O que te espera lá dentro</h2>
       <div class="cards" id="cardsRankup"></div>
     </section>
 
     <section class="bloco-sec" id="como-entrar">
-      <h2>Como entrar</h2>
+      <span class="kicker">Como entrar</span>
+      <h2>Entre em 10 segundos</h2>
       <div class="entrar">
         <div><small>IP</small><b class="js-host"></b></div>
         <div><small>Porta</small><b class="js-porta"></b></div>
         <div><small>Discord</small><b><a class="js-discord" href="#" target="_blank" rel="noopener">discord.gg/5F77ZhZuv3</a></b></div>
       </div>
-      <p class="nota">Pelo Smash Client o servidor já vem na lista.</p>
+      <p class="nota">No Smash Client o servidor já vem na lista: é só tocar e jogar.</p>
     </section>
 
     <section class="bloco-sec">
@@ -658,9 +692,9 @@ const SMASH = {
 };
 // cartoes grandes do "O que tem": [textura de fundo, item, chamada, titulo, texto] (arquivos em img/mc/)
 const DESTAQUES = [
-  ['stone', 'diamond_pickaxe', 'Java 1.8.9', 'Mineração do Java 1.8.9', 'Cada bloco quebra no mesmo tempo do Java 1.8.9. Quem vem do PC já se sente em casa.'],
-  ['netherrack', 'clock_item', 'Do teu jeito', 'Menu do Client', 'Uma grade pra ligar e desligar tudo: Status (FPS, ping, memória, temperatura e bateria), Macro de texto, Toggle Sprint, F5 e Editar HUD, pra arrastar cada item na tela.'],
-  ['gold_block', 'book_enchanted', 'Como no PC', 'Mouse e teclado', 'Conecte mouse e teclado e jogue como no PC.'],
+  ['stone', 'diamond_pickaxe', 'Igual ao Java 1.8.9', 'Mineração', 'Cada bloco quebra no tempo do PC. Quem vem do Java sente a diferença no primeiro minuto.'],
+  ['netherrack', 'clock_item', '9 módulos num menu só', 'Menu do Client', 'FPS e ping na tela, macro de texto, sprint automático, F5, capas e muito mais. Liga e desliga num toque, direto do pause.'],
+  ['gold_block', 'book_enchanted', 'Plugue e jogue', 'Mouse e teclado', 'Conecte mouse e teclado e jogue como no PC.'],
 ];
 // cards da aba Smash RankUp: [item do jogo em img/mc/, titulo, frase] (textos do Marketing; nada de valores nem datas)
 const RANKUP = [
@@ -755,7 +789,7 @@ async function atualizarOnline() {
     const j = await r.json(), n = Number(j.players && j.players.online) || 0;
     marcas.forEach((el) => {
       el.hidden = false; el.classList.toggle('off', !j.online);
-      el.innerHTML = '<span class="ponto" aria-hidden="true"></span>' + (j.online ? '<b>' + n.toLocaleString('pt-BR') + '</b> online' : '<b>offline</b>');
+      el.innerHTML = '<span class="ponto" aria-hidden="true"></span>' + (j.online ? '<b>' + n.toLocaleString('pt-BR') + '</b> jogando' : '<b>offline</b>');
     });
   } catch (e) { marcas.forEach((el) => { el.hidden = true; }); }
 }
