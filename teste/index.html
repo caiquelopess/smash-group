@@ -797,7 +797,7 @@ const menu = { abrir() { document.body.classList.add('menu-aberto'); $('veuMenu'
 $('abrirMenu').onclick = menu.abrir; $('fecharMenu').onclick = menu.fechar; $('veuMenu').onclick = menu.fechar;
 $('menuSite').addEventListener('click', (e) => { if (e.target.closest('.aba')) menu.fechar(); });
 addEventListener('keydown', (e) => { if (e.key === 'Escape') menu.fechar(); });
-// "N online" no topo (como no Lunar); servidor fora = "offline"; erro da API = some
+// jogadores no topo: "Servidor online" (0), "N jogando" (1+), "Servidor em manutencao" (fora); erro da API = some
 async function atualizarOnline() {
   if (!SMASH.statusApi || document.hidden) return;
   const marcas = document.querySelectorAll('.js-online');
@@ -808,7 +808,8 @@ async function atualizarOnline() {
     const j = await r.json(), n = Number(j.players && j.players.online) || 0;
     marcas.forEach((el) => {
       el.hidden = false; el.classList.toggle('off', !j.online);
-      el.innerHTML = '<span class="ponto" aria-hidden="true"></span>' + (j.online ? '<b>' + n.toLocaleString('pt-BR') + '</b> jogando' : '<b>offline</b>');
+      // 0 jogadores afasta quem chega: mostra so "Servidor online"; o numero aparece a partir de 1 (sugestao do Marketing)
+      el.innerHTML = '<span class="ponto" aria-hidden="true"></span>' + (!j.online ? '<b>Servidor em manutenção</b>' : n > 0 ? '<b>' + n.toLocaleString('pt-BR') + '</b> jogando' : '<b>Servidor online</b>');
     });
   } catch (e) { marcas.forEach((el) => { el.hidden = true; }); }
 }
