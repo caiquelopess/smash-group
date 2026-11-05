@@ -113,7 +113,8 @@ a { color: var(--smash-2); }
 .tile h3 { margin: 0; font: 900 clamp(28px, 4vw, 42px)/1 var(--f-titulo); text-transform: uppercase; text-shadow: 0 3px 0 rgb(0 0 0 / .45); }
 .tile p { margin: 4px 0 0; color: #e8d6cf; font-size: 14px; max-width: 34ch; }
 .mais { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
-@media (max-width: 760px) { .mais { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 960px) { .mais { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .mais { grid-template-columns: minmax(0, 1fr); } }
 .mais li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 14px; }
 .mais svg { width: 22px; height: 22px; color: var(--smash-2); }
 
@@ -309,8 +310,8 @@ footer p { margin: 0 auto; max-width: 80ch; }
     <section class="hero">
       <div class="wrap hero-in">
         <img class="hero-logo" src="../img/logo-branca.png" alt="Smash Client" width="840" height="319">
-        <h1>Minecraft PE com a jogabilidade do Java</h1>
-        <p>O Smash Client é o Minecraft PE 1.1.5 para Android com mineração e alcance iguais ao Java, teclado corrigido, câmera sem pulos e o servidor SMASH já na lista.</p>
+        <h1>O Minecraft PE 1.1.5 com cara de PC</h1>
+        <p>Mineração do Java, mouse e teclado, um menu só teu e o servidor SMASH já na lista.</p>
         <div class="hero-botoes">
           <button class="btn grande js-baixar" id="baixarCliente" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar</button>
           <span class="chip off" id="apkBreve">Download do APK · em breve</span>
@@ -332,8 +333,8 @@ footer p { margin: 0 auto; max-width: 80ch; }
     </section>
 
     <section class="bloco-sec">
-      <span class="kicker">Feito para o PvP e o survival</span>
       <h2>O que tem no Smash Client</h2>
+      <p class="nota">Tudo que faz o MCPE parecer o Minecraft do computador, sem perder o jeito do celular.</p>
       <div class="destaques" id="destaques"></div>
       <ul class="mais" id="novidades"></ul>
     </section>
@@ -357,7 +358,7 @@ footer p { margin: 0 auto; max-width: 80ch; }
     <section class="bloco-sec">
       <div class="chamada">
         <img src="../img/icone-branco.png" alt="" width="170" height="192">
-        <p><b>Mineração do Java</b>, <b>alcance certo</b>, <b>teclado corrigido</b> e o <b>servidor SMASH</b> na lista. E é <b>grátis</b>. O que você está esperando? Baixe hoje!</p>
+        <p><b>Baixe grátis e entre no SMASH com um toque.</b> Escolha 64 ou 32 bits. Na dúvida, comece pelo 64.</p>
         <button class="btn-contorno js-baixar" type="button" hidden>Baixar</button>
       </div>
     </section>
@@ -559,16 +560,18 @@ const SMASH = {
 };
 // cartoes grandes do "O que tem": [textura de fundo, item, chamada, titulo, texto] (arquivos em img/mc/)
 const DESTAQUES = [
-  ['stone', 'diamond_pickaxe', 'Igual ao Java', 'Mineração', 'Tempo de quebra do Java, com o efeito real dos encantamentos.'],
-  ['obsidian', 'ender_pearl', 'PvP do Java 1.8', 'Alcance do Java', 'Combate igual ao Java 1.8: dano, crítico, knockback e alcance.'],
-  ['netherrack', 'book_enchanted', 'Chat e menus', 'Teclado corrigido', 'Digita certo em todos os menus e no chat, com histórico Anterior e Próximo.'],
-  ['gold_block', 'chest_front', 'SmashMC.blazebr.com', 'Servidor na lista', 'O SMASH já vem fixo na lista de servidores. O servidor aceita MCPE 1.1.5 e 0.15.10.'],
+  ['stone', 'diamond_pickaxe', 'Java 1.8.9', 'Mineração do Java 1.8.9', 'Cada bloco quebra no mesmo tempo do Java 1.8.9. Quem vem do PC já se sente em casa.'],
+  ['obsidian', 'diamond_sword', 'No servidor SMASH', 'Combate do Java 1.8', 'No servidor SMASH, o PvP é igual ao do Java 1.8: dano, crítico, knockback e alcance.'],  // vem do servidor, nao do Client
+  ['netherrack', 'clock_item', 'Do teu jeito', 'Menu do Client', 'FPS e ping na tela, limite de FPS, modo economia, FOV, neblina, idioma, cor e marca d’água. Tudo no teu jeito, direto do menu de pausa.'],
+  ['gold_block', 'book_enchanted', 'Como no PC', 'Mouse e teclado', 'Conecte mouse e teclado e jogue como no PC. O mouse funciona nos menus e a rodinha troca o item da barra.'],
 ];
-// lista menor embaixo dos cartoes
+// lista menor embaixo dos cartoes (so recursos do jogo: correcoes do emulador e a da placa nao entram)
 const NOVIDADES = [
-  ['cam', '"Pulo" da câmera ao soltar o dedo da tela corrigido'],
-  ['spark', 'Partículas configuráveis nas configurações de vídeo'],
-  ['sun', 'Tela sempre acesa: não apaga mais quando você fica AFK'],
+  ['server', 'Servidor SMASH já na lista: é só tocar e entrar'],
+  ['chat', 'Histórico do chat nas setas'],
+  ['cam', 'Câmera de toque mais estável, sem pulos'],
+  ['lang', 'Português, English e Español'],
+  ['phone', '64 bits pra celulares atuais e 32 bits pros mais antigos'],
 ];
 /* ============================== */
 
@@ -586,6 +589,8 @@ const ICONES = {
   sun: '<path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/>',
   sign: '<path d="M4 4h16v10H4zM12 14v7M8 8h8M8 11h5"/>',
   server: '<path d="M4 4h16v6H4zM4 14h16v6H4zM7 7h1M7 17h1"/>',
+  lang: '<path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18ZM3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9Z"/>',
+  phone: '<path d="M7 2h10v20H7zM11 18h2"/>',
 };
 $('destaques').innerHTML = DESTAQUES.map(([tex, item, chamada, titulo, texto]) =>
   `<article class="tile" style="--tex:url(../img/mc/${tex}.png)"><img class="tile-item" src="../img/mc/${item}.png" alt="" width="16" height="16"><span class="kicker">${chamada}</span><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
