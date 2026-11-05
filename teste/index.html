@@ -315,7 +315,8 @@ footer .credito { margin-top: 8px; opacity: .8; }
 .veu { position: fixed; inset: 0; z-index: 29; background: rgb(0 0 0 / .6); }
 .fechar-menu { display: none; }
 @media (max-width: 900px) {
-  .menu-btn { display: block; }
+  .menu-btn { display: block; padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .btn-topo { display: none; }  /* no celular o Baixar fica so no topo da pagina (pedido do Caique) */
   .topo-2 { position: fixed; top: 0; right: 0; bottom: 0; z-index: 30; width: min(82vw, 320px); border: 0; border-left: 1px solid var(--line); background: #0b0302; transform: translateX(100%); transition: transform .22s ease; overflow-y: auto; padding: 8px 0 24px; }
   body.menu-aberto .topo-2 { transform: none; box-shadow: -12px 0 40px rgb(0 0 0 / .6); }
   body.menu-aberto .topo { z-index: 40; }  /* a barra fica dentro do cabecalho: ele sobe acima do veu */
@@ -664,12 +665,12 @@ const DESTAQUES = [
 // cards da aba Smash RankUp: [item do jogo em img/mc/, titulo, frase] (textos do Marketing; nada de valores nem datas)
 const RANKUP = [
   ['diamond_pickaxe', 'Mina e picaretas', 'Minere pra ganhar Money e Tokens, e encante a tua picareta com Explosão, Destruidor, Laser, Nuclear, Fortuna e Multiplicador.'],
-  ['blaze_rod', '14 ranks e prestígio', 'Do Carvão ao Blaze, em 56 degraus. Os 7 últimos são ranks de mob, e no topo você faz prestígio até o ✦10.'],
+  ['blaze_rod', '14 ranks e prestígio', 'Do Carvão ao Blaze, em 56 degraus, com os 7 últimos de mob. No topo, cada prestígio (até o ✦10) dá +10% de Money pra sempre.'],
   ['nether_star', '6 bosses todo dia', 'Às 18h, 20h e 22h, com aviso antes de nascer e itens que só caem deles.'],
   // sem "alcance": no servidor e 6 blocos, nao o do Java 1.8 (Dev, 05/11)
   ['diamond_sword', 'Combate do Java 1.8', 'Dano, crítico, armadura, knockback e arco iguais aos do Java 1.8, com anticheat no servidor.'],
   ['gold_ingot', 'Economia de verdade', 'Venda manual ou automática, lojas dos jogadores, banco que rende enquanto você joga e Money sem teto.'],
-  ['mob_spawner', 'Máquinas e spawners', 'Máquinas que rendem até com você parado e 15 tipos de spawner, liberados a cada rank.'],
+  ['mob_spawner', 'Máquinas e spawners', 'Máquinas que rendem até com você parado e 15 tipos de spawner pra tua produção não parar.'],
   ['emerald', 'Terrenos e fazenda', 'Teu terreno com fazenda de cana, cacto, abóbora e melancia, que crescem como no Java.'],
   ['gold_sword', 'Clãs', 'Monte teu clã com tag, até 10 membros, aliados, rivais e KDR.'],
   ['chest_front', 'Eventos e caixas', 'Eventos no chat a cada 30 minutos, caixas com keys e boosters de mina e de venda.'],
