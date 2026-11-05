@@ -15,7 +15,7 @@
 <meta property="og:image" content="../img/icone-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Silkscreen&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Rubik:ital,wght@0,700;0,800;0,900;1,600&family=IBM+Plex+Sans:wght@400;500;600&family=Silkscreen&display=swap">
 <style>
 /* Layout: barra do servidor no topo; ferramenta em 3 passos a esquerda e o cartao do pack a direita;
    depois "como usar" e as novidades do Smash Client. Visual escuro de proposito (cliente de jogo).
@@ -37,6 +37,8 @@
   --f-display: "Chakra Petch", "Segoe UI", Roboto, sans-serif;
   --f-body: "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --f-pixel: "Silkscreen", "Courier New", monospace;
+  --f-titulo: "Rubik", "Chakra Petch", "Segoe UI", sans-serif;
+  --discord: #5865f2;
   --r: 10px;
   color-scheme: dark;
   padding-top: env(safe-area-inset-top, 0px);
@@ -46,44 +48,102 @@
 html, body { margin: 0; }
 body {
   background: var(--bg); color: var(--text); font: 15px/1.55 var(--f-body);
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 img { max-width: 100%; }
 [hidden] { display: none !important; }
-.wrap { max-width: 1080px; margin: 0 auto; }
+.wrap { max-width: 1112px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 a { color: var(--smash-2); }
 :focus-visible { outline: 2px solid var(--smash-2); outline-offset: 2px; }
 .pixel { font-family: var(--f-pixel); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; }
 
-/* topo */
-.topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 18px; border-bottom: 1px solid var(--line); }
-.marca { display: flex; align-items: center; gap: 12px; font: 700 20px/1 var(--f-display); letter-spacing: .02em; }
-.marca { flex-wrap: wrap; row-gap: 10px; }
-.marca-logo img { height: 44px; width: auto; display: block; }
-.abas { display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 4px; }
-.aba { padding: 8px 14px; border-radius: 7px; color: var(--muted); text-decoration: none; font: 600 14px var(--f-display); letter-spacing: .02em; white-space: nowrap; }
-.aba:hover { color: var(--text); }
-.aba.on { background: var(--smash); color: var(--on-smash); }
-@media (max-width: 480px) { .abas { width: 100%; } .aba { flex: 1; text-align: center; padding-inline: 8px; font-size: 13px; } }
-.hero-cli { padding-block: 34px 10px; display: grid; gap: 14px; justify-items: start; }
-.logo-grande { width: min(100%, 460px); height: auto; filter: drop-shadow(0 6px 24px color-mix(in srgb, var(--smash) 30%, transparent)); }
-.hero-cli h1 { margin: 0; font: 700 clamp(26px, 4.4vw, 40px)/1.1 var(--f-display); text-wrap: balance; max-width: 22ch; }
-.hero-cli p { margin: 0; color: var(--muted); max-width: 62ch; }
-.btn.grande { padding: 14px 22px; font-size: 17px; }
-.linha a.btn { text-decoration: none; }
-.ficha { display: flex; flex-wrap: wrap; gap: 8px; }
-.ficha .pixel { color: var(--smash-2); border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 5px 9px; }
-.passos-lista { margin: 0; padding-left: 20px; display: grid; gap: 8px; color: var(--muted); }
-.passos-lista b { color: var(--text); }
-.marca small { color: var(--muted); font: 500 13px var(--f-body); letter-spacing: 0; }
+/* cabecalho (estilo Lunar: 2 linhas pretas, botao Baixar colado na direita) */
+.topo { position: sticky; top: 0; z-index: 20; background: #000; border-bottom: 1px solid #1c0a06; }
+.topo-1 { display: flex; align-items: stretch; justify-content: space-between; gap: 12px; height: 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); }
+.marca-logo { display: flex; align-items: center; }
+.marca-logo img { height: 40px; width: auto; display: block; }
+.topo-dir { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.btn-topo { appearance: none; border: 0; cursor: pointer; align-self: stretch; padding: 0 clamp(18px, 4vw, 44px); background: var(--smash); color: var(--on-smash); font: 900 clamp(15px, 2.2vw, 22px)/1 var(--f-titulo); letter-spacing: .08em; text-transform: uppercase; }
+.btn-topo:hover { filter: brightness(1.12); }
+.topo-2 { background: #0b0302; border-top: 1px solid #1c0a06; }
+.abas { display: flex; gap: 4px clamp(10px, 3vw, 34px); justify-content: center; overflow-x: auto; scrollbar-width: none; }
+.abas::-webkit-scrollbar { display: none; }
+@media (max-width: 720px) { .abas { justify-content: flex-start; } }  /* centralizado cortaria o 1o item ao rolar */
+.aba { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; cursor: pointer; padding: 11px 2px 9px; color: #e9dcd6; text-decoration: none; font: 700 13px/1 var(--f-titulo); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.aba:hover { color: #fff; }
+.aba.on { color: var(--smash-2); border-bottom-color: var(--smash); }
 .servidor { display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 14px; min-width: 0; }
 .servidor code { font: 500 13px var(--f-body); color: var(--text); overflow-wrap: anywhere; }
 .servidor .pixel { color: var(--smash-2); }
+.ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); flex: none; }
+@media (max-width: 720px) { .topo-dir .servidor { display: none; } }
+
+/* topo da pagina: cenario em pixel art, logo branca no centro */
+.hero { position: relative; isolation: isolate; text-align: center; padding: clamp(56px, 11vw, 120px) 0 clamp(48px, 8vw, 90px); background: #0a0203 url(../img/hero.jpg) center bottom / cover no-repeat; image-rendering: pixelated; }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 55% at 50% 45%, rgb(255 122 0 / .16), transparent 70%), linear-gradient(180deg, rgb(10 2 3 / .25), rgb(19 0 1 / .55) 70%, var(--bg)); }
+.hero-in { display: grid; justify-items: center; gap: 16px; }
+.hero-logo { width: min(100%, 460px); height: auto; image-rendering: auto; filter: drop-shadow(0 0 28px rgb(255 122 0 / .45)); }
+.hero h1 { margin: 4px 0 0; font: 800 clamp(24px, 4.2vw, 40px)/1.1 var(--f-titulo); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; max-width: 24ch; }
+.hero p { margin: 0; color: #e8d6cf; max-width: 60ch; }
+.hero-botoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 6px; }
+.btn.grande { padding: 14px 26px; font: 800 16px/1 var(--f-titulo); letter-spacing: .08em; text-transform: uppercase; border-radius: 6px; display: inline-flex; align-items: center; gap: 10px; }
+.btn.grande svg { width: 18px; height: 18px; }
+.btn.discord { background: var(--discord); color: #fff; }
+.linha a.btn, .hero-botoes a.btn { text-decoration: none; }
+.ficha { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ficha .pixel { color: var(--smash-2); border: 1px solid rgb(255 255 255 / .12); background: rgb(0 0 0 / .45); border-radius: 6px; padding: 5px 9px; }
+.hero .servidor { background: rgb(0 0 0 / .55); }
+.passos-lista { margin: 0; padding-left: 20px; display: grid; gap: 8px; color: var(--muted); }
+.passos-lista b { color: var(--text); }
+
+/* destaques: 4 cartoes grandes com textura do jogo (como os do Lunar) */
+.titulo-sec { margin: 0; font: 900 clamp(24px, 3.6vw, 34px)/1.1 var(--f-titulo); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+.kicker { font: italic 600 12px/1.2 var(--f-titulo); letter-spacing: .22em; text-transform: uppercase; color: var(--smash-2); }
+.destaques { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+@media (max-width: 640px) { .destaques { grid-template-columns: minmax(0, 1fr); } }
+.tile { position: relative; isolation: isolate; min-height: 250px; display: grid; align-content: center; justify-items: center; gap: 6px; padding: 28px 22px; text-align: center; background: var(--tex) 0 0 / 72px; image-rendering: pixelated; }
+.tile::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 70% at 50% 45%, rgb(19 0 1 / .55), rgb(19 0 1 / .88)); }
+.tile:hover::before { background: radial-gradient(70% 70% at 50% 45%, rgb(19 0 1 / .4), rgb(19 0 1 / .82)); }
+.tile-item { width: 64px; height: 64px; image-rendering: pixelated; filter: drop-shadow(0 4px 10px rgb(0 0 0 / .7)); margin-bottom: 4px; }
+.tile h3 { margin: 0; font: 900 clamp(28px, 4vw, 42px)/1 var(--f-titulo); text-transform: uppercase; text-shadow: 0 3px 0 rgb(0 0 0 / .45); }
+.tile p { margin: 4px 0 0; color: #e8d6cf; font-size: 14px; max-width: 34ch; }
+.mais { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
+@media (max-width: 760px) { .mais { grid-template-columns: minmax(0, 1fr); } }
+.mais li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 14px; }
+.mais svg { width: 22px; height: 22px; color: var(--smash-2); }
+
+/* passo a passo em cartoes numerados */
+.passos-cli { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; counter-reset: p; }
+@media (max-width: 900px) { .passos-cli { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .passos-cli { grid-template-columns: minmax(0, 1fr); } }
+.passos-cli li { counter-increment: p; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; color: var(--muted); font-size: 14px; }
+.passos-cli li::before { content: counter(p, decimal-leading-zero); display: block; font: 900 28px/1 var(--f-titulo); color: var(--smash); margin-bottom: 8px; }
+.passos-cli b { color: var(--text); }
+
+/* faixa do conversor (como a faixa de parceiro do Lunar) */
+.faixa-conv { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: stretch; background: #000; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.faixa-conv .rotulo { display: flex; align-items: center; gap: 10px; padding: 14px 18px; font: 900 15px/1.1 var(--f-titulo); text-transform: uppercase; letter-spacing: .04em; }
+.faixa-conv .rotulo img { width: 32px; height: 32px; image-rendering: pixelated; }
+.faixa-conv p { margin: 0; align-self: center; padding: 14px 6px; color: #e8d6cf; font-size: 14px; }
+.faixa-conv a { display: flex; align-items: center; gap: 8px; padding: 0 26px; background: var(--smash-2); color: var(--on-smash); text-decoration: none; font: 900 14px/1 var(--f-titulo); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.faixa-conv a:hover { filter: brightness(1.08); }
+@media (max-width: 720px) { .faixa-conv { grid-template-columns: minmax(0, 1fr); } .faixa-conv p { padding: 0 18px 14px; } .faixa-conv a { justify-content: center; padding: 15px; } }
+
+/* chamada final (como o banner azul do fim do Lunar) */
+.chamada { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 24px; padding: 22px 26px; border-radius: 14px; background: linear-gradient(110deg, var(--smash-red), var(--smash) 60%, #ff9a1f); color: #fff; }
+.chamada img { width: 72px; height: auto; flex: none; }
+.chamada p { margin: 0; flex: 1 1 300px; font-size: 15px; line-height: 1.5; }
+.chamada p b { font-weight: 700; }
+.btn-contorno { appearance: none; cursor: pointer; background: transparent; color: #fff; border: 2px solid rgb(255 255 255 / .85); border-radius: 999px; padding: 12px 26px; font: 800 15px/1 var(--f-titulo); letter-spacing: .08em; text-transform: uppercase; }
+.btn-contorno:hover { background: #fff; color: var(--smash-red); }
+
+/* faixa de titulo do conversor */
+.faixa { position: relative; isolation: isolate; background: #0a0203 url(../img/hero.jpg) center 85% / cover no-repeat; image-rendering: pixelated; }
+.faixa::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(10 2 3 / .55), var(--bg)); }
+.faixa .intro { padding-block: 44px 26px; }
 
 /* cabecalho */
 .intro { padding-block: 34px 22px; display: grid; gap: 10px; }
-.intro h1 { margin: 0; font: 700 clamp(28px, 5vw, 44px)/1.08 var(--f-display); text-wrap: balance; max-width: 18ch; }
+.intro h1 { margin: 0; font: 900 clamp(28px, 5vw, 46px)/1.06 var(--f-titulo); text-transform: uppercase; text-wrap: balance; max-width: 18ch; }
 .intro h1 em { font-style: normal; color: var(--smash); background: linear-gradient(180deg, var(--smash-2) 10%, var(--smash) 75%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .intro p { margin: 0; color: var(--muted); max-width: 62ch; }
 
@@ -149,8 +209,8 @@ a { color: var(--smash-2); }
 .selo { justify-self: start; }
 
 /* secoes de baixo */
-section.bloco-sec { padding-block: 34px 6px; display: grid; gap: 14px; }
-section.bloco-sec h2 { margin: 0; font: 700 24px/1.2 var(--f-display); text-wrap: balance; }
+section.bloco-sec { padding-block: 34px 6px; display: grid; gap: 14px; scroll-margin-top: 96px; }  /* nao some atras do cabecalho fixo */
+section.bloco-sec h2 { margin: 0; font: 900 clamp(22px, 3.2vw, 30px)/1.15 var(--f-titulo); text-transform: uppercase; text-wrap: balance; }
 .dois { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 @media (max-width: 720px) { .dois { grid-template-columns: minmax(0, 1fr); } }
 .dois h3 { margin: 0 0 6px; font: 600 16px var(--f-display); }
@@ -209,57 +269,55 @@ code { font-size: .92em; overflow-wrap: anywhere; }
 .teste summary { cursor: pointer; color: var(--text); }
 .teste .notas { margin: 8px 0 0; white-space: pre-line; overflow-wrap: anywhere; }
 .teste .linha a.btn { text-decoration: none; }
-footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); margin-top: 34px; }
+footer { margin-top: 46px; padding-block: 30px 28px; background: #000; color: var(--muted); font-size: 12px; text-align: center; }
+.redes { display: flex; justify-content: center; gap: 22px; margin-bottom: 16px; }
+.redes a { color: #e9dcd6; display: inline-flex; }
+.redes a:hover { color: var(--smash-2); }
+.redes svg { width: 22px; height: 22px; }
+footer p { margin: 0 auto; max-width: 80ch; }
 </style>
 </head>
 <body>
 <div style="background:#fee516;color:#130001;font:700 14px/1.4 system-ui,sans-serif;text-align:center;padding:8px 16px">VERSÃO DE TESTE · APKs de teste do Smash Client e novidades do site</div>
-<div class="wrap">
-
-<div class="wrap">
-
   <header class="topo">
-    <div class="marca">
+    <div class="topo-1">
       <a href="#cliente" class="marca-logo" aria-label="Smash Client"><img src="../img/logo.png" alt="Smash Client" width="111" height="44"></a>
-      <nav class="abas" aria-label="Seções do site">
+      <div class="topo-dir">
+        <div class="servidor"><span class="ponto" aria-hidden="true"></span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
+        <button class="btn-topo js-baixar" type="button" hidden>Baixar</button>
+      </div>
+    </div>
+    <nav class="topo-2" aria-label="Seções do site">
+      <div class="abas wrap">
         <a href="#cliente" class="aba" data-v="cliente">Smash Client</a>
         <a href="#conversor" class="aba" data-v="conversor">Conversor de Texturas</a>
-      </nav>
-    </div>
-    <div class="servidor">
-      <span class="pixel">Servidor</span>
-      <code id="ipServidor"></code>
-      <button class="btn mini sec" id="copiarIp" type="button">Copiar</button>
-    </div>
+        <button class="aba" type="button" data-ir="como-instalar">Como instalar</button>
+        <a class="aba js-discord" href="#" target="_blank" rel="noopener">Discord</a>
+        <a class="aba js-youtube" href="#" target="_blank" rel="noopener">YouTube</a>
+      </div>
+    </nav>
   </header>
 
   <main class="vista" id="v-cliente">
-    <section class="hero-cli">
-      <img class="logo-grande" src="../img/logo-grande.png" alt="Smash Client" width="605" height="240">
-      <h1>Minecraft PE com a jogabilidade do Java</h1>
-      <p>O Smash Client é o Minecraft PE 1.1.5 para Android com mineração e alcance iguais ao Java, teclado corrigido, câmera sem pulos e o servidor SMASH já na lista.</p>
-      <div class="linha">
-        <button class="btn grande" id="baixarCliente" type="button" hidden>Baixar o Smash Client</button>
-        <span class="chip off" id="apkBreve">Download do APK · em breve</span>
-        <button class="btn sec" id="irTestes" type="button" hidden>Versões de teste</button>
-        <a class="btn sec" id="lnkDiscord" href="#" target="_blank" rel="noopener">Discord</a>
-        <a class="btn sec" id="lnkYoutube" href="#" target="_blank" rel="noopener">YouTube</a>
-      </div>
-      <div class="ficha">
-        <span class="pixel">Versão 1.1.5</span><span class="pixel">Android</span><span class="pixel">Servidor SMASH incluso</span>
-      </div>
-      <dialog class="janela" id="escolherApk" aria-labelledby="escolherTitulo">
-        <div class="janela-corpo">
-          <div class="janela-topo">
-            <h2 id="escolherTitulo">Qual versão você quer baixar?</h2>
-            <button class="fechar" id="fecharApk" type="button" aria-label="Fechar">×</button>
-          </div>
-          <div class="opcoes" id="opcoesApk"></div>
-          <p class="nota">Não sabe qual é? Baixe a de <b>64 bits</b>. Se o Android avisar que o app não é compatível ou não instalar, baixe a de <b>32 bits</b>.</p>
+    <section class="hero">
+      <div class="wrap hero-in">
+        <img class="hero-logo" src="../img/logo-branca.png" alt="Smash Client" width="840" height="319">
+        <h1>Minecraft PE com a jogabilidade do Java</h1>
+        <p>O Smash Client é o Minecraft PE 1.1.5 para Android com mineração e alcance iguais ao Java, teclado corrigido, câmera sem pulos e o servidor SMASH já na lista.</p>
+        <div class="hero-botoes">
+          <button class="btn grande js-baixar" id="baixarCliente" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar</button>
+          <span class="chip off" id="apkBreve">Download do APK · em breve</span>
+          <a class="btn grande discord js-discord" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>Discord</a>
+          <button class="btn grande sec" id="irTestes" type="button" hidden>Versões de teste</button>
         </div>
-      </dialog>
+        <div class="servidor"><span class="pixel">Servidor</span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
+        <div class="ficha">
+          <span class="pixel">Versão 1.1.5</span><span class="pixel">Android</span><span class="pixel">Servidor SMASH incluso</span>
+        </div>
+      </div>
     </section>
 
+    <div class="wrap">
     <section class="bloco-sec" id="testes" hidden>
       <h2>Versões de teste</h2>
       <p class="nota">Pré-lançamentos do Smash Client e APKs do MCPE 1.1.5 e 0.15.10 para testar antes de todo mundo. Confira o selo da versão do jogo antes de baixar. Podem ter bugs: se algo der errado, avise no Discord.</p>
@@ -267,34 +325,48 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
     </section>
 
     <section class="bloco-sec">
+      <span class="kicker">Feito para o PvP e o survival</span>
       <h2>O que tem no Smash Client</h2>
-      <ul class="novidades" id="novidades"></ul>
+      <div class="destaques" id="destaques"></div>
+      <ul class="mais" id="novidades"></ul>
+    </section>
+
+    <section class="bloco-sec" id="como-instalar">
+      <span class="kicker">Em 1 minuto</span>
+      <h2>Como instalar o Smash Client</h2>
+      <ol class="passos-cli">
+        <li>Toque em <b>Baixar</b> e escolha a versão: <b>64 bits</b> serve na maioria dos celulares; <b>32 bits</b> para os mais antigos.</li>
+        <li>Abra o arquivo baixado. Se o Android pedir, permita <b>Instalar apps desconhecidos</b> para o navegador ou o gerenciador de arquivos e volte.</li>
+        <li>Toque em <b>Instalar</b> e depois em <b>Abrir</b>.</li>
+        <li>Em <b>Jogar › Servidores</b>, o <b>SMASH</b> já está na lista. É só entrar.</li>
+      </ol>
+      <div class="faixa-conv">
+        <span class="rotulo"><img src="../img/mc/book_enchanted.png" alt="" width="16" height="16">Conversor de texturas</span>
+        <p><b>Tem um pack de textura do Java?</b> Converta para o Smash Client sem perder qualidade, direto no navegador.</p>
+        <a href="#conversor">Abrir o conversor ›</a>
+      </div>
     </section>
 
     <section class="bloco-sec">
-      <h2>Como instalar o Smash Client</h2>
-      <div class="cartao">
-        <ol class="passos-lista">
-          <li>Toque em <b>Baixar o Smash Client</b>, escolha a versão (<b>64 bits</b> serve na maioria dos celulares; <b>32 bits</b> para os mais antigos) e espere o download do APK terminar.</li>
-          <li>Abra o arquivo baixado. Se o Android pedir, permita <b>Instalar apps desconhecidos</b> para o navegador ou o gerenciador de arquivos e volte.</li>
-          <li>Toque em <b>Instalar</b> e depois em <b>Abrir</b>.</li>
-          <li>Em <b>Jogar › Servidores</b>, o <b>SMASH</b> já está na lista. É só entrar.</li>
-        </ol>
-      </div>
-      <div class="cta">
-        <p><b>Tem um pack de textura do Java?</b> <span style="color:var(--muted)">Converta para o Smash Client sem perder qualidade.</span></p>
-        <a class="btn" href="#conversor">Abrir o conversor</a>
+      <div class="chamada">
+        <img src="../img/icone-branco.png" alt="" width="170" height="192">
+        <p><b>Mineração do Java</b>, <b>alcance certo</b>, <b>teclado corrigido</b> e o <b>servidor SMASH</b> na lista. E é <b>grátis</b>. O que você está esperando? Baixe hoje!</p>
+        <button class="btn-contorno js-baixar" type="button" hidden>Baixar</button>
       </div>
     </section>
+    </div>
   </main>
 
   <main class="vista" id="v-conversor" hidden>
+    <section class="faixa"><div class="wrap">
     <div class="intro">
       <span class="pixel" style="color:var(--smash-2)">Conversor de resource packs</span>
       <h1>Seu pack do Java no <em>Smash Client</em>, sem perder qualidade</h1>
       <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5 ou 0.15.10. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. Se o pack tiver céu do OptiFine, ele vira skybox no MCPE 1.1.5. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
     </div>
+    </div></section>
 
+    <div class="wrap">
     <div class="grade">
       <div class="cartao passos area-a" aria-live="polite">
 
@@ -433,13 +505,28 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
         </ul>
       </div>
     </section>
+    </div>
   </main>
 
+  <dialog class="janela" id="escolherApk" aria-labelledby="escolherTitulo">
+    <div class="janela-corpo">
+      <div class="janela-topo">
+        <h2 id="escolherTitulo">Qual versão você quer baixar?</h2>
+        <button class="fechar" id="fecharApk" type="button" aria-label="Fechar">×</button>
+      </div>
+      <div class="opcoes" id="opcoesApk"></div>
+      <p class="nota">Não sabe qual é? Baixe a de <b>64 bits</b>. Se o Android avisar que o app não é compatível ou não instalar, baixe a de <b>32 bits</b>.</p>
+    </div>
+  </dialog>
+
   <footer>
-    Ferramenta da comunidade Smash. Não é afiliada à Mojang nem à Microsoft. Minecraft é marca registrada da Mojang Synergies AB.
-    O pack convertido é seu: respeite a licença do autor original antes de redistribuir.
+    <div class="redes">
+      <a class="js-discord" href="#" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg></a>
+      <a class="js-youtube" href="#" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.8 15V9l5.7 3-5.7 3Z"/></svg></a>
+    </div>
+    <p>Smash Group · Ferramenta da comunidade Smash. Não é afiliada à Mojang nem à Microsoft. Minecraft é marca registrada da Mojang Synergies AB.
+    O pack convertido é seu: respeite a licença do autor original antes de redistribuir.</p>
   </footer>
-</div>
 
 <script>
 /* ======= CONFIGURE AQUI ======= */
@@ -460,15 +547,18 @@ const SMASH = {
   discord: 'https://discord.gg/5F77ZhZuv3',
   youtube: 'https://youtube.com/@smashrankup',
 };
+// cartoes grandes do "O que tem": [textura de fundo, item, chamada, titulo, texto] (arquivos em img/mc/)
+const DESTAQUES = [
+  ['stone', 'diamond_pickaxe', 'Igual ao Java', 'Mineração', 'Tempo de quebra do Java, com o efeito real dos encantamentos.'],
+  ['obsidian', 'ender_pearl', '4,5 blocos', 'Alcance do Java', 'Alcance de construção igual ao Java; PvP no padrão.'],
+  ['netherrack', 'book_enchanted', 'Chat e menus', 'Teclado corrigido', 'Digita certo em todos os menus e no chat, com histórico Anterior e Próximo.'],
+  ['gold_block', 'chest_front', 'SmashMC.blazebr.com', 'Servidor na lista', 'O SMASH já vem fixo na lista de servidores. É só entrar.'],
+];
+// lista menor embaixo dos cartoes
 const NOVIDADES = [
-  ['pick', 'Mineração igual ao Java, com o efeito real dos encantamentos'],
-  ['reach', 'Alcance de construção igual ao Java (4,5 blocos); PvP no padrão'],
   ['cam', '"Pulo" da câmera ao soltar o dedo da tela corrigido'],
-  ['key', 'Teclado corrigido em todos os menus e no chat'],
-  ['chat', 'Histórico do chat com os botões Anterior e Próximo'],
   ['spark', 'Partículas configuráveis nas configurações de vídeo'],
   ['sun', 'Tela sempre acesa: não apaga mais quando você fica AFK'],
-  ['server', 'Servidor SMASH fixo na lista de servidores'],
 ];
 /* ============================== */
 
@@ -487,16 +577,22 @@ const ICONES = {
   sign: '<path d="M4 4h16v10H4zM12 14v7M8 8h8M8 11h5"/>',
   server: '<path d="M4 4h16v6H4zM4 14h16v6H4zM7 7h1M7 17h1"/>',
 };
+$('destaques').innerHTML = DESTAQUES.map(([tex, item, chamada, titulo, texto]) =>
+  `<article class="tile" style="--tex:url(../img/mc/${tex}.png)"><img class="tile-item" src="../img/mc/${item}.png" alt="" width="16" height="16"><span class="kicker">${chamada}</span><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
 $('novidades').innerHTML = NOVIDADES.map(([i, t]) =>
   `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[i]}</svg><span>${t}</span></li>`).join('');
 const ip = SMASH.servidor + ':' + SMASH.porta;
-$('ipServidor').textContent = ip;
+document.querySelectorAll('.js-ip').forEach((c) => { c.textContent = ip; });
 if (SMASH.apks.length) {
   const janela = $('escolherApk');
-  $('baixarCliente').hidden = false; $('apkBreve').hidden = true;
+  $('apkBreve').hidden = true;
   $('opcoesApk').innerHTML = SMASH.apks.map((a) =>
     `<a class="opcao${a.recomendado ? ' rec' : ''}" href="${a.link}"><span><b>${a.titulo}</b>${a.recomendado ? '<span class="tag">Recomendado</span>' : ''}<small>${a.desc}</small></span><span class="opcao-mb">${a.mb} MB</span></a>`).join('');
-  $('baixarCliente').onclick = () => { if (SMASH.apks.length === 1) location.href = SMASH.apks[0].link; else abrir(janela); };
+  // todos os botoes Baixar (topo, inicio e chamada final) abrem a escolha de versao
+  document.querySelectorAll('.js-baixar').forEach((b) => {
+    b.hidden = false;
+    b.onclick = () => { if (SMASH.apks.length === 1) location.href = SMASH.apks[0].link; else abrir(janela); };
+  });
   $('fecharApk').onclick = () => fechar(janela);
   janela.onclick = (e) => { if (e.target === janela) fechar(janela); };  // toque fora fecha
   $('opcoesApk').onclick = (e) => { if (e.target.closest('.opcao')) setTimeout(() => fechar(janela), 300); };
@@ -539,12 +635,18 @@ async function carregarTestes() {
   }
 }
 if (SMASH.versoesTeste) carregarTestes();
-$('lnkDiscord').href = SMASH.discord; $('lnkYoutube').href = SMASH.youtube;
-$('copiarIp').onclick = async () => {
-  try { await navigator.clipboard.writeText(ip); $('copiarIp').textContent = 'Copiado'; }
-  catch (e) { const r = document.createRange(); r.selectNodeContents($('ipServidor')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $('copiarIp').textContent = 'Selecionado'; }
-  setTimeout(() => $('copiarIp').textContent = 'Copiar', 1800);
-};
+document.querySelectorAll('.js-discord').forEach((a) => { a.href = SMASH.discord; });
+document.querySelectorAll('.js-youtube').forEach((a) => { a.href = SMASH.youtube; });
+document.querySelectorAll('.js-copiar').forEach((btn) => btn.onclick = async () => {
+  try { await navigator.clipboard.writeText(ip); btn.textContent = 'Copiado'; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(btn.previousElementSibling); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selecionado'; }
+  setTimeout(() => { btn.textContent = 'Copiar'; }, 1800);
+});
+// "Como instalar" do menu: rola ate a secao (sem trocar o #, que escolhe a aba)
+document.querySelectorAll('[data-ir]').forEach((b) => b.onclick = () => {
+  const ir = () => $(b.dataset.ir).scrollIntoView({ behavior: 'smooth' });
+  if ($('v-cliente').hidden) { location.hash = '#cliente'; setTimeout(ir, 60); } else ir();
+});
 
 
 // codigos de cor do Minecraft (§) na descricao do pack
