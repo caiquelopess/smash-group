@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Smash Client</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Converta resource packs do Minecraft Java 1.8.9 para o MCPE 1.1.5 do Smash Client, sem reduzir as imagens.">
+<meta name="description" content="Smash Client: o Minecraft PE 1.1.5 com cara de PC, e o conversor de resource packs do Java 1.8.9 para o MCPE 1.1.5.">
 <link rel="icon" type="image/png" href="img/icone-64.png">
 <link rel="apple-touch-icon" href="img/icone-180.png">
 <meta name="theme-color" content="#130001">
 <meta property="og:title" content="Smash Client">
-<meta property="og:description" content="Converta packs do Java 1.8.9 para o Smash Client (MCPE 1.1.5) sem perder qualidade.">
+<meta property="og:description" content="Smash Client e conversor de packs do Java 1.8.9 para o MCPE 1.1.5.">
 <meta property="og:image" content="img/icone-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -280,7 +280,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
         </ol>
       </div>
       <div class="cta">
-        <p><b>Tem um pack de textura do Java?</b> <span style="color:var(--muted)">Converta para o Smash Client sem perder qualidade.</span></p>
+        <p><b>Tem um pack de textura do Java?</b> <span style="color:var(--muted)">Converta para o Smash Client direto no navegador.</span></p>
         <a class="btn" href="#conversor">Abrir o conversor</a>
       </div>
     </section>
@@ -289,8 +289,8 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
   <main class="vista" id="v-conversor" hidden>
     <div class="intro">
       <span class="pixel" style="color:var(--smash-2)">Conversor de resource packs</span>
-      <h1>Seu pack do Java no <em>Smash Client</em>, sem perder qualidade</h1>
-      <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5 ou 0.15.10. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. Se o pack tiver céu do OptiFine, ele vira skybox no MCPE 1.1.5. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
+      <h1>Seu pack do Java no <em>Smash Client</em></h1>
+      <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5. Packs até 128x ficam com a mesma resolução. Só texturas maiores, que fariam o jogo fechar, são ajustadas, e o conversor avisa quais. Se o pack tiver céu do OptiFine, ele vira skybox no MCPE 1.1.5. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
     </div>
 
     <div class="grade">
@@ -321,7 +321,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
                 <input type="radio" name="saida" id="saidaZip" value="zip" checked>
                 <span><b>Pack em .zip</b><small>Para colocar na pasta resource_packs do celular</small></span>
               </label>
-              <label class="saida" id="rotuloMcpack">
+              <label class="saida" id="rotuloMcpack" hidden>
                 <input type="radio" name="saida" id="saidaMcpack" value="mcpack">
                 <span><b>Pack em .mcpack</b><small id="mcpackTexto">Abra o arquivo com o Minecraft e ele importa o pack</small></span>
               </label>
@@ -398,7 +398,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
 
     <section class="bloco-sec" id="instalar">
       <h2>Como instalar o pack</h2>
-      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. Em <b>.mcpack</b> (só MCPE 1.1.5) é só abrir o arquivo com o Minecraft, que ele importa o pack. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
+      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
       <div class="dois">
         <div class="cartao">
           <h3>No celular (Smash Client, MCPE 1.1.5 ou 0.15.10)</h3>
@@ -671,6 +671,7 @@ function ajustarSaida() {
 }
 document.querySelectorAll('input[name=alvo]').forEach((r) => r.addEventListener('change', ajustarSaida));
 document.querySelectorAll('input[name=saida]').forEach((r) => r.addEventListener('change', () => { if (ultimo && !ocupado) mostrarResultado(ultimo); }));
+if ($('rotuloMcpack').hidden) $('saidaZip').checked = true;  // .mcpack escondido: o navegador pode ter guardado a marcacao antiga
 ajustarSaida();
 
 $('converter').onclick = () => {
