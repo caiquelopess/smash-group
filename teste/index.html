@@ -101,18 +101,19 @@ a { color: var(--smash-2); }
 .passos-lista { margin: 0; padding-left: 20px; display: grid; gap: 8px; color: var(--muted); }
 .passos-lista b { color: var(--text); }
 
-/* destaques: 4 cartoes grandes com textura do jogo (como os do Lunar) */
+/* destaques: cartoes grandes com textura do jogo */
 .titulo-sec { margin: 0; font: 900 clamp(24px, 3.6vw, 34px)/1.1 var(--f-titulo); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
 .kicker { font: italic 600 12px/1.2 var(--f-titulo); letter-spacing: .22em; text-transform: uppercase; color: var(--smash-2); }
-.destaques { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
-@media (max-width: 640px) { .destaques { grid-template-columns: minmax(0, 1fr); } }
+.destaques { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+@media (max-width: 860px) { .destaques { grid-template-columns: minmax(0, 1fr); } }
 .tile { position: relative; isolation: isolate; min-height: 250px; display: grid; align-content: center; justify-items: center; gap: 6px; padding: 28px 22px; text-align: center; background: var(--tex) 0 0 / 72px; image-rendering: pixelated; }
 .tile::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 70% at 50% 45%, rgb(19 0 1 / .55), rgb(19 0 1 / .88)); }
 .tile:hover::before { background: radial-gradient(70% 70% at 50% 45%, rgb(19 0 1 / .4), rgb(19 0 1 / .82)); }
 .tile-item { width: 64px; height: 64px; image-rendering: pixelated; filter: drop-shadow(0 4px 10px rgb(0 0 0 / .7)); margin-bottom: 4px; }
 .tile h3 { margin: 0; font: 900 clamp(28px, 4vw, 42px)/1 var(--f-titulo); text-transform: uppercase; text-shadow: 0 3px 0 rgb(0 0 0 / .45); }
 .tile p { margin: 4px 0 0; color: #e8d6cf; font-size: 14px; max-width: 34ch; }
-.mais { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
+.sub-sec { margin: 10px 0 0; font: 800 16px/1.2 var(--f-titulo); text-transform: uppercase; letter-spacing: .04em; color: var(--smash-2); }
+.mais { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
 @media (max-width: 960px) { .mais { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .mais { grid-template-columns: minmax(0, 1fr); } }
 .mais li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 14px; }
@@ -283,6 +284,48 @@ footer { margin-top: 46px; padding-block: 30px 28px; background: #000; color: va
 .redes a:hover { color: var(--smash-2); }
 .redes svg { width: 22px; height: 22px; }
 footer p { margin: 0 auto; max-width: 80ch; }
+footer .credito { margin-top: 8px; opacity: .8; }
+
+/* cards pequenos (destaques do RankUp e modulos do Client): item do jogo + titulo + frase */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 10px; }
+.card { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 12px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.card img { grid-row: span 2; width: 40px; height: 40px; image-rendering: pixelated; filter: drop-shadow(0 3px 6px rgb(0 0 0 / .6)); }
+.card h3 { margin: 0; font: 800 15px/1.25 var(--f-titulo); text-transform: uppercase; letter-spacing: .02em; }
+.card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+/* aba Smash RankUp: mesma estrutura, cores da marca do servidor */
+.tema-rankup { --smash: #c40e0e; --smash-2: #ffaa00; --on-smash: #fff; }
+.hero-rankup::after { background: radial-gradient(60% 55% at 50% 45%, rgb(196 14 14 / .3), transparent 70%), linear-gradient(180deg, rgb(10 2 3 / .3), rgb(19 0 1 / .6) 70%, var(--bg)); }
+.hero-titulo { margin: 0; line-height: 0; }
+.hero-rankup .hero-logo { width: min(100%, 420px); filter: drop-shadow(0 0 28px rgb(196 14 14 / .55)); }
+.hero-frase { margin: 0; font: 700 clamp(18px, 2.6vw, 24px)/1.35 var(--f-titulo); color: #fff !important; max-width: 40ch !important; text-wrap: balance; }
+.entrar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 720px) { .entrar { grid-template-columns: minmax(0, 1fr); } }
+.entrar > div { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 4px; }
+.entrar small { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; }
+.entrar b { font: 800 17px/1.3 var(--f-titulo); overflow-wrap: anywhere; }
+.entrar a { color: var(--smash-2); }
+.chamada-rk { background: linear-gradient(110deg, #7a0505, #c40e0e 55%, #ff8a00); }
+.chamada-botoes { display: flex; flex-wrap: wrap; gap: 10px; }
+.chamada-botoes a { text-decoration: none; }
+
+/* menu lateral (celular e tablet): botao no canto direito abre a barra */
+.menu-btn { display: none; appearance: none; border: 0; background: none; color: #fff; cursor: pointer; padding: 0 14px; align-self: stretch; }
+.menu-btn svg { width: 26px; height: 26px; display: block; }
+.veu { position: fixed; inset: 0; z-index: 29; background: rgb(0 0 0 / .6); }
+.fechar-menu { display: none; }
+@media (max-width: 900px) {
+  .menu-btn { display: block; }
+  .topo-2 { position: fixed; top: 0; right: 0; bottom: 0; z-index: 30; width: min(82vw, 320px); border: 0; border-left: 1px solid var(--line); background: #0b0302; transform: translateX(100%); transition: transform .22s ease; overflow-y: auto; padding: 8px 0 24px; }
+  body.menu-aberto .topo-2 { transform: none; box-shadow: -12px 0 40px rgb(0 0 0 / .6); }
+  body.menu-aberto .topo { z-index: 40; }  /* a barra fica dentro do cabecalho: ele sobe acima do veu */
+  .topo-2 .abas { flex-direction: column; justify-content: flex-start; gap: 0; padding: 0; overflow: visible; }
+  .topo-2 .aba { text-align: left; padding: 16px 22px; font-size: 15px; border-bottom: 1px solid #1c0a06; border-left: 3px solid transparent; }
+  .topo-2 .aba.on { border-bottom-color: #1c0a06; border-left-color: var(--smash); background: rgb(255 122 0 / .08); }
+  .fechar-menu { display: block; margin: 4px 12px 8px auto; }
+}
+@media (prefers-reduced-motion: reduce) { .topo-2 { transition: none; } }
+
 </style>
 </head>
 <body>
@@ -292,12 +335,15 @@ footer p { margin: 0 auto; max-width: 80ch; }
       <a href="#cliente" class="marca-logo" aria-label="Smash Client"><img src="../img/logo.png" alt="Smash Client" width="111" height="44"></a>
       <div class="topo-dir">
         <div class="servidor"><span class="online js-online" hidden></span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
+        <button class="menu-btn" id="abrirMenu" type="button" aria-label="Abrir o menu" aria-controls="menuSite" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
         <button class="btn-topo js-baixar" type="button" hidden>Baixar</button>
       </div>
     </div>
-    <nav class="topo-2" aria-label="Seções do site">
+    <nav class="topo-2" id="menuSite" aria-label="Seções do site">
+      <button class="fechar fechar-menu" id="fecharMenu" type="button" aria-label="Fechar o menu">×</button>
       <div class="abas wrap">
         <a href="#cliente" class="aba" data-v="cliente">Smash Client</a>
+        <a href="#rankup" class="aba" data-v="rankup">Smash RankUp</a>
         <a href="#conversor" class="aba" data-v="conversor">Conversor de Texturas</a>
         <button class="aba" type="button" data-ir="como-instalar">Como instalar</button>
         <a class="aba js-discord" href="#" target="_blank" rel="noopener">Discord</a>
@@ -305,13 +351,14 @@ footer p { margin: 0 auto; max-width: 80ch; }
       </div>
     </nav>
   </header>
+  <div class="veu" id="veuMenu" hidden></div>
 
   <main class="vista" id="v-cliente">
     <section class="hero">
       <div class="wrap hero-in">
         <img class="hero-logo" src="../img/logo-branca.png" alt="Smash Client" width="840" height="319">
         <h1>O Minecraft PE 1.1.5 com cara de PC</h1>
-        <p>Mineração do Java, mouse e teclado, um menu no estilo Lunar e o servidor SMASH já na lista.</p>
+        <p>Mineração do Java, mouse e teclado, um menu completo e o servidor SMASH já na lista.</p>
         <div class="hero-botoes">
           <button class="btn grande js-baixar" id="baixarCliente" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar</button>
           <span class="chip off" id="apkBreve">Download do APK · em breve</span>
@@ -336,6 +383,13 @@ footer p { margin: 0 auto; max-width: 80ch; }
       <h2>O que tem no Smash Client</h2>
       <p class="nota">Tudo que faz o MCPE parecer o Minecraft do computador, sem perder o jeito do celular.</p>
       <div class="destaques" id="destaques"></div>
+    </section>
+
+    <section class="bloco-sec" id="modulos">
+      <span class="kicker">No menu de pausa</span>
+      <h2>Módulos do Smash Client</h2>
+      <div class="cards" id="cardsModulos"></div>
+      <h3 class="sub-sec">E ainda</h3>
       <ul class="mais" id="novidades"></ul>
     </section>
 
@@ -360,6 +414,48 @@ footer p { margin: 0 auto; max-width: 80ch; }
         <img src="../img/icone-branco.png" alt="" width="170" height="192">
         <p><b>Baixe grátis e entre no SMASH com um toque.</b> Escolha 64 ou 32 bits. Na dúvida, comece pelo 64.</p>
         <button class="btn-contorno js-baixar" type="button" hidden>Baixar</button>
+      </div>
+    </section>
+    </div>
+  </main>
+
+  <main class="vista tema-rankup" id="v-rankup" hidden>
+    <section class="hero hero-rankup">
+      <div class="wrap hero-in">
+        <h1 class="hero-titulo"><img class="hero-logo" src="../img/logo-rankup.png" alt="Smash RankUp" width="840" height="372"></h1>
+        <p class="hero-frase">Começa do zero, minera, sobe de rank e chega no Blaze. RankUp brasileiro de MCPE, com combate do Java 1.8.</p>
+        <div class="hero-botoes">
+          <button class="btn grande js-baixar" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar o Smash Client</button>
+          <a class="btn grande discord js-discord" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>Entrar no Discord</a>
+        </div>
+        <div class="servidor"><span class="pixel">Servidor</span><span class="online js-online" hidden></span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
+      </div>
+    </section>
+
+    <div class="wrap">
+    <section class="bloco-sec">
+      <h2>O que tem no Smash RankUp</h2>
+      <div class="cards" id="cardsRankup"></div>
+    </section>
+
+    <section class="bloco-sec" id="como-entrar">
+      <h2>Como entrar</h2>
+      <div class="entrar">
+        <div><small>IP</small><b class="js-host"></b></div>
+        <div><small>Porta</small><b class="js-porta"></b></div>
+        <div><small>Discord</small><b><a class="js-discord" href="#" target="_blank" rel="noopener">discord.gg/5F77ZhZuv3</a></b></div>
+      </div>
+      <p class="nota">Pelo Smash Client o servidor já vem na lista.</p>
+    </section>
+
+    <section class="bloco-sec">
+      <div class="chamada chamada-rk">
+        <img src="../img/icone-branco.png" alt="" width="170" height="192">
+        <p><b>A temporada já começou.</b> Teu lugar no topo está esperando.</p>
+        <div class="chamada-botoes">
+          <button class="btn-contorno js-baixar" type="button" hidden>Baixar o Smash Client</button>
+          <a class="btn-contorno js-discord" href="#" target="_blank" rel="noopener">Entrar no Discord</a>
+        </div>
       </div>
     </section>
     </div>
@@ -535,6 +631,7 @@ footer p { margin: 0 auto; max-width: 80ch; }
     </div>
     <p>Smash Group · Ferramenta da comunidade Smash. Não é afiliada à Mojang nem à Microsoft. Minecraft é marca registrada da Mojang Synergies AB.
     O pack convertido é seu: respeite a licença do autor original antes de redistribuir.</p>
+    <p class="credito">Visual inspirado no Lunar Client.</p>
   </footer>
 
 <script>
@@ -561,17 +658,46 @@ const SMASH = {
 // cartoes grandes do "O que tem": [textura de fundo, item, chamada, titulo, texto] (arquivos em img/mc/)
 const DESTAQUES = [
   ['stone', 'diamond_pickaxe', 'Java 1.8.9', 'Mineração do Java 1.8.9', 'Cada bloco quebra no mesmo tempo do Java 1.8.9. Quem vem do PC já se sente em casa.'],
-  ['obsidian', 'diamond_sword', 'No servidor SMASH', 'Combate do Java 1.8', 'No servidor SMASH, o PvP é igual ao do Java 1.8: dano, crítico, knockback e alcance.'],  // vem do servidor, nao do Client
-  ['netherrack', 'clock_item', 'Estilo Lunar', 'Menu do Client', 'Uma grade no estilo Lunar pra ligar e desligar tudo: Status (FPS, ping, memória, temperatura e bateria), Auto-Text, Toggle Sprint, F5 e Editar HUD, pra arrastar cada item na tela.'],
-  ['gold_block', 'book_enchanted', 'Como no PC', 'Mouse e teclado', 'Conecte mouse e teclado e jogue como no PC. O mouse funciona nos menus e a rodinha troca o item da barra.'],
+  ['netherrack', 'clock_item', 'Do teu jeito', 'Menu do Client', 'Uma grade pra ligar e desligar tudo: Status (FPS, ping, memória, temperatura e bateria), Macro de texto, Toggle Sprint, F5 e Editar HUD, pra arrastar cada item na tela.'],
+  ['gold_block', 'book_enchanted', 'Como no PC', 'Mouse e teclado', 'Conecte mouse e teclado e jogue como no PC.'],
+];
+// cards da aba Smash RankUp: [item do jogo em img/mc/, titulo, frase] (textos do Marketing; nada de valores nem datas)
+const RANKUP = [
+  ['diamond_pickaxe', 'Mina e picaretas', 'Minere pra ganhar Money e Tokens, e encante a tua picareta com Explosão, Destruidor, Laser, Nuclear, Fortuna e Multiplicador.'],
+  ['blaze_rod', '14 ranks e prestígio', 'Do Carvão ao Blaze, em 56 degraus. Os 7 últimos são ranks de mob, e no topo você faz prestígio até o ✦10.'],
+  ['nether_star', '6 bosses todo dia', 'Às 18h, 20h e 22h, com aviso antes de nascer e itens que só caem deles.'],
+  // sem "alcance": no servidor e 6 blocos, nao o do Java 1.8 (Dev, 05/11)
+  ['diamond_sword', 'Combate do Java 1.8', 'Dano, crítico, armadura, knockback e arco iguais aos do Java 1.8, com anticheat no servidor.'],
+  ['gold_ingot', 'Economia de verdade', 'Venda manual ou automática, lojas dos jogadores, banco que rende enquanto você joga e Money sem teto.'],
+  ['mob_spawner', 'Máquinas e spawners', 'Máquinas que rendem até com você parado e 15 tipos de spawner, liberados a cada rank.'],
+  ['emerald', 'Terrenos e fazenda', 'Teu terreno com fazenda de cana, cacto, abóbora e melancia, que crescem como no Java.'],
+  ['gold_sword', 'Clãs', 'Monte teu clã com tag, até 10 membros, aliados, rivais e KDR.'],
+  ['chest_front', 'Eventos e caixas', 'Eventos no chat a cada 30 minutos, caixas com keys e boosters de mina e de venda.'],
+  ['clock_item', 'Diário, missões e metas', 'Prêmio todo dia, 3 missões novas por dia e metas permanentes de blocos e mobs.'],
+  ['diamond', 'Tops', 'Rankings de Money, Cash, Tokens, Gemas, blocos e banco. Teu nome no topo.'],
+  ['furnace_front_on', 'Do teu jeito', '/sethome, /home e /tpa, sem fome e com proteção contra quem sai no meio do combate.'],
+  ['redstone_dust', 'Discord integrado', 'Vincule a conta e receba no Discord o cargo do teu VIP e os avisos de boss e eventos.'],
+  ['book_enchanted', 'Chat em 3 idiomas', 'O chat e o servidor inteiro em português, inglês e espanhol, traduzidos na hora.'],
+  ['ender_eye', '1.1.5 e 0.15.10', 'Jogue pelo 1.1.5, a versão principal. O 0.15.10 também entra no mesmo IP, em beta.'],
 ];
 // lista menor embaixo dos cartoes (so recursos do jogo: correcoes do emulador e a da placa nao entram)
+// cards dos modulos do menu do Client (APK publico; textos do Marketing, marketing/SITE-TEXTOS.md)
+const MODULOS = [
+  ['clock_item', 'Status Display', 'FPS, ping, memória, temperatura e bateria na tela, do tamanho e da transparência que você quiser.'],
+  ['book_enchanted', 'Macro de texto', 'Crie atalhos com mensagens ou /comandos e mande com um toque, ou com uma tecla do teclado.'],
+  ['ender_pearl', 'Toggle Sprint', 'Corra sem precisar segurar: é só andar pra frente.'],
+  ['diamond', 'Vídeo', 'Ajuste a distância das entidades, as texturas animadas, o céu, as nuvens, o clima e a iluminação.'],
+  ['nether_star', 'Capas', 'Use a tua skin com a capa que quiser. Os outros jogadores também veem.'],
+  ['ender_eye', 'F5', 'Um botão na tela pra alternar a câmera entre a 1ª pessoa e a 3ª, de costas ou de frente.'],
+  ['diamond_sword', 'Mouse', 'Mouse e teclado como no PC, com sensibilidade e eixos do teu jeito.'],
+  ['redstone_dust', 'Configurações do Client', 'Idioma, cor de destaque, tamanho do menu, marca d’água, limite de FPS e modo economia.'],
+  ['chest_front', 'Editar HUD', 'Arraste o Status, a Macro de texto, o F5 e a marca d’água pra onde quiser na tela.'],
+];
+// lista menor: recursos fixos, sem modulo (correcoes do emulador e a da placa nao entram; FOV dinamico nao existe mais)
 const NOVIDADES = [
   ['server', 'Servidor SMASH já na lista: é só tocar e entrar'],
-  ['cape', 'Capas'],
-  ['gear', 'Configurações do Client: cor de destaque, tamanho e transparência do menu, marca d’água, limite de FPS e modo economia'],
-  ['eye', 'FOV fixo ou dinâmico, neblina ajustável e distância das partículas ajustável'],
-  ['chat', 'Histórico do chat nas setas'],
+  ['eye', 'Visão estável: FOV fixo (não muda quando você corre), sem tremor ao levar dano e neblina mais distante'],
+  ['spark', 'Distância das partículas ajustável'],
   ['cam', 'Câmera de toque mais estável, sem pulos'],
   ['lang', 'Português, English e Español'],
   ['phone', '64 bits pra celulares atuais e 32 bits pros mais antigos'],
@@ -600,10 +726,23 @@ const ICONES = {
 };
 $('destaques').innerHTML = DESTAQUES.map(([tex, item, chamada, titulo, texto]) =>
   `<article class="tile" style="--tex:url(../img/mc/${tex}.png)"><img class="tile-item" src="../img/mc/${item}.png" alt="" width="16" height="16"><span class="kicker">${chamada}</span><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
+const cards = (lista) => lista.map(([item, titulo, texto]) =>
+  `<article class="card"><img src="../img/mc/${item}.png" alt="" width="16" height="16"><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
+$('cardsModulos').innerHTML = cards(MODULOS);
+$('cardsRankup').innerHTML = RANKUP.map(([item, titulo, texto]) =>
+  `<article class="card"><img src="../img/mc/${item}.png" alt="" width="16" height="16"><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
 $('novidades').innerHTML = NOVIDADES.map(([i, t]) =>
   `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[i]}</svg><span>${t}</span></li>`).join('');
 const ip = SMASH.servidor + ':' + SMASH.porta;
 document.querySelectorAll('.js-ip').forEach((c) => { c.textContent = ip; });
+document.querySelectorAll('.js-host').forEach((c) => { c.textContent = SMASH.servidor; });
+document.querySelectorAll('.js-porta').forEach((c) => { c.textContent = SMASH.porta; });
+// menu lateral do celular: abre pelo botao do canto direito; fecha no X, no veu, no Esc ou ao escolher um item
+const menu = { abrir() { document.body.classList.add('menu-aberto'); $('veuMenu').hidden = false; $('abrirMenu').setAttribute('aria-expanded', 'true'); },
+  fechar() { document.body.classList.remove('menu-aberto'); $('veuMenu').hidden = true; $('abrirMenu').setAttribute('aria-expanded', 'false'); } };
+$('abrirMenu').onclick = menu.abrir; $('fecharMenu').onclick = menu.fechar; $('veuMenu').onclick = menu.fechar;
+$('menuSite').addEventListener('click', (e) => { if (e.target.closest('.aba')) menu.fechar(); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape') menu.fechar(); });
 // "N online" no topo (como no Lunar); servidor fora = "offline"; erro da API = some
 async function atualizarOnline() {
   if (!SMASH.statusApi || document.hidden) return;
@@ -736,10 +875,10 @@ function iniciarConversor() {
 
 // abas: #cliente e #conversor (o conversor so carrega quando a aba dele abre)
 function mostrarVista() {
-  const v = location.hash === '#conversor' || location.hash === '#instalar' ? 'conversor' : 'cliente';
-  $('v-cliente').hidden = v !== 'cliente'; $('v-conversor').hidden = v !== 'conversor';
+  const v = location.hash === '#conversor' || location.hash === '#instalar' ? 'conversor' : location.hash === '#rankup' ? 'rankup' : 'cliente';
+  ['cliente', 'rankup', 'conversor'].forEach((x) => { $('v-' + x).hidden = v !== x; });
   document.querySelectorAll('.aba').forEach((a) => { const on = a.dataset.v === v; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  document.title = v === 'conversor' ? '[TESTE] Smash Texturas · Conversor' : '[TESTE] Smash Client';
+  document.title = (SMASH.versoesTeste ? '[TESTE] ' : '') + { cliente: 'Smash Client', rankup: 'Smash RankUp', conversor: 'Smash Texturas · Conversor' }[v];
   if (v === 'conversor') iniciarConversor();
 }
 addEventListener('hashchange', () => { mostrarVista(); scrollTo(0, 0); });
