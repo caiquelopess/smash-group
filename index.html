@@ -384,7 +384,7 @@ footer { padding-block: 36px 28px; color: var(--muted); font-size: 12px; border-
 
     <section class="bloco-sec" id="instalar">
       <h2>Como instalar o pack</h2>
-      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. O <b>.mcpack</b> é o mesmo pack, para importar tocando no arquivo onde o jogo aceita; se não abrir, use o .zip. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
+      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. O <b>.mcpack</b> é o mesmo pack, pro Smash Client das próximas versões, que importa com um toque. Por enquanto, use o .zip. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
       <div class="dois">
         <div class="cartao">
           <h3>No celular (Smash Client, MCPE 1.1.5 ou 0.15.10)</h3>
@@ -639,7 +639,7 @@ $('avisoBaixar').addEventListener('click', () => setTimeout(() => fechar(aviso),
 // o aviso de fechar o jogo abre ANTES do download: o pack so baixa pelo botao da janela
 function avisoAntes(url, nome, mcpack) {
   $('avisoPasso1').innerHTML = mcpack
-    ? 'Abra o <b>.mcpack</b> baixado (pela notificação do download ou pelo gerenciador de arquivos) e escolha o jogo pra importar. Se não abrir, use o .zip em <b>games › com.mojang › resource_packs</b>.'
+    ? 'O <b>.mcpack</b> é pro Smash Client das próximas versões, que importa com um toque. Por enquanto, coloque o <b>.zip</b> em <b>games › com.mojang › resource_packs</b>.'
     : 'Coloque o .zip em <b>games › com.mojang › resource_packs</b> (no celular não precisa extrair).';
   const a = $('avisoBaixar'); a.href = url; a.download = nome;
   a.textContent = 'Entendi, baixar o ' + (mcpack ? '.mcpack' : '.zip');
@@ -664,7 +664,7 @@ function mostrarResultado(m) {
   const mcpack = pack && alvo === '1.1.5' ? { nome: pack.nome.replace(/\.zip$/i, '') + '.mcpack', dados: pack.dados } : null;
   const itens = [
     [pack, 'Pack para o MCPE ' + alvo + ': coloque em games/com.mojang/resource_packs (sem extrair)', 'application/zip', 'zip'],
-    [mcpack, 'O mesmo pack em .mcpack: importa tocando no arquivo, onde o jogo aceita. Se não abrir, use o .zip', 'application/octet-stream', 'mcpack'],
+    [mcpack, 'Também em .mcpack, pro Smash Client das próximas versões, que importa com um toque. Por enquanto, use o .zip', 'application/octet-stream', 'mcpack'],
     [m.arquivos.relatorio, 'Relatório: o que foi convertido e o que ficou original', 'text/plain', null],
   ];
   itens.forEach(([a, desc, tipo, formato]) => {
@@ -672,7 +672,7 @@ function mostrarResultado(m) {
     if (!a) return;
     const url = URL.createObjectURL(new Blob([a.dados], { type: tipo })); urls.push(url);
     const div = document.createElement('div'); div.className = 'arquivo';
-    div.innerHTML = `<div><b></b><small></small></div>` + (principal ? '<button class="btn" type="button">Baixar</button>' : '<a class="btn sec" download>Baixar</a>');
+    div.innerHTML = `<div><b></b><small></small></div>` + (principal ? `<button class="btn${formato === 'mcpack' ? ' sec' : ''}" type="button">Baixar</button>` : '<a class="btn sec" download>Baixar</a>');
     div.querySelector('b').textContent = a.nome;
     div.querySelector('small').textContent = desc + ' · ' + kb(a.dados.byteLength);
     if (principal) div.querySelector('button').onclick = () => avisoAntes(url, a.nome, formato === 'mcpack');
