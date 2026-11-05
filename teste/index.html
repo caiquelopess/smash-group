@@ -7,12 +7,12 @@
 <title>[TESTE] Smash Client</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Converta resource packs do Minecraft Java 1.8.9 para o MCPE 1.1.5 do Smash Client, sem reduzir as imagens.">
-<link rel="icon" type="image/png" href="../img/icone-64.png">
-<link rel="apple-touch-icon" href="../img/icone-180.png">
+<link rel="icon" type="image/png" href="../img/grupo-icone-64.png">
+<link rel="apple-touch-icon" href="../img/grupo-icone-180.png">
 <meta name="theme-color" content="#130001">
 <meta property="og:title" content="Smash Client">
 <meta property="og:description" content="Converta packs do Java 1.8.9 para o Smash Client (MCPE 1.1.5) sem perder qualidade.">
-<meta property="og:image" content="../img/icone-180.png">
+<meta property="og:image" content="../img/grupo-icone-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Rubik:ital,wght@0,700;0,800;0,900;1,600&family=IBM+Plex+Sans:wght@400;500;600&family=Silkscreen&display=swap">
@@ -74,6 +74,12 @@ a { color: var(--smash-2); }
 .servidor { display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 14px; min-width: 0; }
 .servidor code { font: 500 13px var(--f-body); color: var(--text); overflow-wrap: anywhere; }
 .servidor .pixel { color: var(--smash-2); }
+.online { display: inline-flex; align-items: center; gap: 6px; font: 500 13px var(--f-body); color: var(--muted); white-space: nowrap; }
+.online b { color: var(--ok); font-weight: 700; }
+.online.off b { color: var(--bad); }
+.online.off .ponto { background: var(--bad); box-shadow: 0 0 8px var(--bad); }
+.hero .servidor { flex-wrap: wrap; justify-content: center; row-gap: 4px; }
+@media (max-width: 480px) { .hero .servidor > .pixel { display: none; } }  /* cabe numa linha so no celular */
 .ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); flex: none; }
 @media (max-width: 720px) { .topo-dir .servidor { display: none; } }
 
@@ -270,6 +276,7 @@ code { font-size: .92em; overflow-wrap: anywhere; }
 .teste .notas { margin: 8px 0 0; white-space: pre-line; overflow-wrap: anywhere; }
 .teste .linha a.btn { text-decoration: none; }
 footer { margin-top: 46px; padding-block: 30px 28px; background: #000; color: var(--muted); font-size: 12px; text-align: center; }
+.assinatura { display: block; width: min(220px, 60vw); height: auto; margin: 0 auto 16px; }
 .redes { display: flex; justify-content: center; gap: 22px; margin-bottom: 16px; }
 .redes a { color: #e9dcd6; display: inline-flex; }
 .redes a:hover { color: var(--smash-2); }
@@ -283,7 +290,7 @@ footer p { margin: 0 auto; max-width: 80ch; }
     <div class="topo-1">
       <a href="#cliente" class="marca-logo" aria-label="Smash Client"><img src="../img/logo.png" alt="Smash Client" width="111" height="44"></a>
       <div class="topo-dir">
-        <div class="servidor"><span class="ponto" aria-hidden="true"></span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
+        <div class="servidor"><span class="online js-online" hidden></span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
         <button class="btn-topo js-baixar" type="button" hidden>Baixar</button>
       </div>
     </div>
@@ -310,7 +317,7 @@ footer p { margin: 0 auto; max-width: 80ch; }
           <a class="btn grande discord js-discord" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>Discord</a>
           <button class="btn grande sec" id="irTestes" type="button" hidden>Versões de teste</button>
         </div>
-        <div class="servidor"><span class="pixel">Servidor</span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
+        <div class="servidor"><span class="pixel">Servidor</span><span class="online js-online" hidden></span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
         <div class="ficha">
           <span class="pixel">Versão 1.1.5</span><span class="pixel">Android</span><span class="pixel">Servidor SMASH incluso</span>
         </div>
@@ -520,6 +527,7 @@ footer p { margin: 0 auto; max-width: 80ch; }
   </dialog>
 
   <footer>
+    <img class="assinatura" src="../img/smash-group.png" alt="Smash Group" width="480" height="161">
     <div class="redes">
       <a class="js-discord" href="#" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 5.3A17 17 0 0 0 15.4 4l-.5 1.1a15.6 15.6 0 0 0-5.8 0L8.6 4a17 17 0 0 0-4.2 1.3C1.7 9.3 1 13.2 1.3 17a17 17 0 0 0 5.2 2.6l1.1-1.8a11 11 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.4 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.7c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg></a>
       <a class="js-youtube" href="#" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.8 15V9l5.7 3-5.7 3Z"/></svg></a>
@@ -542,6 +550,8 @@ const SMASH = {
     { titulo: '32 bits', desc: 'Para celulares mais antigos ou se a de 64 bits não instalar', mb: 50,
       link: 'https://github.com/caiquelopess/smash-group/releases/download/1.1.5/Smash-Client-v2.0-beta-32bits.apk' },
   ],
+  // jogadores online: API publica do mcsrvstat (faz o ping do Bedrock por nos; cache de 5 min la). Vazio = sem contador
+  statusApi: 'https://api.mcsrvstat.us/bedrock/3/',
   repo: 'caiquelopess/smash-group',
   versoesTeste: true,  // true so na pagina /teste/: lista as pre-releases (APKs de teste) do GitHub
   discord: 'https://discord.gg/5F77ZhZuv3',
@@ -550,9 +560,9 @@ const SMASH = {
 // cartoes grandes do "O que tem": [textura de fundo, item, chamada, titulo, texto] (arquivos em img/mc/)
 const DESTAQUES = [
   ['stone', 'diamond_pickaxe', 'Igual ao Java', 'Mineração', 'Tempo de quebra do Java, com o efeito real dos encantamentos.'],
-  ['obsidian', 'ender_pearl', '4,5 blocos', 'Alcance do Java', 'Alcance de construção igual ao Java; PvP no padrão.'],
+  ['obsidian', 'ender_pearl', 'PvP do Java 1.8', 'Alcance do Java', 'Combate igual ao Java 1.8: dano, crítico, knockback e alcance.'],
   ['netherrack', 'book_enchanted', 'Chat e menus', 'Teclado corrigido', 'Digita certo em todos os menus e no chat, com histórico Anterior e Próximo.'],
-  ['gold_block', 'chest_front', 'SmashMC.blazebr.com', 'Servidor na lista', 'O SMASH já vem fixo na lista de servidores. É só entrar.'],
+  ['gold_block', 'chest_front', 'SmashMC.blazebr.com', 'Servidor na lista', 'O SMASH já vem fixo na lista de servidores. O servidor aceita MCPE 1.1.5 e 0.15.10.'],
 ];
 // lista menor embaixo dos cartoes
 const NOVIDADES = [
@@ -583,6 +593,22 @@ $('novidades').innerHTML = NOVIDADES.map(([i, t]) =>
   `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[i]}</svg><span>${t}</span></li>`).join('');
 const ip = SMASH.servidor + ':' + SMASH.porta;
 document.querySelectorAll('.js-ip').forEach((c) => { c.textContent = ip; });
+// "N online" no topo (como no Lunar); servidor fora = "offline"; erro da API = some
+async function atualizarOnline() {
+  if (!SMASH.statusApi || document.hidden) return;
+  const marcas = document.querySelectorAll('.js-online');
+  try {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 8000);
+    const r = await fetch(SMASH.statusApi + ip, { signal: ctl.signal }); clearTimeout(t);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json(), n = Number(j.players && j.players.online) || 0;
+    marcas.forEach((el) => {
+      el.hidden = false; el.classList.toggle('off', !j.online);
+      el.innerHTML = '<span class="ponto" aria-hidden="true"></span>' + (j.online ? '<b>' + n.toLocaleString('pt-BR') + '</b> online' : '<b>offline</b>');
+    });
+  } catch (e) { marcas.forEach((el) => { el.hidden = true; }); }
+}
+atualizarOnline(); setInterval(atualizarOnline, 60000);  // no maximo 1x por minuto
 if (SMASH.apks.length) {
   const janela = $('escolherApk');
   $('apkBreve').hidden = true;
