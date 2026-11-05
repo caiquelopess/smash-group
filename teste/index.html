@@ -6,12 +6,12 @@
 <meta name="robots" content="noindex">
 <title>[TESTE] Smash Client</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Converta resource packs do Minecraft Java 1.8.9 para o MCPE 1.1.5 do Smash Client, sem reduzir as imagens.">
+<meta name="description" content="Smash Client: o Minecraft PE 1.1.5 com cara de PC, e o conversor de resource packs do Java 1.8.9 para o MCPE 1.1.5.">
 <link rel="icon" type="image/png" href="../img/grupo-icone-64.png">
 <link rel="apple-touch-icon" href="../img/grupo-icone-180.png">
 <meta name="theme-color" content="#130001">
 <meta property="og:title" content="Smash Client">
-<meta property="og:description" content="Converta packs do Java 1.8.9 para o Smash Client (MCPE 1.1.5) sem perder qualidade.">
+<meta property="og:description" content="Smash Client e conversor de packs do Java 1.8.9 para o MCPE 1.1.5.">
 <meta property="og:image" content="../img/grupo-icone-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -424,7 +424,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
       </ol>
       <div class="faixa-conv">
         <span class="rotulo"><img src="../img/mc/book_enchanted.png" alt="" width="16" height="16">Conversor de texturas</span>
-        <p><b>Tem um pack de textura do Java?</b> Converta para o Smash Client sem perder qualidade, direto no navegador.</p>
+        <p><b>Tem um pack de textura do Java?</b> Converta para o Smash Client direto no navegador.</p>
         <a href="#conversor">Abrir o conversor ›</a>
       </div>
       <div class="faixa-conv faixa-rk">
@@ -500,8 +500,8 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="hero">
       <div class="wrap hero-in">
         <span class="kicker">Conversor de texturas</span>
-        <h1>Teu pack do Java no celular, sem perder um pixel</h1>
-        <p>Envie o resource pack do Minecraft Java 1.8.9 e receba pronto para o MCPE 1.1.5 ou 0.15.10. 32x continua 32x, 128x continua 128x, e o céu do OptiFine vira skybox no 1.1.5. Tudo no teu aparelho: o pack não sai daqui.</p>
+        <h1>Teu pack do Java no celular, até 128x</h1>
+        <p>Envie o resource pack do Minecraft Java 1.8.9 e receba pronto pro MCPE 1.1.5. Packs até 128x ficam com a mesma resolução. Só texturas maiores, que fariam o jogo fechar, são ajustadas, e o conversor avisa quais. Tudo no teu aparelho: o pack não sai daqui.</p>
         <div class="hero-botoes">
           <button class="btn grande" type="button" data-ir="ferramenta">Converter meu pack</button>
           <button class="btn grande sec" type="button" data-ir="instalar">Como instalar</button>
@@ -511,14 +511,23 @@ footer .credito { margin-top: 8px; opacity: .8; }
 
     <div class="wrap">
     <div class="numeros">
-      <div><b>100%</b><span>da resolução original</span></div>
+      <div><b>128x</b><span>mesma resolução</span></div>
       <div><b>1.8.9</b><span>pack do Java</span></div>
-      <div><b>2</b><span>versões: 1.1.5 e 0.15.10</span></div>
       <div><b>0</b><span>uploads: roda no aparelho</span></div>
+      <div><b>Grátis</b><span>sem cadastro</span></div>
     </div>
 
+    <section class="bloco-sec">
+      <span class="kicker">Destaques do conversor</span>
+      <h2>Até os packs que fechavam o jogo</h2>
+      <div class="cards">
+        <article class="card"><img src="../img/mc/clock_item.png" alt="" width="16" height="16"><h3>Céu do OptiFine no MCPE</h3><p>A skybox do teu pack vira o céu do 1.1.5, com sol redondo e céu que muda ao longo do dia.</p></article>
+        <article class="card"><img src="../img/mc/diamond_ore.png" alt="" width="16" height="16"><h3>Packs pesados carregam</h3><p>Aqueles que fechavam o jogo, com minério 512x ou lava gigante, agora entram.</p></article>
+      </div>
+    </section>
+
     <section class="bloco-sec" id="ferramenta">
-    <span class="kicker">Grátis e sem cadastro</span>
+    <span class="kicker">Do Java pro MCPE</span>
     <h2>Converta em 3 passos</h2>
     <div class="grade">
       <div class="cartao passos area-a" aria-live="polite">
@@ -548,7 +557,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
                 <input type="radio" name="saida" id="saidaZip" value="zip" checked>
                 <span><b>Pack em .zip</b><small>Para colocar na pasta resource_packs do celular</small></span>
               </label>
-              <label class="saida" id="rotuloMcpack">
+              <label class="saida" id="rotuloMcpack" hidden>
                 <input type="radio" name="saida" id="saidaMcpack" value="mcpack">
                 <span><b>Pack em .mcpack</b><small id="mcpackTexto">Abra o arquivo com o Minecraft e ele importa o pack</small></span>
               </label>
@@ -627,7 +636,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="bloco-sec" id="instalar">
       <span class="kicker">Depois de baixar</span>
       <h2>Do download ao jogo</h2>
-      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. Em <b>.mcpack</b> (só MCPE 1.1.5) é só abrir o arquivo com o Minecraft, que ele importa o pack. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
+      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
       <div class="dois">
         <div class="cartao">
           <h3>No celular (Smash Client, MCPE 1.1.5 ou 0.15.10)</h3>
@@ -1012,6 +1021,7 @@ function ajustarSaida() {
 }
 document.querySelectorAll('input[name=alvo]').forEach((r) => r.addEventListener('change', ajustarSaida));
 document.querySelectorAll('input[name=saida]').forEach((r) => r.addEventListener('change', () => { if (ultimo && !ocupado) mostrarResultado(ultimo); }));
+if ($('rotuloMcpack').hidden) $('saidaZip').checked = true;  // .mcpack escondido: o navegador pode ter guardado a marcacao antiga
 ajustarSaida();
 
 $('converter').onclick = () => {
