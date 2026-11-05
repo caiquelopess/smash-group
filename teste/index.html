@@ -535,7 +535,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
         <div class="passo ativo" id="p1">
           <div class="num">1</div>
           <div style="display:grid;gap:12px">
-            <h2>Versão e formato</h2>
+            <h2>Versão do jogo</h2>
             <div class="versoes">
               <span class="chip on">Java 1.8.9</span>
               <span class="chip off" title="Em breve">Java 1.9 a 1.21 · em breve</span>
@@ -549,21 +549,6 @@ footer .credito { margin-top: 8px; opacity: .8; }
               <label class="saida">
                 <input type="radio" name="alvo" id="alvo015" value="0.15.10">
                 <span><b>MCPE 0.15.10</b><small>Versão clássica 0.15</small></span>
-              </label>
-            </fieldset>
-            <fieldset class="saidas">
-              <legend class="pixel">Como você quer receber</legend>
-              <label class="saida">
-                <input type="radio" name="saida" id="saidaZip" value="zip" checked>
-                <span><b>Pack em .zip</b><small>Para colocar na pasta resource_packs do celular</small></span>
-              </label>
-              <label class="saida" id="rotuloMcpack" hidden>
-                <input type="radio" name="saida" id="saidaMcpack" value="mcpack">
-                <span><b>Pack em .mcpack</b><small id="mcpackTexto">Abra o arquivo com o Minecraft e ele importa o pack</small></span>
-              </label>
-              <label class="saida off" title="Em breve">
-                <input type="radio" name="saida" id="saidaApk" value="apk" disabled>
-                <span><b>Direto no APK</b><small>Disponível em breve</small></span>
               </label>
             </fieldset>
           </div>
@@ -593,6 +578,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
             <div class="baixar" id="baixar" hidden></div>
             <div class="resumo" id="resumo" hidden></div>
             <ul class="avisos" id="avisos" hidden></ul>
+            <span class="chip off" title="Em breve" style="justify-self:start">Direto no APK · em breve</span>
           </div>
         </div>
       </div>
@@ -636,7 +622,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="bloco-sec" id="instalar">
       <span class="kicker">Depois de baixar</span>
       <h2>Do download ao jogo</h2>
-      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
+      <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. O <b>.mcpack</b> é o mesmo pack, para importar tocando no arquivo onde o jogo aceita; se não abrir, use o .zip. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
       <div class="dois">
         <div class="cartao">
           <h3>No celular (Smash Client, MCPE 1.1.5 ou 0.15.10)</h3>
@@ -1003,26 +989,13 @@ $('avisoBaixar').addEventListener('click', () => setTimeout(() => fechar(aviso),
 // o aviso de fechar o jogo abre ANTES do download: o pack so baixa pelo botao da janela
 function avisoAntes(url, nome, mcpack) {
   $('avisoPasso1').innerHTML = mcpack
-    ? 'Abra o <b>.mcpack</b> baixado (pela notificação do download ou pelo gerenciador de arquivos) e escolha o <b>Minecraft</b>: ele importa o pack.'
+    ? 'Abra o <b>.mcpack</b> baixado (pela notificação do download ou pelo gerenciador de arquivos) e escolha o jogo pra importar. Se não abrir, use o .zip em <b>games › com.mojang › resource_packs</b>.'
     : 'Coloque o .zip em <b>games › com.mojang › resource_packs</b> (no celular não precisa extrair).';
   const a = $('avisoBaixar'); a.href = url; a.download = nome;
   a.textContent = 'Entendi, baixar o ' + (mcpack ? '.mcpack' : '.zip');
   abrir(aviso);
 }
 
-// .mcpack so existe no MCPE 1.1.5 (o 0.15.10 so aceita a pasta resource_packs)
-let ultimo = null;  // ultimo resultado: trocar .zip/.mcpack depois de converter so refaz o download
-const formato = () => (document.querySelector('input[name=saida]:checked') || {}).value || 'zip';
-function ajustarSaida() {
-  const so115 = ((document.querySelector('input[name=alvo]:checked') || {}).value || '1.1.5') === '1.1.5';
-  const r = $('saidaMcpack'); r.disabled = !so115; $('rotuloMcpack').classList.toggle('off', !so115);
-  $('mcpackTexto').textContent = so115 ? 'Abra o arquivo com o Minecraft e ele importa o pack' : 'Só no MCPE 1.1.5';
-  if (!so115 && r.checked) { $('saidaZip').checked = true; if (ultimo && !ocupado) mostrarResultado(ultimo); }
-}
-document.querySelectorAll('input[name=alvo]').forEach((r) => r.addEventListener('change', ajustarSaida));
-document.querySelectorAll('input[name=saida]').forEach((r) => r.addEventListener('change', () => { if (ultimo && !ocupado) mostrarResultado(ultimo); }));
-if ($('rotuloMcpack').hidden) $('saidaZip').checked = true;  // .mcpack escondido: o navegador pode ter guardado a marcacao antiga
-ajustarSaida();
 
 $('converter').onclick = () => {
   if (!caminho || ocupado) return;
@@ -1033,23 +1006,26 @@ $('converter').onclick = () => {
 };
 
 function mostrarResultado(m) {
-  ultimo = m; ocupado = false; passo(3); $('converter').disabled = false;  // da para converter o mesmo pack para a outra versao
+  ocupado = false; passo(3); $('converter').disabled = false;  // da para converter o mesmo pack para a outra versao
   urls.forEach(URL.revokeObjectURL); urls = [];
   const box = $('baixar'); box.innerHTML = ''; box.hidden = false; $('semResultado').hidden = true;
-  const alvo = m.res.alvo || '1.1.5', mcpack = formato() === 'mcpack' && alvo === '1.1.5';
-  const pack = m.arquivos.pack && { nome: m.arquivos.pack.nome.replace(/\.zip$/i, mcpack ? '.mcpack' : '.zip'), dados: m.arquivos.pack.dados };  // .mcpack = o mesmo zip (manifest.json na raiz)
+  // entrega o pack em .zip e, no MCPE 1.1.5, tambem em .mcpack (o mesmo zip, manifest.json na raiz; o 0.15.10 so aceita a pasta)
+  const alvo = m.res.alvo || '1.1.5', pack = m.arquivos.pack;
+  const mcpack = pack && alvo === '1.1.5' ? { nome: pack.nome.replace(/\.zip$/i, '') + '.mcpack', dados: pack.dados } : null;
   const itens = [
-    [pack, 'Pack para o MCPE ' + alvo + (mcpack ? ': abra com o Minecraft para importar' : ': coloque em games/com.mojang/resource_packs (sem extrair)'), mcpack ? 'application/octet-stream' : 'application/zip', true],
-    [m.arquivos.relatorio, 'Relatório: o que foi convertido e o que ficou original', 'text/plain', false],
+    [pack, 'Pack para o MCPE ' + alvo + ': coloque em games/com.mojang/resource_packs (sem extrair)', 'application/zip', 'zip'],
+    [mcpack, 'O mesmo pack em .mcpack: importa tocando no arquivo, onde o jogo aceita. Se não abrir, use o .zip', 'application/octet-stream', 'mcpack'],
+    [m.arquivos.relatorio, 'Relatório: o que foi convertido e o que ficou original', 'text/plain', null],
   ];
-  itens.forEach(([a, desc, tipo, principal]) => {
+  itens.forEach(([a, desc, tipo, formato]) => {
+    const principal = !!formato;
     if (!a) return;
     const url = URL.createObjectURL(new Blob([a.dados], { type: tipo })); urls.push(url);
     const div = document.createElement('div'); div.className = 'arquivo';
     div.innerHTML = `<div><b></b><small></small></div>` + (principal ? '<button class="btn" type="button">Baixar</button>' : '<a class="btn sec" download>Baixar</a>');
     div.querySelector('b').textContent = a.nome;
     div.querySelector('small').textContent = desc + ' · ' + kb(a.dados.byteLength);
-    if (principal) div.querySelector('button').onclick = () => avisoAntes(url, a.nome, mcpack);
+    if (principal) div.querySelector('button').onclick = () => avisoAntes(url, a.nome, formato === 'mcpack');
     else { const link = div.querySelector('a'); link.href = url; link.download = a.nome; }
     box.appendChild(div);
   });
