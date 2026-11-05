@@ -165,7 +165,7 @@ a { color: var(--smash-2); }
 .num { width: 30px; height: 30px; display: grid; place-items: center; background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; font: 700 14px var(--f-display); color: var(--muted); }
 .passo.ativo .num { background: var(--smash); border-color: var(--smash); color: var(--on-smash); }
 .passo.feito .num { background: transparent; border-color: var(--ok); color: var(--ok); }
-.passo h2 { margin: 3px 0 8px; font: 600 16px/1.3 var(--f-display); letter-spacing: .02em; }
+section.bloco-sec .passo h2, .passo h2 { margin: 3px 0 8px; font: 800 16px/1.3 var(--f-titulo); text-transform: uppercase; letter-spacing: .03em; }  /* a ferramenta fica dentro de uma secao */
 
 .versoes { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel-2); font-size: 13px; }
@@ -207,7 +207,7 @@ a { color: var(--smash-2); }
 .pack { display: grid; gap: 14px; }
 .pack-topo { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 14px; align-items: center; }
 .icone { width: 72px; height: 72px; border-radius: 6px; background: var(--panel-2); border: 1px solid var(--line); image-rendering: pixelated; object-fit: cover; }
-.pack h3 { margin: 0 0 4px; font: 600 17px/1.25 var(--f-display); overflow-wrap: anywhere; }
+.pack h3 { margin: 0 0 4px; font: 800 17px/1.25 var(--f-titulo); overflow-wrap: anywhere; }
 .mcdesc { font-family: var(--f-pixel); font-size: 12px; line-height: 1.5; color: #aaa; overflow-wrap: anywhere; background: #000; padding: 6px 8px; border-radius: 4px; }
 .dados { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .dado { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
@@ -497,15 +497,29 @@ footer .credito { margin-top: 8px; opacity: .8; }
   </main>
 
   <main class="vista" id="v-conversor" hidden>
-    <section class="faixa"><div class="wrap">
-    <div class="intro">
-      <span class="pixel" style="color:var(--smash-2)">Conversor de resource packs</span>
-      <h1>Seu pack do Java no <em>Smash Client</em>, sem perder qualidade</h1>
-      <p>Envie um resource pack do Minecraft Java 1.8.9 e receba o pack pronto para o MCPE 1.1.5 ou 0.15.10. Toda textura fica na resolução original: um pack 32x continua 32x, um 128x continua 128x. Se o pack tiver céu do OptiFine, ele vira skybox no MCPE 1.1.5. A conversão roda no seu próprio aparelho; o pack não é enviado para nenhum servidor.</p>
-    </div>
-    </div></section>
+    <section class="hero">
+      <div class="wrap hero-in">
+        <span class="kicker">Conversor de texturas</span>
+        <h1>Teu pack do Java no celular, sem perder um pixel</h1>
+        <p>Envie o resource pack do Minecraft Java 1.8.9 e receba pronto para o MCPE 1.1.5 ou 0.15.10. 32x continua 32x, 128x continua 128x, e o céu do OptiFine vira skybox no 1.1.5. Tudo no teu aparelho: o pack não sai daqui.</p>
+        <div class="hero-botoes">
+          <button class="btn grande" type="button" data-ir="ferramenta">Converter meu pack</button>
+          <button class="btn grande sec" type="button" data-ir="instalar">Como instalar</button>
+        </div>
+      </div>
+    </section>
 
     <div class="wrap">
+    <div class="numeros">
+      <div><b>100%</b><span>da resolução original</span></div>
+      <div><b>1.8.9</b><span>pack do Java</span></div>
+      <div><b>2</b><span>versões: 1.1.5 e 0.15.10</span></div>
+      <div><b>0</b><span>uploads: roda no aparelho</span></div>
+    </div>
+
+    <section class="bloco-sec" id="ferramenta">
+    <span class="kicker">Grátis e sem cadastro</span>
+    <h2>Converta em 3 passos</h2>
     <div class="grade">
       <div class="cartao passos area-a" aria-live="polite">
 
@@ -592,6 +606,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
         <button class="btn largo" id="converter" type="button" disabled>Converter</button>
       </aside>
     </div>
+    </section>
 
     <dialog class="janela" id="avisoFechar" aria-labelledby="avisoTitulo">
       <div class="janela-corpo">
@@ -610,7 +625,8 @@ footer .credito { margin-top: 8px; opacity: .8; }
     </dialog>
 
     <section class="bloco-sec" id="instalar">
-      <h2>Como instalar o pack</h2>
+      <span class="kicker">Depois de baixar</span>
+      <h2>Do download ao jogo</h2>
       <p class="nota">Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. Em <b>.mcpack</b> (só MCPE 1.1.5) é só abrir o arquivo com o Minecraft, que ele importa o pack. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.</p>
       <div class="dois">
         <div class="cartao">
@@ -642,6 +658,14 @@ footer .credito { margin-top: 8px; opacity: .8; }
           <li>Ativou e o jogo travou ou fechou: abra de novo, que na segunda vez ele carrega o pack inteiro.</li>
           <li>Pack 256x é pesado: se o jogo ficar lento ou fechar, use uma versão 32x ou 64x do mesmo pack.</li>
         </ul>
+      </div>
+    </section>
+
+    <section class="bloco-sec">
+      <div class="chamada">
+        <img src="../img/icone-branco.png" alt="" width="170" height="192">
+        <p><b>Ainda não tem o Smash Client?</b> Mineração do Java, mouse e teclado, 8 módulos e o servidor SMASH na lista. E é grátis.</p>
+        <button class="btn-contorno js-baixar" type="button" hidden>Baixar grátis</button>
       </div>
     </section>
     </div>
@@ -853,10 +877,10 @@ document.querySelectorAll('.js-copiar').forEach((btn) => btn.onclick = async () 
   catch (e) { const r = document.createRange(); r.selectNodeContents(btn.previousElementSibling); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selecionado'; }
   setTimeout(() => { btn.textContent = 'Copiar'; }, 1800);
 });
-// "Como instalar" do menu: rola ate a secao (sem trocar o #, que escolhe a aba)
+// botoes de rolagem ("Como instalar" do menu, "Converter meu pack"...): rolam ate a secao sem trocar o #, que escolhe a aba
 document.querySelectorAll('[data-ir]').forEach((b) => b.onclick = () => {
-  const ir = () => $(b.dataset.ir).scrollIntoView({ behavior: 'smooth' });
-  if ($('v-cliente').hidden) { location.hash = '#cliente'; setTimeout(ir, 60); } else ir();
+  const alvo = $(b.dataset.ir), vista = alvo.closest('.vista'), ir = () => alvo.scrollIntoView({ behavior: 'smooth' });
+  if (vista.hidden) { location.hash = '#' + vista.id.slice(2); setTimeout(ir, 60); } else ir();
 });
 
 
