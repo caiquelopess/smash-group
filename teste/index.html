@@ -297,6 +297,24 @@ footer .credito { margin-top: 8px; opacity: .8; }
 .faixa-rk .rotulo { color: #ffaa00; }
 .faixa-rk a { background: #c40e0e; color: #fff; }
 
+/* topo do Client com a arte do Marketing (fox + celular com mouse e teclado) */
+.hero-client { background-image: url(../img/arte/topo-client-2000.jpg); background-position: center; image-rendering: auto; }
+@media (max-width: 720px) { .hero-client { background-image: url(../img/arte/topo-client-1000.jpg); background-position: 50% 50%; } }
+.hero-client::after { background: radial-gradient(55% 60% at 50% 48%, rgb(19 0 1 / .78), rgb(19 0 1 / .35) 70%, transparent), linear-gradient(180deg, rgb(10 2 3 / .35), rgb(19 0 1 / .55) 75%, var(--bg)); }
+/* cartao grande com arte (no lugar da textura de bloco) */
+.tile-arte { background: var(--arte) center / cover no-repeat; image-rendering: auto; }
+.tile-arte::before { background: linear-gradient(180deg, rgb(19 0 1 / .25), rgb(19 0 1 / .88) 72%); }
+.tile-arte:hover::before { background: linear-gradient(180deg, rgb(19 0 1 / .15), rgb(19 0 1 / .82) 72%); }
+.tile-arte { align-content: end; }
+/* perguntas frequentes */
+.faq { display: grid; gap: 8px; }
+.faq details { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0 16px; }
+.faq summary { cursor: pointer; list-style: none; padding: 15px 0; font: 800 15px/1.35 var(--f-titulo); display: flex; justify-content: space-between; gap: 12px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; color: var(--smash-2); font-size: 20px; line-height: 1; }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { margin: 0 0 15px; color: var(--muted); font-size: 14px; }
+
 /* galeria de prints do Client: grade 2x2 no PC, carrossel de arrastar no celular */
 .galeria { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .galeria figure { margin: 0; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
@@ -380,11 +398,11 @@ footer .credito { margin-top: 8px; opacity: .8; }
   <div class="veu" id="veuMenu" hidden></div>
 
   <main class="vista" id="v-cliente">
-    <section class="hero">
+    <section class="hero hero-client">
       <div class="wrap hero-in">
         <img class="hero-logo" src="../img/logo-branca.png" alt="Smash Client" width="840" height="319">
-        <h1>Jogue no celular como se fosse no PC</h1>
-        <p>Mineração do Java 1.8.9, mouse e teclado, 8 módulos no menu de pausa e o servidor SMASH a um toque. Grátis, para Android.</p>
+        <h1>O client completo do Minecraft PE</h1>
+        <p>Mineração do Java 1.8.9, mouse e teclado, HUD do teu jeito e 8 módulos num menu só. Grátis, para Android, com o servidor Smash a um toque.</p>
         <div class="hero-botoes">
           <button class="btn grande js-baixar" id="baixarCliente" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar grátis</button>
           <span class="chip off" id="apkBreve">Download do APK · em breve</span>
@@ -402,7 +420,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <div class="numeros">
       <div><b>8</b><span>módulos no menu</span></div>
       <div><b>1.8.9</b><span>mineração do Java</span></div>
-      <div><b>64 e 32</b><span>bits, até em celular antigo</span></div>
+      <div><b>3</b><span>idiomas: PT, EN e ES</span></div>
       <div><b>100%</b><span>grátis</span></div>
     </div>
 
@@ -413,10 +431,16 @@ footer .credito { margin-top: 8px; opacity: .8; }
     </section>
 
     <section class="bloco-sec">
-      <span class="kicker">O que tem no Smash Client</span>
+      <span class="kicker">Por que o Smash Client</span>
       <h2>O MCPE que você sempre quis</h2>
       <p class="nota">Tudo que faltava no Minecraft PE pra ele parecer o do computador, sem perder o jeito do celular.</p>
       <div class="destaques" id="destaques"></div>
+    </section>
+
+    <section class="bloco-sec" id="diferenciais">
+      <span class="kicker">Diferenciais</span>
+      <h2>Mais controle, menos limite</h2>
+      <div class="cards" id="cardsDiferenciais"></div>
     </section>
 
     <section class="bloco-sec" id="galeria">
@@ -432,11 +456,9 @@ footer .credito { margin-top: 8px; opacity: .8; }
     </section>
 
     <section class="bloco-sec" id="modulos">
-      <span class="kicker">Liga e desliga no menu de pausa</span>
+      <span class="kicker">Todos os módulos · liga e desliga no menu de pausa</span>
       <h2>8 módulos, zero complicação</h2>
       <div class="cards" id="cardsModulos"></div>
-      <h3 class="sub-sec">E tem mais</h3>
-      <ul class="mais" id="novidades"></ul>
     </section>
 
     <section class="bloco-sec" id="como-instalar">
@@ -460,10 +482,23 @@ footer .credito { margin-top: 8px; opacity: .8; }
       </div>
     </section>
 
+    <section class="bloco-sec" id="faq">
+      <span class="kicker">Perguntas frequentes</span>
+      <h2>Ficou com dúvida?</h2>
+      <div class="faq">
+        <details><summary>O Smash Client é grátis?</summary><p>Sim. É só baixar, instalar e jogar.</p></details>
+        <details><summary>Funciona no meu celular?</summary><p>Funciona em Android. Baixe a versão de 64 bits, que serve na maioria dos celulares. Se o Android avisar que o app não é compatível, baixe a de 32 bits.</p></details>
+        <details><summary>Tem para PC ou iPhone?</summary><p>Ainda não: o Smash Client é para Android. Mas dá pra conectar mouse e teclado no celular e jogar como no PC.</p></details>
+        <details><summary>Como entro no servidor Smash?</summary><p>Abra <b>Jogar › Servidores</b>: o SMASH já está na lista. É só tocar e entrar.</p></details>
+        <details><summary>Posso usar meu pack de textura do Java?</summary><p>Pode. Converta no nosso <a href="#conversor">Conversor de Texturas</a>, direto no navegador, e coloque no jogo.</p></details>
+        <details><summary>Onde vejo as novidades do Client?</summary><p>No nosso <a class="js-discord" href="#" target="_blank" rel="noopener">Discord</a>, nos canais do Smash Client.</p></details>
+      </div>
+    </section>
+
     <section class="bloco-sec">
       <div class="chamada">
         <img src="../img/icone-branco.png" alt="" width="170" height="192">
-        <p><b>Mineração do Java, mouse e teclado, 8 módulos e o servidor SMASH na lista.</b> E é grátis. O que você está esperando? Baixe agora!</p>
+        <p><b>O MCPE que você sempre quis está a um toque.</b> Mineração do Java, mouse e teclado, HUD do teu jeito e o servidor Smash na lista. E é grátis. Baixe agora!</p>
         <button class="btn-contorno js-baixar" type="button" hidden>Baixar grátis</button>
       </div>
     </section>
@@ -736,10 +771,21 @@ const SMASH = {
   youtube: 'https://youtube.com/@smashrankup',
 };
 // cartoes grandes do "O que tem": [textura de fundo, item, chamada, titulo, texto] (arquivos em img/mc/)
-const DESTAQUES = [
-  ['stone', 'diamond_pickaxe', 'Igual ao Java 1.8.9', 'Mineração', 'Cada bloco quebra no tempo do PC. Quem vem do Java sente a diferença no primeiro minuto.'],
-  ['netherrack', 'clock_item', '8 módulos num menu só', 'Menu do Client', 'FPS e ping na tela, macro de texto, sprint automático, F5, capas e muito mais. Liga e desliga num toque, direto do pause.'],
-  ['gold_block', 'book_enchanted', 'Plugue e jogue', 'Mouse e teclado', 'Conecte mouse e teclado e jogue como no PC.'],
+const DESTAQUES = [  // textura de bloco ou 'arte:nome' (img/arte/nome-720.jpg, artes do Marketing)
+  ['stone', 'diamond_pickaxe', 'Igual ao Java 1.8.9', 'Minere no tempo do PC', 'Cada bloco quebra no mesmo tempo do Java 1.8.9. Quem vem do PC sente a diferença no primeiro minuto.'],
+  ['arte:menu-client', '', '8 módulos num menu só', 'Teu jogo, do teu jeito', 'FPS e ping na tela, macro de texto, sprint automático, capas e muito mais. Liga e desliga num toque, direto do pause.'],
+  ['arte:mouse-teclado', '', 'Plugue e jogue', 'Mouse e teclado', 'Conecte mouse e teclado e jogue como no PC.'],
+];
+// diferenciais (estilo Lunar/Badlion/Feather): so recursos do APK publico (ficha tecnica do Client); correcoes do emulador nao entram
+const DIFERENCIAIS = [
+  ['chest_front', 'HUD do teu jeito', 'Arraste FPS, ping, status e botões pra onde quiser e escolha o tamanho e a transparência de cada um.'],
+  ['redstone_dust', 'Desempenho na tua mão', 'Modo economia, limite de FPS e opções de vídeo: entidades, texturas animadas, céu, nuvens e iluminação.'],
+  ['ender_eye', 'Visão estável no PvP', 'FOV fixo quando você corre, sem tremor ao levar dano e neblina mais distante.'],
+  ['book_enchanted', 'Mensagens num toque', 'Macro de texto: frases e /comandos prontos, com tecla de atalho no teclado.'],
+  ['nether_star', 'Tua skin, tua capa', 'Use a tua skin com a capa que quiser. Os outros jogadores também veem.'],
+  ['ender_pearl', 'Câmera sem pulos', 'A câmera de toque fica mais estável: nada de pulos quando você solta o dedo.'],
+  ['gold_ingot', 'Em 3 idiomas', 'Menu do Client em português, inglês e espanhol.'],
+  ['diamond_sword', 'Feito pro Smash', 'O servidor Smash já vem na lista, e lá o PvP é igual ao do Java 1.8.'],
 ];
 // cards da aba Smash RankUp: [item do jogo em img/mc/, titulo, frase] (textos do Marketing; nada de valores nem datas)
 const RANKUP = [
@@ -804,14 +850,16 @@ const ICONES = {
   gear: '<path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>',
   eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/>',
 };
-$('destaques').innerHTML = DESTAQUES.map(([tex, item, chamada, titulo, texto]) =>
-  `<article class="tile" style="--tex:url(../img/mc/${tex}.png)"><img class="tile-item" src="../img/mc/${item}.png" alt="" width="16" height="16"><span class="kicker">${chamada}</span><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
+$('destaques').innerHTML = DESTAQUES.map(([tex, item, chamada, titulo, texto]) => tex.startsWith('arte:')
+  ? `<article class="tile tile-arte" style="--arte:url(../img/arte/${tex.slice(5)}-720.jpg)"><span class="kicker">${chamada}</span><h3>${titulo}</h3><p>${texto}</p></article>`
+  : `<article class="tile" style="--tex:url(../img/mc/${tex}.png)"><img class="tile-item" src="../img/mc/${item}.png" alt="" width="16" height="16"><span class="kicker">${chamada}</span><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
 const cards = (lista) => lista.map(([item, titulo, texto]) =>
   `<article class="card"><img src="../img/mc/${item}.png" alt="" width="16" height="16"><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
 $('cardsModulos').innerHTML = cards(MODULOS);
+$('cardsDiferenciais').innerHTML = cards(DIFERENCIAIS);
 $('cardsRankup').innerHTML = RANKUP.map(([item, titulo, texto]) =>
   `<article class="card"><img src="../img/mc/${item}.png" alt="" width="16" height="16"><h3>${titulo}</h3><p>${texto}</p></article>`).join('');
-$('novidades').innerHTML = NOVIDADES.map(([i, t]) =>
+if ($('novidades')) $('novidades').innerHTML = NOVIDADES.map(([i, t]) =>
   `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[i]}</svg><span>${t}</span></li>`).join('');
 const ip = SMASH.servidor + ':' + SMASH.porta;
 document.querySelectorAll('.js-ip').forEach((c) => { c.textContent = ip; });
