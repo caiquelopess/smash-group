@@ -104,7 +104,7 @@ a { color: var(--smash-2); }
 /* destaques: cartoes grandes com textura do jogo */
 .titulo-sec { margin: 0; font: 900 clamp(24px, 3.6vw, 34px)/1.1 var(--f-titulo); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
 .kicker { font: italic 600 12px/1.2 var(--f-titulo); letter-spacing: .22em; text-transform: uppercase; color: var(--smash-2); }
-.destaques { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+.destaques { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
 @media (max-width: 860px) { .destaques { grid-template-columns: minmax(0, 1fr); } }
 .tile { position: relative; isolation: isolate; min-height: 250px; display: grid; align-content: center; justify-items: center; gap: 6px; padding: 28px 22px; text-align: center; background: var(--tex) 0 0 / 72px; image-rendering: pixelated; }
 .tile::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 70% at 50% 45%, rgb(19 0 1 / .55), rgb(19 0 1 / .88)); }
@@ -402,7 +402,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
       <div class="wrap hero-in">
         <img class="hero-logo" src="../img/logo-branca.png" alt="Smash Client" width="840" height="319">
         <h1>O client completo do Minecraft PE</h1>
-        <p>Mineração do Java 1.8.9, mouse e teclado, HUD do teu jeito e 8 módulos num menu só. Grátis, para Android, com o servidor Smash a um toque.</p>
+        <p>15 mods num menu só, mouse e teclado e HUD do seu jeito. Grátis, para Android, com o servidor Smash a um toque.</p>
         <div class="hero-botoes">
           <button class="btn grande js-baixar" id="baixarCliente" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>Baixar grátis</button>
           <span class="chip off" id="apkBreve">Download do APK · em breve</span>
@@ -411,16 +411,16 @@ footer .credito { margin-top: 8px; opacity: .8; }
         </div>
         <div class="servidor"><span class="pixel">Servidor</span><span class="online js-online" hidden></span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
         <div class="ficha">
-          <span class="pixel">Versão 1.1.5</span><span class="pixel">Android</span><span class="pixel">Servidor SMASH incluso</span>
+          <span class="pixel">Versão 1.1.5</span><span class="pixel">Android</span><span class="pixel">Suporta teclado e mouse</span>
         </div>
       </div>
     </section>
 
     <div class="wrap">
     <div class="numeros">
-      <div><b>8</b><span>módulos no menu</span></div>
-      <div><b>1.8.9</b><span>mineração do Java</span></div>
+      <div><b>15</b><span>mods num menu só</span></div>
       <div><b>3</b><span>idiomas: PT, EN e ES</span></div>
+      <div><b>32 e 64</b><span>bits</span></div>
       <div><b>100%</b><span>grátis</span></div>
     </div>
 
@@ -449,15 +449,15 @@ footer .credito { margin-top: 8px; opacity: .8; }
       <p class="arraste">Arraste pro lado pra ver mais ›</p>
       <div class="galeria">
         <figure><a href="../img/prints/hud-1600.jpg" target="_blank" rel="noopener"><img src="../img/prints/hud-800.jpg" srcset="../img/prints/hud-800.jpg 800w, ../img/prints/hud-1600.jpg 1600w" sizes="(max-width: 720px) 88vw, 540px" alt="O HUD em jogo" width="800" height="360" loading="lazy"></a><figcaption><b>O HUD em jogo</b>FPS, ping e status na tela, cada um no seu lugar.</figcaption></figure>
-        <figure><a href="../img/prints/menu-1600.jpg" target="_blank" rel="noopener"><img src="../img/prints/menu-800.jpg" srcset="../img/prints/menu-800.jpg 800w, ../img/prints/menu-1600.jpg 1600w" sizes="(max-width: 720px) 88vw, 540px" alt="Menu do Client" width="800" height="360" loading="lazy"></a><figcaption><b>Menu do Client</b>Liga e desliga cada módulo num toque, direto do pause.</figcaption></figure>
+        <figure><a href="../img/prints/menu-1600.jpg" target="_blank" rel="noopener"><img src="../img/prints/menu-800.jpg" srcset="../img/prints/menu-800.jpg 800w, ../img/prints/menu-1600.jpg 1600w" sizes="(max-width: 720px) 88vw, 540px" alt="Menu do Client" width="800" height="360" loading="lazy"></a><figcaption><b>Menu do Client</b>Liga e desliga cada mod num toque, direto do pause.</figcaption></figure>
         <figure><a href="../img/prints/editar-hud-1600.jpg" target="_blank" rel="noopener"><img src="../img/prints/editar-hud-800.jpg" srcset="../img/prints/editar-hud-800.jpg 800w, ../img/prints/editar-hud-1600.jpg 1600w" sizes="(max-width: 720px) 88vw, 540px" alt="Editar HUD" width="800" height="360" loading="lazy"></a><figcaption><b>Editar HUD</b>Arraste os botões pra onde quiser na tela.</figcaption></figure>
         <figure><a href="../img/prints/carregando-1600.jpg" target="_blank" rel="noopener"><img src="../img/prints/carregando-800.jpg" srcset="../img/prints/carregando-800.jpg 800w, ../img/prints/carregando-1600.jpg 1600w" sizes="(max-width: 720px) 88vw, 540px" alt="Tela de carregamento" width="800" height="360" loading="lazy"></a><figcaption><b>Tela de carregamento</b>Com a cara do Smash, do primeiro segundo.</figcaption></figure>
       </div>
     </section>
 
     <section class="bloco-sec" id="modulos">
-      <span class="kicker">Todos os módulos · liga e desliga no menu de pausa</span>
-      <h2>8 módulos, zero complicação</h2>
+      <span class="kicker">Todos os mods · liga e desliga no menu de pausa</span>
+      <h2>15 mods, zero complicação</h2>
       <div class="cards" id="cardsModulos"></div>
     </section>
 
@@ -498,7 +498,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="bloco-sec">
       <div class="chamada">
         <img src="../img/icone-branco.png" alt="" width="170" height="192">
-        <p><b>O MCPE que você sempre quis está a um toque.</b> Mineração do Java, mouse e teclado, HUD do teu jeito e o servidor Smash na lista. E é grátis. Baixe agora!</p>
+        <p><b>O MCPE que você sempre quis está a um toque.</b> 15 mods, mouse e teclado, HUD do seu jeito e o servidor Smash na lista. E é grátis. Baixe agora!</p>
         <button class="btn-contorno js-baixar" type="button" hidden>Baixar grátis</button>
       </div>
     </section>
@@ -547,7 +547,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="bloco-sec">
       <div class="chamada chamada-rk">
         <img src="../img/icone-branco.png" alt="" width="170" height="192">
-        <p><b>A temporada já começou.</b> Teu lugar no topo está esperando.</p>
+        <p><b>A temporada já começou.</b> Seu lugar no topo está esperando.</p>
         <div class="chamada-botoes">
           <button class="btn-contorno js-baixar" type="button" hidden>Baixar o Smash Client</button>
           <a class="btn-contorno js-discord" href="#" target="_blank" rel="noopener">Entrar no Discord</a>
@@ -561,8 +561,8 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="hero">
       <div class="wrap hero-in">
         <span class="kicker">Conversor de texturas</span>
-        <h1>Teu pack do Java no celular, até 128x</h1>
-        <p>Envie o resource pack do Minecraft Java 1.8.9 e receba pronto pro MCPE 1.1.5. Packs até 128x ficam com a mesma resolução. Só texturas maiores, que fariam o jogo fechar, são ajustadas, e o conversor avisa quais. Tudo no teu aparelho: o pack não sai daqui.</p>
+        <h1>Seu pack do Java no celular, até 128x</h1>
+        <p>Envie o resource pack do Minecraft Java 1.8.9 e receba pronto pro MCPE 1.1.5. Packs até 128x ficam com a mesma resolução. Só texturas maiores, que fariam o jogo fechar, são ajustadas, e o conversor avisa quais. Tudo no seu aparelho: o pack não sai daqui.</p>
         <div class="hero-botoes">
           <button class="btn grande" type="button" data-ir="ferramenta">Converter meu pack</button>
           <button class="btn grande sec" type="button" data-ir="instalar">Como instalar</button>
@@ -582,7 +582,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
       <span class="kicker">Destaques do conversor</span>
       <h2>Até os packs que fechavam o jogo</h2>
       <div class="cards">
-        <article class="card"><img src="../img/mc/clock_item.png" alt="" width="16" height="16"><h3>Céu do OptiFine no MCPE</h3><p>A skybox do teu pack vira o céu do 1.1.5, com sol redondo e céu que muda ao longo do dia.</p></article>
+        <article class="card"><img src="../img/mc/clock_item.png" alt="" width="16" height="16"><h3>Céu do OptiFine no MCPE</h3><p>A skybox do seu pack vira o céu do 1.1.5, com sol redondo e céu que muda ao longo do dia.</p></article>
         <article class="card"><img src="../img/mc/diamond_ore.png" alt="" width="16" height="16"><h3>Packs pesados carregam</h3><p>Aqueles que fechavam o jogo, com minério 512x ou lava gigante, agora entram.</p></article>
       </div>
     </section>
@@ -720,7 +720,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <section class="bloco-sec">
       <div class="chamada">
         <img src="../img/icone-branco.png" alt="" width="170" height="192">
-        <p><b>Ainda não tem o Smash Client?</b> Mineração do Java, mouse e teclado, 8 módulos e o servidor SMASH na lista. E é grátis.</p>
+        <p><b>Ainda não tem o Smash Client?</b> 15 mods, mouse e teclado e o servidor Smash na lista. E é grátis.</p>
         <button class="btn-contorno js-baixar" type="button" hidden>Baixar grátis</button>
       </div>
     </section>
@@ -772,50 +772,57 @@ const SMASH = {
 };
 // cartoes grandes do "O que tem": [textura de fundo, item, chamada, titulo, texto] (arquivos em img/mc/)
 const DESTAQUES = [  // textura de bloco ou 'arte:nome' (img/arte/nome-720.jpg, artes do Marketing)
-  ['stone', 'diamond_pickaxe', 'Igual ao Java 1.8.9', 'Minere no tempo do PC', 'Cada bloco quebra no mesmo tempo do Java 1.8.9. Quem vem do PC sente a diferença no primeiro minuto.'],
-  ['arte:menu-client', '', '8 módulos num menu só', 'Teu jogo, do teu jeito', 'FPS e ping na tela, macro de texto, sprint automático, capas e muito mais. Liga e desliga num toque, direto do pause.'],
+  ['arte:menu-client', '', '15 mods num menu só', 'Seu jogo, do seu jeito', 'FPS e ping na tela, macro de texto, sprint automático, capas, zoom e muito mais. Liga e desliga num toque, direto do pause.'],
   ['arte:mouse-teclado', '', 'Plugue e jogue', 'Mouse e teclado', 'Conecte mouse e teclado e jogue como no PC.'],
 ];
 // diferenciais (estilo Lunar/Badlion/Feather): so recursos do APK publico (ficha tecnica do Client); correcoes do emulador nao entram
 const DIFERENCIAIS = [
-  ['chest_front', 'HUD do teu jeito', 'Arraste FPS, ping, status e botões pra onde quiser e escolha o tamanho e a transparência de cada um.'],
-  ['redstone_dust', 'Desempenho na tua mão', 'Modo economia, limite de FPS e opções de vídeo: entidades, texturas animadas, céu, nuvens e iluminação.'],
+  ['chest_front', 'HUD do seu jeito', 'Arraste FPS, ping, status e botões pra onde quiser e escolha o tamanho e a transparência de cada um.'],
+  ['redstone_dust', 'Desempenho na sua mão', 'Modo economia, limite de FPS e opções de vídeo: entidades, texturas animadas, céu, nuvens e iluminação.'],
   ['ender_eye', 'Visão estável no PvP', 'FOV fixo quando você corre, sem tremor ao levar dano e neblina mais distante.'],
   ['book_enchanted', 'Mensagens num toque', 'Macro de texto: frases e /comandos prontos, com tecla de atalho no teclado.'],
-  ['nether_star', 'Tua skin, tua capa', 'Use a tua skin com a capa que quiser. Os outros jogadores também veem.'],
+  ['nether_star', 'Sua skin, sua capa', 'Use a sua skin com a capa que quiser. Os outros jogadores também veem.'],
   ['ender_pearl', 'Câmera sem pulos', 'A câmera de toque fica mais estável: nada de pulos quando você solta o dedo.'],
   ['gold_ingot', 'Em 3 idiomas', 'Menu do Client em português, inglês e espanhol.'],
   ['diamond_sword', 'Feito pro Smash', 'O servidor Smash já vem na lista, e lá o PvP é igual ao do Java 1.8.'],
 ];
 // cards da aba Smash RankUp: [item do jogo em img/mc/, titulo, frase] (textos do Marketing; nada de valores nem datas)
 const RANKUP = [
-  ['diamond_pickaxe', 'Mina e picaretas', 'Minere pra ganhar Money e Tokens, e encante a tua picareta com Explosão, Destruidor, Laser, Nuclear, Fortuna e Multiplicador.'],
+  ['diamond_pickaxe', 'Mina e picaretas', 'Minere pra ganhar Money e Tokens, e encante a sua picareta com Explosão, Destruidor, Laser, Nuclear, Fortuna e Multiplicador.'],
   ['blaze_rod', '14 ranks e prestígio', 'Do Carvão ao Blaze, em 56 degraus, com os 7 últimos de mob. No topo, cada prestígio (até o ✦10) dá +10% de Money pra sempre.'],
   ['nether_star', '6 bosses, 3 vezes por dia', 'Às 18h, 20h e 22h, com aviso antes de nascer e itens que só caem deles.'],
   // sem "alcance": no servidor e 6 blocos, nao o do Java 1.8 (Dev, 05/11)
   ['diamond_sword', 'Combate do Java 1.8', 'Dano, crítico, armadura, knockback e arco iguais aos do Java 1.8, com anticheat no servidor.'],
   ['gold_ingot', 'Economia de verdade', 'Venda manual ou automática, lojas dos jogadores, banco que rende enquanto você joga e Money sem teto.'],
   ['mob_spawner', 'Máquinas e spawners', 'Cada rank novo libera máquinas que rendem até com você parado, spawners (15 tipos, até o Golem de Ferro) e um kit novo.'],
-  ['emerald', 'Terrenos e fazenda', 'Teu terreno com fazenda de cana, cacto, abóbora e melancia, que crescem como no Java.'],
-  ['gold_sword', 'Clãs', 'Monte teu clã com tag, até 10 membros, aliados, rivais e KDR.'],
+  ['emerald', 'Terrenos e fazenda', 'Seu terreno com fazenda de cana, cacto, abóbora e melancia, que crescem como no Java.'],
+  ['gold_sword', 'Clãs', 'Monte seu clã com tag, até 10 membros, aliados, rivais e KDR.'],
   ['chest_front', 'Eventos e caixas', 'Eventos no chat a cada 30 minutos, caixas com keys e boosters de mina e de venda.'],
   ['clock_item', 'Diário, missões e metas', 'Prêmio todo dia, 3 missões novas por dia e metas permanentes de blocos e mobs.'],
-  ['diamond', 'Tops', 'Rankings de Money, Cash, Tokens, Gemas, blocos e banco. Teu nome no topo.'],
-  ['furnace_front_on', 'Do teu jeito', '/sethome, /home e /tpa, sem fome e com proteção contra quem sai no meio do combate.'],
-  ['redstone_dust', 'Discord integrado', 'Vincule a conta e receba no Discord o cargo do teu VIP e os avisos de boss e eventos.'],
+  ['diamond', 'Tops', 'Rankings de Money, Cash, Tokens, Gemas, blocos e banco. Seu nome no topo.'],
+  ['furnace_front_on', 'Do seu jeito', '/sethome, /home e /tpa, sem fome e com proteção contra quem sai no meio do combate.'],
+  ['redstone_dust', 'Discord integrado', 'Vincule a conta e receba no Discord o cargo do seu VIP e os avisos de boss e eventos.'],
   ['book_enchanted', 'Chat em 3 idiomas', 'O chat e o servidor inteiro em português, inglês e espanhol, traduzidos na hora.'],
   ['ender_eye', '1.1.5 e 0.15.10', 'Jogue pelo 1.1.5, a versão principal. O 0.15.10 também entra no mesmo IP, em beta.'],
 ];
 // lista menor embaixo dos cartoes (so recursos do jogo: correcoes do emulador e a da placa nao entram)
 // cards dos modulos do menu do Client (APK publico; textos do Marketing, marketing/SITE-TEXTOS.md)
+// mods do Client: os 14 cards do menu (ficha tecnica, beta36+) + a mineracao do Java (recurso fixo, o Caique conta como mod)
 const MODULOS = [
-  ['clock_item', 'Status Display', 'FPS, ping, memória, temperatura e bateria na tela, do tamanho e da transparência que você quiser.'],
-  ['book_enchanted', 'Macro de texto', 'Crie atalhos com mensagens ou /comandos e mande com um toque, ou com uma tecla do teclado.'],
-  ['ender_pearl', 'Toggle Sprint', 'Corra sem precisar segurar: é só andar pra frente.'],
+  ['diamond_pickaxe', 'Mineração do Java', 'Cada bloco quebra no mesmo tempo do Java 1.8.9. Quem vem do PC sente a diferença no primeiro minuto.'],
+  ['blaze_powder', 'FPS', 'Os quadros por segundo sempre à vista.'],
+  ['ender_pearl', 'Ping', 'Sua latência com o servidor, na tela.'],
+  ['emerald', 'Coordenadas', 'X, Y, Z e a direção pra onde você olha.'],
+  ['clock_item', 'Status Display', 'Memória, temperatura e bateria do celular na tela.'],
+  ['book_enchanted', 'Macro de texto', 'Mensagens e /comandos prontos, enviados com um toque ou uma tecla do teclado.'],
+  ['experience_bottle', 'Toggle Sprint', 'Corra sem precisar segurar: é só andar pra frente.'],
   ['diamond', 'Vídeo', 'Ajuste a distância das entidades, as texturas animadas, o céu, as nuvens, o clima e a iluminação.'],
-  ['nether_star', 'Capas', 'Use a tua skin com a capa que quiser. Os outros jogadores também veem.'],
-  ['ender_eye', 'F5', 'Um botão na tela pra alternar a câmera entre a 1ª pessoa e a 3ª, de costas ou de frente.'],
-  ['diamond_sword', 'Mouse', 'Mouse e teclado como no PC, com sensibilidade e eixos do teu jeito.'],
+  ['nether_star', 'Capas', 'Use a sua skin com a capa que quiser. Os outros jogadores também veem.'],
+  ['chest_front', 'Teclas virtuais', 'Crie botões de tecla na tela, do tamanho e da transparência que quiser: câmera, zoom ou suas macros num toque.'],
+  ['diamond_sword', 'Mouse', 'Mouse e teclado como no PC, com sensibilidade e eixos do seu jeito.'],
+  ['redstone_block', 'Keystrokes', 'WASD, espaço e os cliques do mouse aparecendo na tela.'],
+  ['fireball', 'CPS', 'Seus cliques por segundo, ao vivo.'],
+  ['ender_eye', 'Zoom', 'Segure a tecla pra aproximar; a rodinha ajusta o zoom.'],
   ['redstone_dust', 'Configurações do Client', 'Idioma, cor de destaque, tamanho do menu, marca d’água, limite de FPS e modo economia.'],
 ];
 // lista menor: recursos fixos, sem modulo (correcoes do emulador e a da placa nao entram; FOV dinamico nao existe mais)
