@@ -1,6 +1,6 @@
 # Smash Group
 
-Site do **Smash Client** (download e novidades) e do **conversor de texturas**: resource packs do Minecraft Java 1.8.9 para o MCPE 1.1.5 ou 0.15.10, sem reduzir as imagens.
+Site do **Smash Client** (um único APK oficial para download), do **Smash RankUp** e do **conversor de texturas**: resource packs do Minecraft Java 1.8.9 para o MCPE 1.1.5 ou 0.15.10, mantendo a resolução até 128x e ajustando texturas maiores conforme os limites do jogo.
 
 Site: https://caiquelopess.github.io/smash-group/
 Roda inteiro no navegador (Python + Pillow + NumPy via Pyodide); o pack não sai do aparelho de quem usa.
