@@ -342,6 +342,18 @@ footer .credito { margin-top: 8px; opacity: .8; }
 }
 @media (prefers-reduced-motion: reduce) { .topo-2 { transition: none; } }
 
+/* idioma do site: bandeira ao lado das tres listras, abre a lista PT/EN/ES */
+.idioma { position: relative; align-self: stretch; display: flex; }
+.idioma-btn { appearance: none; border: 0; background: none; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 7px; padding: 0 6px; font: 800 13px/1 var(--f-titulo); letter-spacing: .06em; }
+.idioma-btn:hover .bandeira { filter: brightness(1.15); }
+.bandeira { width: 26px; height: 18px; border-radius: 3px; display: block; flex: none; box-shadow: 0 0 0 1px rgb(255 255 255 / .25); }
+.idioma-btn .seta { width: 12px; height: 12px; opacity: .7; }
+.idioma-lista { position: absolute; top: calc(100% + 6px); right: 0; z-index: 45; min-width: 190px; margin: 0; padding: 6px; list-style: none; background: #0b0302; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 14px 40px rgb(0 0 0 / .6); }
+.idioma-lista button { appearance: none; border: 0; background: none; color: var(--text); width: 100%; display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 7px; cursor: pointer; font: 600 15px/1 var(--f-body); text-align: left; }
+.idioma-lista button:hover { background: var(--panel); }
+.idioma-lista button[aria-checked="true"] { color: var(--smash-2); background: rgb(255 122 0 / .1); }
+@media (max-width: 900px) { .idioma-btn .sigla, .idioma-btn .seta { display: none; } .idioma-btn { padding: 0 4px 0 8px; } .menu-btn { padding-left: 10px; } }
+
 </style>
 </head>
 <body>
@@ -350,6 +362,10 @@ footer .credito { margin-top: 8px; opacity: .8; }
       <a href="#cliente" class="marca-logo" aria-label="Smash Client"><img src="img/logo.png" alt="Smash Client" width="111" height="44"></a>
       <div class="topo-dir">
         <div class="servidor"><span class="online js-online" hidden></span><code class="js-ip"></code><button class="btn mini sec js-copiar" type="button">Copiar</button></div>
+        <div class="idioma">
+          <button class="idioma-btn" id="idiomaBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="idiomaLista" aria-label="Idioma do site"><span id="idiomaBandeira"></span><span class="sigla" id="idiomaSigla">PT</span><svg class="seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <ul class="idioma-lista" id="idiomaLista" role="menu" hidden></ul>
+        </div>
         <button class="menu-btn" id="abrirMenu" type="button" aria-label="Abrir o menu" aria-controls="menuSite" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
         <button class="btn-topo js-baixar" type="button" hidden>Baixar</button>
       </div>
@@ -389,7 +405,7 @@ footer .credito { margin-top: 8px; opacity: .8; }
     <div class="numeros">
       <div><b>15</b><span>mods num menu só</span></div>
       <div><b>3</b><span>idiomas: PT, EN e ES</span></div>
-      <div><b>64</b><span>bits</span></div>
+      <div><b>32/64</b><span>bits</span></div>
       <div><b>100%</b><span>grátis</span></div>
     </div>
 <section class="bloco-sec">
@@ -705,7 +721,7 @@ const SMASH = {
   nome: 'Smash Client',
   servidor: 'SmashMC.blazebr.com',
   porta: 26685,
-  // Download oficial único do Smash Client (APK 64 bits).
+  // Download oficial único do Smash Client (um APK só, 32 e 64 bits).
   download: 'https://github.com/caiquelopess/smash-group/releases/download/Smash-Client-Beta/Smash-Client-v2.0-beta40.apk',
   // jogadores online: API publica do mcsrvstat (faz o ping do Bedrock por nos; cache de 5 min la). Vazio = sem contador
   statusApi: 'https://api.mcsrvstat.us/bedrock/3/',
@@ -1018,6 +1034,353 @@ function mostrarResultado(m) {
   (r.avisos || []).forEach((t) => { const li = document.createElement('li'); li.textContent = t; av.appendChild(li); });
   status('Pronto! Baixe o pack e siga o passo a passo de instalação.', false);
 }
+
+// ===== idioma do site (PT/EN/ES): botao da bandeira ao lado das tres listras =====
+// textos em portugues sao a chave; TEXTOS = [pt, en, es]. O html de cada trecho pode ter <b>, <code>, <br> e <a> (o <a> guarda o link original)
+const BANDEIRAS = {
+  pt: '<svg class="bandeira" viewBox="0 0 26 18" aria-hidden="true"><rect width="26" height="18" fill="#009c3b"/><path d="M13 2.2 23.4 9 13 15.8 2.6 9Z" fill="#ffdf00"/><circle cx="13" cy="9" r="4.1" fill="#002776"/><path d="M9.1 8.2c2.6-.4 5.3.1 7.7 1.4" stroke="#fff" stroke-width=".7" fill="none"/></svg>',
+  en: '<svg class="bandeira" viewBox="0 0 26 18" aria-hidden="true"><rect width="26" height="18" fill="#fff"/><path d="M0 0h26v1.4H0zM0 2.8h26v1.4H0zM0 5.5h26v1.4H0zM0 8.3h26v1.4H0zM0 11.1h26v1.4H0zM0 13.8h26v1.4H0zM0 16.6h26V18H0z" fill="#b22234"/><rect width="11" height="9.7" fill="#3c3b6e"/></svg>',
+  es: '<svg class="bandeira" viewBox="0 0 26 18" aria-hidden="true"><rect width="26" height="18" fill="#aa151b"/><rect y="4.5" width="26" height="9" fill="#f1bf00"/></svg>',
+};
+const IDIOMAS = { pt: ['PT', 'Português', 'pt-BR'], en: ['EN', 'English', 'en'], es: ['ES', 'Español', 'es'] };
+const TEXTOS = [
+  ["Copiar", "Copy", "Copiar"],
+  ["Copiado", "Copied", "Copiado"],
+  ["Selecionado", "Selected", "Seleccionado"],
+  ["Idioma do site", "Site language", "Idioma del sitio"],
+  ["Abrir o menu", "Open the menu", "Abrir el menú"],
+  ["Seções do site", "Site sections", "Secciones del sitio"],
+  ["Fechar o menu", "Close the menu", "Cerrar el menú"],
+  ["Fechar", "Close", "Cerrar"],
+  ["Baixar", "Download", "Descargar"],
+  ["Conversor de Texturas", "Texture Converter", "Conversor de Texturas"],
+  ["Conversor de texturas", "Texture converter", "Conversor de texturas"],
+  ["Como instalar", "How to install", "Cómo instalar"],
+  ["Servidor em manutenção", "Server under maintenance", "Servidor en mantenimiento"],
+  ["Servidor online", "Server online", "Servidor en línea"],
+  ["jogando", "playing", "jugando"],
+  ["O client completo do Minecraft PE", "The complete Minecraft PE client", "El client completo de Minecraft PE"],
+  ["15 mods num menu só, mouse e teclado e HUD do seu jeito. Grátis, para Android, com o servidor Smash a um toque.", "15 mods in one menu, mouse and keyboard and a HUD your way. Free, for Android, with the Smash server one tap away.", "15 mods en un solo menú, mouse y teclado y el HUD a tu manera. Gratis, para Android, con el servidor Smash a un toque."],
+  ["Baixar grátis", "Download free", "Descargar gratis"],
+  ["Servidor", "Server", "Servidor"],
+  ["Versão 1.1.5", "Version 1.1.5", "Versión 1.1.5"],
+  ["Suporta teclado e mouse", "Keyboard and mouse support", "Compatible con teclado y mouse"],
+  ["mods num menu só", "mods in one menu", "mods en un solo menú"],
+  ["idiomas: PT, EN e ES", "languages: PT, EN and ES", "idiomas: PT, EN y ES"],
+  ["grátis", "free", "gratis"],
+  ["Por que o Smash Client", "Why Smash Client", "Por qué Smash Client"],
+  ["O MCPE que você sempre quis", "The MCPE you always wanted", "El MCPE que siempre quisiste"],
+  ["Tudo que faltava no Minecraft PE pra ele parecer o do computador, sem perder o jeito do celular.", "Everything Minecraft PE was missing to feel like the PC version, without losing the feel of your phone.", "Todo lo que le faltaba a Minecraft PE para parecerse al de PC, sin perder lo mejor del celular."],
+  ["15 mods num menu só", "15 mods in one menu", "15 mods en un solo menú"],
+  ["Seu jogo, do seu jeito", "Your game, your way", "Tu juego, a tu manera"],
+  ["FPS e ping na tela, macro de texto, sprint automático, capas, zoom e muito mais. Liga e desliga num toque, direto do pause.", "FPS and ping on screen, text macros, auto sprint, capes, zoom and much more. Turn them on and off with one tap, right from the pause menu.", "FPS y ping en pantalla, macro de texto, sprint automático, capas, zoom y mucho más. Se activan y desactivan con un toque, desde la pausa."],
+  ["Plugue e jogue", "Plug and play", "Conecta y juega"],
+  ["Mouse e teclado", "Mouse and keyboard", "Mouse y teclado"],
+  ["Conecte mouse e teclado e jogue como no PC.", "Plug in a mouse and keyboard and play like on PC.", "Conecta mouse y teclado y juega como en PC."],
+  ["Mod de mineração", "Mining mod", "Mod de minería"],
+  ["Mineração do Java", "Java mining", "Minería de Java"],
+  ["Cada bloco quebra no mesmo tempo do Java 1.8.9. Quem vem do PC sente a diferença no primeiro minuto.", "Every block breaks in the same time as Java 1.8.9. PC players feel the difference in the first minute.", "Cada bloque se rompe en el mismo tiempo que en Java 1.8.9. Quien viene de PC nota la diferencia en el primer minuto."],
+  ["No servidor Smash", "On the Smash server", "En el servidor Smash"],
+  ["PvP do Java 1.8", "Java 1.8 PvP", "PvP de Java 1.8"],
+  ["Dano, crítico, knockback e arco iguais aos do Java 1.8. O Smash já vem na lista do Client.", "Damage, crits, knockback and bow just like Java 1.8. Smash is already on the Client's server list.", "Daño, crítico, knockback y arco iguales a los de Java 1.8. Smash ya viene en la lista del Client."],
+  ["Diferenciais", "What sets it apart", "Diferenciales"],
+  ["Mais controle, menos limite", "More control, fewer limits", "Más control, menos límites"],
+  ["HUD do seu jeito", "Your HUD, your way", "El HUD a tu manera"],
+  ["Arraste FPS, ping, status e botões pra onde quiser e escolha o tamanho e a transparência de cada um.", "Drag FPS, ping, status and buttons wherever you want and pick the size and transparency of each one.", "Arrastra FPS, ping, estado y botones a donde quieras y elige el tamaño y la transparencia de cada uno."],
+  ["Desempenho na sua mão", "Performance in your hands", "El rendimiento en tus manos"],
+  ["Modo economia, limite de FPS e opções de vídeo: entidades, texturas animadas, céu, nuvens e iluminação.", "Battery saver, FPS limit and video options: entities, animated textures, sky, clouds and lighting.", "Modo ahorro, límite de FPS y opciones de video: entidades, texturas animadas, cielo, nubes e iluminación."],
+  ["Visão estável no PvP", "Steady view in PvP", "Visión estable en PvP"],
+  ["FOV fixo quando você corre, sem tremor ao levar dano e neblina mais distante.", "Fixed FOV when you sprint, no shake when you take damage and fog pushed further away.", "FOV fijo al correr, sin temblor al recibir daño y niebla más lejana."],
+  ["Mensagens num toque", "Messages in one tap", "Mensajes en un toque"],
+  ["Macro de texto: frases e /comandos prontos, com tecla de atalho no teclado.", "Text macros: ready-made phrases and /commands, with a keyboard shortcut.", "Macro de texto: frases y /comandos listos, con atajo en el teclado."],
+  ["Sua skin, sua capa", "Your skin, your cape", "Tu skin, tu capa"],
+  ["Use a sua skin com a capa que quiser. Os outros jogadores também veem.", "Use your skin with any cape you like. Other players see it too.", "Usa tu skin con la capa que quieras. Los demás jugadores también la ven."],
+  ["Câmera sem pulos", "No camera jumps", "Cámara sin saltos"],
+  ["A câmera de toque fica mais estável: nada de pulos quando você solta o dedo.", "The touch camera is steadier: no more jumps when you lift your finger.", "La cámara táctil es más estable: nada de saltos al soltar el dedo."],
+  ["Em 3 idiomas", "In 3 languages", "En 3 idiomas"],
+  ["Menu do Client em português, inglês e espanhol.", "Client menu in Portuguese, English and Spanish.", "Menú del Client en portugués, inglés y español."],
+  ["Feito pro Smash", "Made for Smash", "Hecho para Smash"],
+  ["O servidor Smash já vem na lista, e lá o PvP é igual ao do Java 1.8.", "The Smash server is already on the list, and its PvP plays just like Java 1.8.", "El servidor Smash ya viene en la lista, y allí el PvP es igual al de Java 1.8."],
+  ["Por dentro do Smash Client", "Inside Smash Client", "Por dentro de Smash Client"],
+  ["Veja como ele fica no jogo", "See how it looks in game", "Mira cómo se ve en el juego"],
+  ["Arraste pro lado pra ver mais ›", "Swipe sideways to see more ›", "Desliza hacia el lado para ver más ›"],
+  ["O HUD em jogo", "The HUD in game", "El HUD en el juego"],
+  ["<b>O HUD em jogo</b>FPS, ping e status na tela, cada um no seu lugar.", "<b>The HUD in game</b>FPS, ping and status on screen, each in its place.", "<b>El HUD en el juego</b>FPS, ping y estado en pantalla, cada uno en su lugar."],
+  ["Menu do Client", "Client menu", "Menú del Client"],
+  ["<b>Menu do Client</b>Liga e desliga cada mod num toque, direto do pause.", "<b>Client menu</b>Turn each mod on and off with one tap, right from the pause menu.", "<b>Menú del Client</b>Activa y desactiva cada mod con un toque, desde la pausa."],
+  ["Editar HUD", "Edit HUD", "Editar HUD"],
+  ["<b>Editar HUD</b>Arraste os botões pra onde quiser na tela.", "<b>Edit HUD</b>Drag the buttons anywhere on the screen.", "<b>Editar HUD</b>Arrastra los botones a donde quieras en la pantalla."],
+  ["Tela de carregamento", "Loading screen", "Pantalla de carga"],
+  ["<b>Tela de carregamento</b>Com a cara do Smash, do primeiro segundo.", "<b>Loading screen</b>Smash style, from the very first second.", "<b>Pantalla de carga</b>Con el estilo de Smash, desde el primer segundo."],
+  ["Todos os mods · liga e desliga no menu de pausa", "All mods · toggle them from the pause menu", "Todos los mods · se activan en el menú de pausa"],
+  ["15 mods, zero complicação", "15 mods, zero hassle", "15 mods, cero complicaciones"],
+  ["Os quadros por segundo sempre à vista.", "Frames per second always in sight.", "Los cuadros por segundo siempre a la vista."],
+  ["Sua latência com o servidor, na tela.", "Your latency to the server, on screen.", "Tu latencia con el servidor, en pantalla."],
+  ["Coordenadas", "Coordinates", "Coordenadas"],
+  ["X, Y, Z e a direção pra onde você olha.", "X, Y, Z and the direction you are facing.", "X, Y, Z y la dirección hacia donde miras."],
+  ["Memória, temperatura e bateria do celular na tela.", "Your phone's memory, temperature and battery on screen.", "Memoria, temperatura y batería del celular en pantalla."],
+  ["Macro de texto", "Text macro", "Macro de texto"],
+  ["Mensagens e /comandos prontos, enviados com um toque ou uma tecla do teclado.", "Ready-made messages and /commands, sent with one tap or one key.", "Mensajes y /comandos listos, enviados con un toque o una tecla del teclado."],
+  ["Corra sem precisar segurar: é só andar pra frente.", "Sprint without holding anything: just walk forward.", "Corre sin mantener nada pulsado: solo camina hacia adelante."],
+  ["Vídeo", "Video", "Video"],
+  ["Ajuste a distância das entidades, as texturas animadas, o céu, as nuvens, o clima e a iluminação.", "Adjust entity distance, animated textures, sky, clouds, weather and lighting.", "Ajusta la distancia de las entidades, las texturas animadas, el cielo, las nubes, el clima y la iluminación."],
+  ["Capas", "Capes", "Capas"],
+  ["Teclas virtuais", "Virtual keys", "Teclas virtuales"],
+  ["Crie botões de tecla na tela, do tamanho e da transparência que quiser: câmera, zoom ou suas macros num toque.", "Create key buttons on screen, with any size and transparency: camera, zoom or your macros in one tap.", "Crea botones de tecla en la pantalla, del tamaño y la transparencia que quieras: cámara, zoom o tus macros en un toque."],
+  ["Mouse e teclado como no PC, com sensibilidade e eixos do seu jeito.", "Mouse and keyboard like on PC, with sensitivity and axes your way.", "Mouse y teclado como en PC, con sensibilidad y ejes a tu manera."],
+  ["WASD, espaço e os cliques do mouse aparecendo na tela.", "WASD, space and mouse clicks shown on screen.", "WASD, espacio y los clics del mouse en pantalla."],
+  ["Seus cliques por segundo, ao vivo.", "Your clicks per second, live.", "Tus clics por segundo, en vivo."],
+  ["Segure a tecla pra aproximar; a rodinha ajusta o zoom.", "Hold the key to zoom in; the scroll wheel adjusts the zoom.", "Mantén la tecla para acercar; la rueda ajusta el zoom."],
+  ["Configurações do Client", "Client settings", "Ajustes del Client"],
+  ["Idioma, cor de destaque, tamanho do menu, marca d’água, limite de FPS e modo economia.", "Language, accent color, menu size, watermark, FPS limit and battery saver.", "Idioma, color de acento, tamaño del menú, marca de agua, límite de FPS y modo ahorro."],
+  ["Como instalar · leva 1 minuto", "How to install · takes 1 minute", "Cómo instalar · toma 1 minuto"],
+  ["Baixou, instalou, jogou", "Download, install, play", "Descarga, instala, juega"],
+  ["Toque em <b>Baixar grátis</b>. É um APK só, que funciona em celulares de 32 e 64 bits com Android 4.4 ou mais novo.", "Tap <b>Download free</b>. It's a single APK that works on 32-bit and 64-bit phones with Android 4.4 or newer.", "Toca <b>Descargar gratis</b>. Es un solo APK, que funciona en celulares de 32 y 64 bits con Android 4.4 o más nuevo."],
+  ["Abra o arquivo baixado. Se o Android pedir, permita <b>Instalar apps desconhecidos</b> para o navegador ou o gerenciador de arquivos e volte.", "Open the downloaded file. If Android asks, allow <b>Install unknown apps</b> for your browser or file manager and go back.", "Abre el archivo descargado. Si Android lo pide, permite <b>Instalar apps desconocidas</b> para el navegador o el gestor de archivos y vuelve."],
+  ["Toque em <b>Instalar</b> e depois em <b>Abrir</b>.", "Tap <b>Install</b> and then <b>Open</b>.", "Toca <b>Instalar</b> y luego <b>Abrir</b>."],
+  ["Em <b>Jogar › Servidores</b>, o <b>SMASH</b> já está na lista. É só entrar.", "In <b>Play › Servers</b>, <b>SMASH</b> is already on the list. Just join.", "En <b>Jugar › Servidores</b>, <b>SMASH</b> ya está en la lista. Solo entra."],
+  ["<b>Tem um pack de textura do Java?</b> Converta para o Smash Client direto no navegador.", "<b>Got a Java texture pack?</b> Convert it for Smash Client right in your browser.", "<b>¿Tienes un pack de texturas de Java?</b> Conviértelo para Smash Client directo en el navegador."],
+  ["Abrir o conversor ›", "Open the converter ›", "Abrir el conversor ›"],
+  ["Servidor SMASH", "SMASH server", "Servidor SMASH"],
+  ["<b>6 bosses 3 vezes por dia, 56 degraus de rank e PvP do Java 1.8.</b> E ele já vem na lista do Smash Client.", "<b>6 bosses 3 times a day, 56 rank steps and Java 1.8 PvP.</b> And it's already on the Smash Client list.", "<b>6 bosses 3 veces al día, 56 escalones de rango y PvP de Java 1.8.</b> Y ya viene en la lista de Smash Client."],
+  ["Conhecer o RankUp ›", "Discover RankUp ›", "Conocer RankUp ›"],
+  ["Perguntas frequentes", "FAQ", "Preguntas frecuentes"],
+  ["Ficou com dúvida?", "Got questions?", "¿Tienes dudas?"],
+  ["O Smash Client é grátis?", "Is Smash Client free?", "¿Smash Client es gratis?"],
+  ["Sim. É só baixar, instalar e jogar.", "Yes. Just download, install and play.", "Sí. Solo descarga, instala y juega."],
+  ["Funciona no meu celular?", "Will it work on my phone?", "¿Funciona en mi celular?"],
+  ["Funciona em Android 4.4 ou mais novo, em celulares de 32 e 64 bits. É um APK só: o próprio app se ajusta ao seu celular.", "It works on Android 4.4 or newer, on 32-bit and 64-bit phones. It's a single APK: the app adapts to your phone by itself.", "Funciona en Android 4.4 o más nuevo, en celulares de 32 y 64 bits. Es un solo APK: la app se ajusta sola a tu celular."],
+  ["Tem para PC ou iPhone?", "Is there a PC or iPhone version?", "¿Hay versión para PC o iPhone?"],
+  ["Ainda não: o Smash Client é para Android. Mas dá pra conectar mouse e teclado no celular e jogar como no PC.", "Not yet: Smash Client is for Android. But you can plug a mouse and keyboard into your phone and play like on PC.", "Todavía no: Smash Client es para Android. Pero puedes conectar mouse y teclado al celular y jugar como en PC."],
+  ["Como entro no servidor Smash?", "How do I join the Smash server?", "¿Cómo entro al servidor Smash?"],
+  ["Abra <b>Jogar › Servidores</b>: o SMASH já está na lista. É só tocar e entrar.", "Open <b>Play › Servers</b>: SMASH is already on the list. Just tap and join.", "Abre <b>Jugar › Servidores</b>: SMASH ya está en la lista. Solo toca y entra."],
+  ["Posso usar meu pack de textura do Java?", "Can I use my Java texture pack?", "¿Puedo usar mi pack de texturas de Java?"],
+  ["Pode. Converta no nosso <a>Conversor de Texturas</a>, direto no navegador, e coloque no jogo.", "Yes. Convert it with our <a>Texture Converter</a>, right in your browser, and add it to the game.", "Sí. Conviértelo en nuestro <a>Conversor de Texturas</a>, directo en el navegador, y ponlo en el juego."],
+  ["Onde vejo as novidades do Client?", "Where can I see Client news?", "¿Dónde veo las novedades del Client?"],
+  ["No nosso <a>Discord</a>, nos canais do Smash Client.", "On our <a>Discord</a>, in the Smash Client channels.", "En nuestro <a>Discord</a>, en los canales de Smash Client."],
+  ["<b>O MCPE que você sempre quis está a um toque.</b> 15 mods, mouse e teclado, HUD do seu jeito e o servidor Smash na lista. E é grátis. Baixe agora!", "<b>The MCPE you always wanted is one tap away.</b> 15 mods, mouse and keyboard, your own HUD and the Smash server on the list. And it's free. Download now!", "<b>El MCPE que siempre quisiste está a un toque.</b> 15 mods, mouse y teclado, el HUD a tu manera y el servidor Smash en la lista. Y es gratis. ¡Descárgalo ya!"],
+  ["Do Carvão ao Blaze. Até onde você chega?", "From Coal to Blaze. How far can you go?", "Del Carbón al Blaze. ¿Hasta dónde llegas?"],
+  ["56 degraus de rank, 6 bosses 3 vezes por dia e PvP do Java 1.8. A temporada já começou: ainda dá tempo de chegar no topo.", "56 rank steps, 6 bosses 3 times a day and Java 1.8 PvP. The season has started: there's still time to reach the top.", "56 escalones de rango, 6 bosses 3 veces al día y PvP de Java 1.8. La temporada ya empezó: aún hay tiempo de llegar a la cima."],
+  ["Baixar o Smash Client", "Download Smash Client", "Descargar Smash Client"],
+  ["Entrar no Discord", "Join the Discord", "Entrar al Discord"],
+  ["ranks", "ranks", "rangos"],
+  ["degraus até o Blaze", "steps up to Blaze", "escalones hasta el Blaze"],
+  ["por dia", "a day", "al día"],
+  ["O que tem no Smash RankUp", "What's in Smash RankUp", "Qué hay en Smash RankUp"],
+  ["O que te espera lá dentro", "What awaits you inside", "Lo que te espera adentro"],
+  ["Mina e picaretas", "Mine and pickaxes", "Mina y picos"],
+  ["Minere pra ganhar Money e Tokens, e encante a sua picareta com Explosão, Destruidor, Laser, Nuclear, Fortuna e Multiplicador.", "Mine to earn Money and Tokens, and enchant your pickaxe with Explosion, Destroyer, Laser, Nuclear, Fortune and Multiplier.", "Mina para ganar Money y Tokens, y encanta tu pico con Explosión, Destructor, Láser, Nuclear, Fortuna y Multiplicador."],
+  ["14 ranks e prestígio", "14 ranks and prestige", "14 rangos y prestigio"],
+  ["Do Carvão ao Blaze, em 56 degraus, com os 7 últimos de mob. No topo, cada prestígio (até o ✦10) dá +10% de Money pra sempre.", "From Coal to Blaze in 56 steps, the last 7 of them mobs. At the top, each prestige (up to ✦10) gives +10% Money forever.", "Del Carbón al Blaze en 56 escalones, los 7 últimos de mobs. En la cima, cada prestigio (hasta el ✦10) da +10% de Money para siempre."],
+  ["6 bosses, 3 vezes por dia", "6 bosses, 3 times a day", "6 bosses, 3 veces al día"],
+  ["Às 18h, 20h e 22h, com aviso antes de nascer e itens que só caem deles.", "At 6 pm, 8 pm and 10 pm (Brasília time), with a warning before they spawn and items that only they drop.", "A las 18 h, 20 h y 22 h (hora de Brasil), con aviso antes de aparecer e ítems que solo ellos sueltan."],
+  ["Combate do Java 1.8", "Java 1.8 combat", "Combate de Java 1.8"],
+  ["Dano, crítico, armadura, knockback e arco iguais aos do Java 1.8, com anticheat no servidor.", "Damage, crits, armor, knockback and bow just like Java 1.8, with a server-side anticheat.", "Daño, crítico, armadura, knockback y arco iguales a los de Java 1.8, con anticheat en el servidor."],
+  ["Economia de verdade", "A real economy", "Economía de verdad"],
+  ["Venda manual ou automática, lojas dos jogadores, banco que rende enquanto você joga e Money sem teto.", "Manual or automatic selling, player shops, a bank that earns while you play and no Money cap.", "Venta manual o automática, tiendas de jugadores, un banco que rinde mientras juegas y Money sin límite."],
+  ["Máquinas e spawners", "Machines and spawners", "Máquinas y spawners"],
+  ["Cada rank novo libera máquinas que rendem até com você parado, spawners (15 tipos, até o Golem de Ferro) e um kit novo.", "Every new rank unlocks machines that earn even while you're idle, spawners (15 types, up to the Iron Golem) and a new kit.", "Cada rango nuevo libera máquinas que rinden incluso cuando estás quieto, spawners (15 tipos, hasta el Gólem de Hierro) y un kit nuevo."],
+  ["Terrenos e fazenda", "Plots and farms", "Terrenos y granja"],
+  ["Seu terreno com fazenda de cana, cacto, abóbora e melancia, que crescem como no Java.", "Your own plot with sugar cane, cactus, pumpkin and melon farms that grow like in Java.", "Tu terreno con granja de caña, cactus, calabaza y sandía, que crecen como en Java."],
+  ["Clãs", "Clans", "Clanes"],
+  ["Monte seu clã com tag, até 10 membros, aliados, rivais e KDR.", "Build your clan with a tag, up to 10 members, allies, rivals and KDR.", "Arma tu clan con tag, hasta 10 miembros, aliados, rivales y KDR."],
+  ["Eventos e caixas", "Events and crates", "Eventos y cajas"],
+  ["Eventos no chat a cada 30 minutos, caixas com keys e boosters de mina e de venda.", "Chat events every 30 minutes, crates with keys and mining and selling boosters.", "Eventos en el chat cada 30 minutos, cajas con keys y boosters de mina y de venta."],
+  ["Diário, missões e metas", "Daily rewards, missions and goals", "Diario, misiones y metas"],
+  ["Prêmio todo dia, 3 missões novas por dia e metas permanentes de blocos e mobs.", "A reward every day, 3 new missions a day and permanent block and mob goals.", "Premio todos los días, 3 misiones nuevas al día y metas permanentes de bloques y mobs."],
+  ["Rankings de Money, Cash, Tokens, Gemas, blocos e banco. Seu nome no topo.", "Leaderboards for Money, Cash, Tokens, Gems, blocks and bank. Your name at the top.", "Rankings de Money, Cash, Tokens, Gemas, bloques y banco. Tu nombre en la cima."],
+  ["Do seu jeito", "Your way", "A tu manera"],
+  ["/sethome, /home e /tpa, sem fome e com proteção contra quem sai no meio do combate.", "/sethome, /home and /tpa, no hunger and protection against players who log out mid-fight.", "/sethome, /home y /tpa, sin hambre y con protección contra quien sale en medio del combate."],
+  ["Discord integrado", "Discord integration", "Discord integrado"],
+  ["Vincule a conta e receba no Discord o cargo do seu VIP e os avisos de boss e eventos.", "Link your account and get your VIP role plus boss and event alerts on Discord.", "Vincula tu cuenta y recibe en Discord el rol de tu VIP y los avisos de bosses y eventos."],
+  ["Chat em 3 idiomas", "Chat in 3 languages", "Chat en 3 idiomas"],
+  ["O chat e o servidor inteiro em português, inglês e espanhol, traduzidos na hora.", "The chat and the whole server in Portuguese, English and Spanish, translated instantly.", "El chat y todo el servidor en portugués, inglés y español, traducidos al instante."],
+  ["1.1.5 e 0.15.10", "1.1.5 and 0.15.10", "1.1.5 y 0.15.10"],
+  ["Jogue pelo 1.1.5, a versão principal. O 0.15.10 também entra no mesmo IP, em beta.", "Play on 1.1.5, the main version. 0.15.10 can also join on the same IP, in beta.", "Juega en 1.1.5, la versión principal. La 0.15.10 también entra con la misma IP, en beta."],
+  ["Como entrar", "How to join", "Cómo entrar"],
+  ["Entre em segundos", "Join in seconds", "Entra en segundos"],
+  ["Porta", "Port", "Puerto"],
+  ["No Smash Client o servidor já vem na lista: é só tocar e jogar.", "In Smash Client the server is already on the list: just tap and play.", "En Smash Client el servidor ya viene en la lista: solo toca y juega."],
+  ["<b>A temporada já começou.</b> Seu lugar no topo está esperando.", "<b>The season has started.</b> Your spot at the top is waiting.", "<b>La temporada ya empezó.</b> Tu lugar en la cima te espera."],
+  ["Seu pack do Java no celular, até 128x", "Your Java pack on your phone, up to 128x", "Tu pack de Java en el celular, hasta 128x"],
+  ["Envie o resource pack do Minecraft Java 1.8.9 e receba pronto pro MCPE 1.1.5. Packs até 128x ficam com a mesma resolução. Só texturas maiores, que fariam o jogo fechar, são ajustadas, e o conversor avisa quais. Tudo no seu aparelho: o pack não sai daqui.", "Send your Minecraft Java 1.8.9 resource pack and get it ready for MCPE 1.1.5. Packs up to 128x keep the same resolution. Only bigger textures, which would crash the game, are resized, and the converter tells you which ones. Everything runs on your device: the pack never leaves it.", "Envía el resource pack de Minecraft Java 1.8.9 y recíbelo listo para MCPE 1.1.5. Los packs de hasta 128x mantienen la misma resolución. Solo se ajustan las texturas más grandes, que harían cerrar el juego, y el conversor avisa cuáles. Todo en tu dispositivo: el pack no sale de aquí."],
+  ["Converter meu pack", "Convert my pack", "Convertir mi pack"],
+  ["mesma resolução", "same resolution", "misma resolución"],
+  ["pack do Java", "Java pack", "pack de Java"],
+  ["uploads: roda no aparelho", "uploads: runs on your device", "subidas: corre en tu dispositivo"],
+  ["Grátis", "Free", "Gratis"],
+  ["sem cadastro", "no sign-up", "sin registro"],
+  ["Destaques do conversor", "Converter highlights", "Lo mejor del conversor"],
+  ["Até os packs que fechavam o jogo", "Even the packs that used to crash the game", "Hasta los packs que cerraban el juego"],
+  ["Céu do OptiFine no MCPE", "OptiFine sky in MCPE", "Cielo de OptiFine en MCPE"],
+  ["A skybox do seu pack vira o céu do 1.1.5, com sol redondo e céu que muda ao longo do dia.", "Your pack's skybox becomes the 1.1.5 sky, with a round sun and a sky that changes through the day.", "El skybox de tu pack se vuelve el cielo de la 1.1.5, con sol redondo y un cielo que cambia a lo largo del día."],
+  ["Packs pesados carregam", "Heavy packs load", "Los packs pesados cargan"],
+  ["Aqueles que fechavam o jogo, com minério 512x ou lava gigante, agora entram.", "The ones that used to crash the game, with 512x ores or giant lava, now load.", "Los que cerraban el juego, con minerales de 512x o lava gigante, ahora entran."],
+  ["Do Java pro MCPE", "From Java to MCPE", "De Java a MCPE"],
+  ["Converta em 3 passos", "Convert in 3 steps", "Convierte en 3 pasos"],
+  ["Versão do jogo", "Game version", "Versión del juego"],
+  ["Em breve", "Coming soon", "Próximamente"],
+  ["Java 1.9 a 1.21 · em breve", "Java 1.9 to 1.21 · coming soon", "Java 1.9 a 1.21 · próximamente"],
+  ["Converter para", "Convert to", "Convertir a"],
+  ["Smash Client e MCPE 1.1.x", "Smash Client and MCPE 1.1.x", "Smash Client y MCPE 1.1.x"],
+  ["Versão clássica 0.15", "Classic 0.15 version", "Versión clásica 0.15"],
+  ["Envie o pack do Java (.zip)", "Send the Java pack (.zip)", "Envía el pack de Java (.zip)"],
+  ["Aguarde o conversor carregar 100%", "Wait for the converter to reach 100%", "Espera a que el conversor cargue al 100%"],
+  ["Depois disso você pode escolher o .zip do pack", "Then you can pick the pack's .zip", "Después podrás elegir el .zip del pack"],
+  ["Baixe e instale", "Download and install", "Descarga e instala"],
+  ["O .zip aparece aqui quando a conversão terminar. Depois siga o passo a passo de instalação logo abaixo.", "The .zip shows up here when the conversion finishes. Then follow the install steps right below.", "El .zip aparece aquí cuando termine la conversión. Luego sigue el paso a paso de instalación justo abajo."],
+  ["Direto no APK · em breve", "Straight into the APK · coming soon", "Directo en el APK · próximamente"],
+  ["Pack escolhido", "Chosen pack", "Pack elegido"],
+  ["Nenhum pack ainda", "No pack yet", "Ningún pack todavía"],
+  ["Escolha um .zip para ver o nome e a descrição", "Pick a .zip to see its name and description", "Elige un .zip para ver el nombre y la descripción"],
+  ["Resolução", "Resolution", "Resolución"],
+  ["Formato", "Format", "Formato"],
+  ["Arquivos", "Files", "Archivos"],
+  ["Converter", "Convert", "Convertir"],
+  ["Importante: feche o jogo depois de ativar o pack", "Important: close the game after turning on the pack", "Importante: cierra el juego después de activar el pack"],
+  ["No jogo, ative o pack em <b>Configurações › Recursos Globais</b>.", "In the game, turn on the pack in <b>Settings › Global Resources</b>.", "En el juego, activa el pack en <b>Ajustes › Recursos globales</b>."],
+  ["<b>Feche o jogo por completo</b> (tire dos apps recentes) e abra de novo.", "<b>Close the game completely</b> (swipe it out of recent apps) and open it again.", "<b>Cierra el juego por completo</b> (quítalo de las apps recientes) y ábrelo de nuevo."],
+  ["Sem fechar, o jogo carrega o pack pela metade e pode travar ou fechar sozinho (crash).", "If you don't, the game loads the pack only halfway and may freeze or crash.", "Si no lo cierras, el juego carga el pack a medias y puede trabarse o cerrarse solo (crash)."],
+  ["Entendi, baixar o pack", "Got it, download the pack", "Entendido, descargar el pack"],
+  ["Entendi, baixar o .zip", "Got it, download the .zip", "Entendido, descargar el .zip"],
+  ["Entendi, baixar o .mcpack", "Got it, download the .mcpack", "Entendido, descargar el .mcpack"],
+  ["Coloque o .zip em <b>games › com.mojang › resource_packs</b> (no celular não precisa extrair).", "Put the .zip in <b>games › com.mojang › resource_packs</b> (on a phone there's no need to extract it).", "Pon el .zip en <b>games › com.mojang › resource_packs</b> (en el celular no hace falta extraerlo)."],
+  ["O <b>.mcpack</b> é pro Smash Client das próximas versões, que importa com um toque. Por enquanto, coloque o <b>.zip</b> em <b>games › com.mojang › resource_packs</b>.", "The <b>.mcpack</b> is for upcoming Smash Client versions, which import it with one tap. For now, put the <b>.zip</b> in <b>games › com.mojang › resource_packs</b>.", "El <b>.mcpack</b> es para las próximas versiones de Smash Client, que lo importan con un toque. Por ahora, pon el <b>.zip</b> en <b>games › com.mojang › resource_packs</b>."],
+  ["Depois de baixar", "After downloading", "Después de descargar"],
+  ["Do download ao jogo", "From download to game", "De la descarga al juego"],
+  ["Em <b>.zip</b> o pack vai direto na pasta <code>resource_packs</code> do jogo. O <b>.mcpack</b> é o mesmo pack, pro Smash Client das próximas versões, que importa com um toque. Por enquanto, use o .zip. Depois de ativar o pack, <b>feche e abra o jogo de novo</b>: assim ele carrega 100% e não dá crash.", "As a <b>.zip</b> the pack goes straight into the game's <code>resource_packs</code> folder. The <b>.mcpack</b> is the same pack, for upcoming Smash Client versions, which import it with one tap. For now, use the .zip. After turning on the pack, <b>close and reopen the game</b>: that way it loads 100% and doesn't crash.", "En <b>.zip</b> el pack va directo a la carpeta <code>resource_packs</code> del juego. El <b>.mcpack</b> es el mismo pack, para las próximas versiones de Smash Client, que lo importan con un toque. Por ahora, usa el .zip. Después de activar el pack, <b>cierra y abre el juego de nuevo</b>: así carga al 100% y no da crash."],
+  ["No celular (Smash Client, MCPE 1.1.5 ou 0.15.10)", "On your phone (Smash Client, MCPE 1.1.5 or 0.15.10)", "En el celular (Smash Client, MCPE 1.1.5 o 0.15.10)"],
+  ["Baixe o <b>.zip</b> do pack aqui no site. Não precisa extrair.", "Download the pack's <b>.zip</b> here on the site. No need to extract it.", "Descarga el <b>.zip</b> del pack aquí en el sitio. No hace falta extraerlo."],
+  ["Abra um gerenciador de arquivos (Arquivos do Google, ZArchiver ou o do próprio celular) e mova o .zip da pasta <b>Download</b> para<br><code>Armazenamento interno › games › com.mojang › resource_packs</code>", "Open a file manager (Files by Google, ZArchiver or your phone's own) and move the .zip from the <b>Download</b> folder to<br><code>Internal storage › games › com.mojang › resource_packs</code>", "Abre un gestor de archivos (Files de Google, ZArchiver o el del propio celular) y mueve el .zip de la carpeta <b>Download</b> a<br><code>Almacenamiento interno › games › com.mojang › resource_packs</code>"],
+  ["Abra o Smash Client: <b>Configurações › Recursos Globais</b>, toque no pack, ative e deixe no topo da lista.", "Open Smash Client: <b>Settings › Global Resources</b>, tap the pack, turn it on and keep it at the top of the list.", "Abre Smash Client: <b>Ajustes › Recursos globales</b>, toca el pack, actívalo y déjalo arriba de la lista."],
+  ["No PC (Minecraft for Windows 10)", "On PC (Minecraft for Windows 10)", "En PC (Minecraft for Windows 10)"],
+  ["Baixe o <b>.zip</b> do pack aqui no site.", "Download the pack's <b>.zip</b> here on the site.", "Descarga el <b>.zip</b> del pack aquí en el sitio."],
+  ["Aperte <b>Windows + R</b>, cole o caminho abaixo e dê Enter:<br><code>%LOCALAPPDATA%\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\resource_packs</code>", "Press <b>Windows + R</b>, paste the path below and hit Enter:<br><code>%LOCALAPPDATA%\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\resource_packs</code>", "Pulsa <b>Windows + R</b>, pega la ruta de abajo y da Enter:<br><code>%LOCALAPPDATA%\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\LocalState\\games\\com.mojang\\resource_packs</code>"],
+  ["Clique com o botão direito no .zip › <b>Extrair tudo</b> e escolha essa pasta como destino.", "Right-click the .zip › <b>Extract all</b> and choose that folder as the destination.", "Haz clic derecho en el .zip › <b>Extraer todo</b> y elige esa carpeta como destino."],
+  ["No jogo: <b>Configurações › Recursos Globais</b>, ative o pack e deixe no topo.", "In the game: <b>Settings › Global Resources</b>, turn on the pack and keep it at the top.", "En el juego: <b>Ajustes › Recursos globales</b>, activa el pack y déjalo arriba."],
+  ["<b>Feche o Minecraft</b> e abra de novo.", "<b>Close Minecraft</b> and open it again.", "<b>Cierra Minecraft</b> y ábrelo de nuevo."],
+  ["O pack é feito para a versão 1.1.5. Em versões mais novas do Windows 10 algumas texturas podem não aparecer.", "The pack is made for version 1.1.5. On newer Windows 10 versions some textures may not show up.", "El pack está hecho para la versión 1.1.5. En versiones más nuevas de Windows 10 algunas texturas pueden no aparecer."],
+  ["Se o pack não aparecer ou o jogo fechar", "If the pack doesn't show up or the game crashes", "Si el pack no aparece o el juego se cierra"],
+  ["Confira se o pack está em <code>games/com.mojang/resource_packs</code>, e não em <code>resource_packs</code> de outra pasta.", "Check that the pack is in <code>games/com.mojang/resource_packs</code>, and not in a <code>resource_packs</code> inside another folder.", "Revisa que el pack esté en <code>games/com.mojang/resource_packs</code>, y no en <code>resource_packs</code> de otra carpeta."],
+  ["No PC, abra a pasta extraída: o <code>manifest.json</code> tem que estar logo ali dentro. Se tiver uma pasta dentro de outra (<code>Pack/Pack/manifest.json</code>), tire a de dentro para fora.", "On PC, open the extracted folder: <code>manifest.json</code> must be right inside it. If there's a folder inside another (<code>Pack/Pack/manifest.json</code>), move the inner one out.", "En PC, abre la carpeta extraída: el <code>manifest.json</code> tiene que estar justo adentro. Si hay una carpeta dentro de otra (<code>Pack/Pack/manifest.json</code>), saca la de adentro."],
+  ["Ativou e o jogo travou ou fechou: abra de novo, que na segunda vez ele carrega o pack inteiro.", "Turned it on and the game froze or crashed? Open it again: the second time it loads the whole pack.", "¿Lo activaste y el juego se trabó o se cerró? Ábrelo de nuevo: la segunda vez carga el pack entero."],
+  ["Pack 256x é pesado: se o jogo ficar lento ou fechar, use uma versão 32x ou 64x do mesmo pack.", "256x packs are heavy: if the game lags or crashes, use a 32x or 64x version of the same pack.", "Un pack 256x es pesado: si el juego va lento o se cierra, usa una versión 32x o 64x del mismo pack."],
+  ["<b>Ainda não tem o Smash Client?</b> 15 mods, mouse e teclado e o servidor Smash na lista. E é grátis.", "<b>Don't have Smash Client yet?</b> 15 mods, mouse and keyboard and the Smash server on the list. And it's free.", "<b>¿Todavía no tienes Smash Client?</b> 15 mods, mouse y teclado y el servidor Smash en la lista. Y es gratis."],
+  ["Smash Group · Ferramenta da comunidade Smash. Não é afiliada à Mojang nem à Microsoft. Minecraft é marca registrada da Mojang Synergies AB. O pack convertido é seu: respeite a licença do autor original antes de redistribuir.", "Smash Group · A Smash community tool. Not affiliated with Mojang or Microsoft. Minecraft is a trademark of Mojang Synergies AB. The converted pack is yours: respect the original author's license before redistributing it.", "Smash Group · Herramienta de la comunidad Smash. No está afiliada a Mojang ni a Microsoft. Minecraft es marca registrada de Mojang Synergies AB. El pack convertido es tuyo: respeta la licencia del autor original antes de redistribuirlo."],
+  ["Visual inspirado no Lunar Client.", "Design inspired by Lunar Client.", "Diseño inspirado en Lunar Client."],
+  ["Conversor pronto (100%). Escolha o .zip do pack.", "Converter ready (100%). Pick the pack's .zip.", "Conversor listo (100%). Elige el .zip del pack."],
+  ["Faltou memória no navegador para um pack deste tamanho. Tente pelo computador, ou use o conversor do Termux/PC.", "The browser ran out of memory for a pack this size. Try on a computer, or use the Termux/PC converter.", "Al navegador le faltó memoria para un pack de este tamaño. Prueba desde la computadora, o usa el conversor de Termux/PC."],
+  ["Toque para escolher ou arraste o .zip aqui", "Tap to choose or drag the .zip here", "Toca para elegir o arrastra el .zip aquí"],
+  ["O mesmo arquivo que você colocaria na pasta resourcepacks do Java", "The same file you would put in Java's resourcepacks folder", "El mismo archivo que pondrías en la carpeta resourcepacks de Java"],
+  ["Espere o conversor chegar a 100% antes de enviar o pack.", "Wait for the converter to reach 100% before sending the pack.", "Espera a que el conversor llegue al 100% antes de enviar el pack."],
+  ["Esse arquivo não é .zip. Envie o pack compactado em .zip.", "That file isn't a .zip. Send the pack compressed as .zip.", "Ese archivo no es .zip. Envía el pack comprimido en .zip."],
+  ["(sem descrição)", "(no description)", "(sin descripción)"],
+  ["Este já é um pack do Bedrock/MCPE: não precisa converter", "This is already a Bedrock/MCPE pack: no need to convert", "Este ya es un pack de Bedrock/MCPE: no hace falta convertirlo"],
+  ["Sem pack.mcmeta: vou tentar mesmo assim", "No pack.mcmeta: trying anyway", "Sin pack.mcmeta: lo intentaré igual"],
+  ["Pack do Java 1.8 – pronto para converter", "Java 1.8 pack – ready to convert", "Pack de Java 1.8 – listo para convertir"],
+  ["Tudo certo. Toque em Converter no cartão do pack.", "All set. Tap Convert on the pack card.", "Todo listo. Toca Convertir en la tarjeta del pack."],
+  ["Escolha um pack do Java.", "Pick a Java pack.", "Elige un pack de Java."],
+  ["Convertendo texturas… (pode levar alguns minutos em packs grandes)", "Converting textures… (big packs can take a few minutes)", "Convirtiendo texturas… (en packs grandes puede tardar unos minutos)"],
+  ["Convertendo texturas…", "Converting textures…", "Convirtiendo texturas…"],
+  ["Pronto! Baixe o pack e siga o passo a passo de instalação.", "Done! Download the pack and follow the install steps.", "¡Listo! Descarga el pack y sigue el paso a paso de instalación."],
+  ["Também em .mcpack, pro Smash Client das próximas versões, que importa com um toque. Por enquanto, use o .zip", "Also as .mcpack, for upcoming Smash Client versions, which import it with one tap. For now, use the .zip", "También en .mcpack, para las próximas versiones de Smash Client, que lo importan con un toque. Por ahora, usa el .zip"],
+  ["Relatório: o que foi convertido e o que ficou original", "Report: what was converted and what stayed original", "Informe: qué se convirtió y qué quedó original"],
+  ["texturas", "textures", "texturas"],
+  ["blocos", "blocks", "bloques"],
+  ["itens", "items", "ítems"],
+  ["entidades", "entities", "entidades"],
+  ["fonte", "font", "fuente"],
+  ["interface", "interface", "interfaz"],
+  ["ambiente", "environment", "ambiente"],
+  ["partículas", "particles", "partículas"],
+  ["quadros", "paintings", "cuadros"],
+  ["cores", "colors", "colores"],
+  ["efeitos", "effects", "efectos"],
+  ["modelos", "models", "modelos"],
+  ["outros", "other", "otros"],
+  ["mapa", "map", "mapa"],
+  ["do OptiFine", "from OptiFine", "de OptiFine"],
+];
+// textos que mudam (numeros, nomes de arquivo): [regex sobre o texto em portugues, en, es]
+const TEXTOS_RE = [
+  [/^Carregando… (\d+)%$/, "Loading… $1%", "Cargando… $1%"],
+  [/^Lendo (.+)…$/, "Reading $1…", "Leyendo $1…"],
+  [/^Não deu para converter: ([\s\S]+)$/, "Couldn't convert: $1", "No se pudo convertir: $1"],
+  [/^Formato (\d+) é de versão mais nova que a 1\.8\.9: o resultado pode sair incompleto$/, "Format $1 is from a version newer than 1.8.9: the result may be incomplete", "El formato $1 es de una versión más nueva que la 1.8.9: el resultado puede salir incompleto"],
+  [/^pack (\d+)x é pesado: no celular pode faltar memória$/, "$1x packs are heavy: a phone may run out of memory", "un pack $1x es pesado: en el celular puede faltar memoria"],
+  [/^Pack para o MCPE ([\d.]+): coloque em games\/com\.mojang\/resource_packs \(sem extrair\)$/, "Pack for MCPE $1: put it in games/com.mojang/resource_packs (don't extract)", "Pack para MCPE $1: ponlo en games/com.mojang/resource_packs (sin extraer)"],
+];
+const idx = { en: 1, es: 2 }, DIC = new Map(TEXTOS.map((t) => [t[0], t]));
+let idioma = 'pt';
+const norm = (h) => h.replace(/\s+/g, ' ').replace(/<a [^>]*>/g, '<a>').trim();
+const INLINE = new Set(['B', 'STRONG', 'A', 'CODE', 'BR', 'EM', 'I']);
+const PULAR = new Set(['SCRIPT', 'STYLE', 'SVG', 'svg', 'CODE', 'TEXTAREA']);
+const orig = new WeakMap();  // no -> texto original em portugues
+function traduzTexto(pt) {
+  if (idioma === 'pt') return pt;
+  const t = DIC.get(pt); if (t) return t[idx[idioma]];
+  for (const r of TEXTOS_RE) if (r[0].test(pt)) return pt.replace(r[0], r[idx[idioma]]);
+  // frases juntas com " · " (selo do pack, descricao do arquivo + tamanho): traduz cada parte
+  if (pt.includes(' · ')) { const partes = pt.split(' · ').map((x) => [x, DIC.has(x) || TEXTOS_RE.some((r) => r[0].test(x))]);
+    if (partes.some((x) => x[1])) return partes.map(([x, ok]) => ok ? traduzTexto(x) : x).join(' · '); }
+  return null;
+}
+function traduzNo(no) {
+  if (no.nodeType === 3) {
+    const pt = orig.has(no) ? orig.get(no) : no.nodeValue, chave = pt.replace(/\s+/g, ' ').trim();
+    if (!chave) return;
+    const tr = traduzTexto(chave);
+    if (tr == null) return;
+    orig.set(no, pt); const novo = idioma === 'pt' ? pt : pt.match(/^\s*/)[0] + tr + pt.match(/\s*$/)[0];
+    if (no.nodeValue !== novo) no.nodeValue = novo;
+    return;
+  }
+  if (no.nodeType !== 1 || PULAR.has(no.tagName) || no.closest('#idiomaLista')) return;
+  for (const at of ['aria-label', 'alt', 'title']) {
+    const k = 'pt' + at.replace(/-./, (c) => c[1].toUpperCase()), v = no.dataset[k] ?? no.getAttribute(at);
+    if (v) { const tr = traduzTexto(v.trim()); if (tr != null) { no.dataset[k] = v; no.setAttribute(at, tr); } }
+  }
+  const filhos = [...no.querySelectorAll('*')];
+  if (orig.has(no) || (filhos.length && filhos.every((f) => INLINE.has(f.tagName)) && no.textContent.trim())) {
+    const pt = orig.has(no) ? orig.get(no) : norm(no.innerHTML), tr = traduzTexto(pt);
+    if (tr != null) {
+      const links = no.innerHTML.match(/<a [^>]*>/g) || []; let i = 0;
+      orig.set(no, pt); const novo = tr.replace(/<a>/g, () => links[i++] || '<a>');
+      if (norm(no.innerHTML) !== norm(novo)) no.innerHTML = novo;
+      return;
+    }
+  }
+  no.childNodes.forEach(traduzNo);
+}
+// o site muda textos sozinho (conversor, jogadores online): traduz o que entrar depois
+const vigia = new MutationObserver((lista) => {
+  lista.forEach((m) => {
+    const alvo = m.target;
+    if (m.type === 'characterData') { if (alvo.nodeValue !== traduzTexto((orig.get(alvo) || '').trim())) orig.delete(alvo); }
+    else orig.delete(alvo);
+    if (m.type === 'childList' && alvo.closest && alvo.closest('#idiomaLista')) return;
+    traduzNo(alvo);
+  });
+  vigia.takeRecords();
+});
+function trocarIdioma(l) {
+  idioma = IDIOMAS[l] ? l : 'pt';
+  try { localStorage.setItem('smash-idioma', idioma); } catch (e) {}
+  document.documentElement.lang = IDIOMAS[idioma][2];
+  $('idiomaBandeira').innerHTML = BANDEIRAS[idioma]; $('idiomaSigla').textContent = IDIOMAS[idioma][0];
+  $('idiomaLista').innerHTML = Object.entries(IDIOMAS).map(([k, [, nome]]) =>
+    `<li role="none"><button type="button" role="menuitemradio" aria-checked="${k === idioma}" data-l="${k}">${BANDEIRAS[k]}${nome}</button></li>`).join('');
+  traduzNo(document.body); vigia.takeRecords();
+}
+const idiomaMenu = (abre) => { $('idiomaLista').hidden = !abre; $('idiomaBtn').setAttribute('aria-expanded', String(abre)); };
+$('idiomaBtn').onclick = (e) => { e.stopPropagation(); menu.fechar(); idiomaMenu($('idiomaLista').hidden); };
+$('idiomaLista').onclick = (e) => { const b = e.target.closest('[data-l]'); if (b) { trocarIdioma(b.dataset.l); idiomaMenu(false); $('idiomaBtn').focus(); } };
+addEventListener('click', (e) => { if (!e.target.closest('.idioma')) idiomaMenu(false); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape') idiomaMenu(false); });
+let salvo = null; try { salvo = localStorage.getItem('smash-idioma'); } catch (e) {}
+const nav = (navigator.language || 'pt').slice(0, 2).toLowerCase();
+trocarIdioma(salvo || (nav === 'pt' ? 'pt' : nav === 'es' ? 'es' : 'en'));
+vigia.observe(document.body, { childList: true, characterData: true, subtree: true });
 </script>
 </body>
 </html>
