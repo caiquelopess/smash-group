@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Arena Smash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+<style>
+/* Layout: noite de pixel. Cabeçalho com relógio da rodada, um "palco" pixelado por clã (cena + placar + elenco)
+   e o mural de acontecimentos; no celular tudo numa coluna, no computador palcos à esquerda e mural à direita. */
+:root {
+  color-scheme: dark;
+  --noite: #15121f; --painel: #201b2f; --painel2: #2a2440; --borda: #3d3558;
+  --texto: #f1ead6; --apagado: #a69fbd; --ouro: #f4c64f; --vida: #6fd08c; --perigo: #ec6a5c;
+  --c1: #3987e5; --c2: #e0662f; --c3: #22b07a; --c4: #d9a21b;
+  --pixel: "Press Start 2P", "Courier New", monospace;
+  --corpo: "VT323", "Courier New", monospace;
+}
+* { box-sizing: border-box; }
+body { background: var(--noite); color: var(--texto); font-family: var(--corpo); font-size: 20px; line-height: 1.15;
+  background-image: radial-gradient(var(--borda) 1px, transparent 1px); background-size: 24px 24px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 18px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+h1 { font-family: var(--pixel); font-size: clamp(18px, 4.6vw, 28px); margin: 0; color: var(--ouro);
+  text-shadow: 3px 3px 0 #7a4b12; letter-spacing: 1px; }
+.sub { color: var(--apagado); font-size: 19px; margin-top: 6px; }
+.relogio { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill { font-family: var(--pixel); font-size: 10px; padding: 8px 10px; border: 2px solid var(--borda); background: var(--painel);
+  display: inline-flex; align-items: center; gap: 8px; box-shadow: 3px 3px 0 #0b0911; }
+.pill .luz { width: 8px; height: 8px; background: var(--apagado); }
+.pill.vivo .luz { background: var(--vida); animation: pisca 1.2s steps(2) infinite; }
+.pill.velho .luz { background: var(--perigo); }
+@keyframes pisca { 50% { opacity: .2; } }
+.grade { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (min-width: 940px) { .grade { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; } .mural { position: sticky; top: 12px; } }
+.palcos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (min-width: 700px) and (max-width: 939px) { .palcos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.palco { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; min-width: 0; }
+.palco-top { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 3px solid var(--borda); }
+.bandeira { width: 14px; height: 18px; flex: none; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%); }
+.palco-nome { font-family: var(--pixel); font-size: 12px; line-height: 1.4; }
+.palco-cam { margin-left: auto; font-family: var(--pixel); font-size: 8px; color: var(--apagado); border: 2px solid var(--borda); padding: 5px 6px; white-space: nowrap; }
+.cena { position: relative; background: #000; }
+.cena canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; }
+.etiqueta { position: absolute; transform: translate(-50%, -100%); font-family: var(--pixel); font-size: 7px; white-space: nowrap;
+  background: rgb(10 8 16 / .72); padding: 3px 4px; color: var(--texto); pointer-events: none; }
+.etiqueta.fora { color: var(--apagado); }
+.placar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 3px solid var(--borda); }
+.placar div { padding: 8px 10px; border-right: 2px solid var(--borda); min-width: 0; }
+.placar div:last-child { border-right: 0; }
+.placar dt { font-size: 16px; color: var(--apagado); }
+.placar dd { margin: 2px 0 0; font-family: var(--pixel); font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
+.trofeus { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border-bottom: 3px solid var(--borda); min-height: 20px; }
+.trofeu { display: inline-flex; align-items: center; gap: 6px; font-size: 18px; background: var(--painel2); padding: 2px 8px 2px 4px; border: 2px solid var(--borda); }
+.trofeu.nao { opacity: .38; }
+.elenco { list-style: none; margin: 0; padding: 4px 0; }
+.elenco li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 6px 12px; }
+.elenco li + li { border-top: 2px dashed var(--painel2); }
+.elenco canvas { width: 30px; height: 45px; image-rendering: pixelated; }
+.nick { font-family: var(--pixel); font-size: 9px; line-height: 1.6; overflow-wrap: anywhere; }
+.nick .coroa { color: var(--ouro); }
+.faz { color: var(--texto); font-size: 19px; }
+.faz.fora { color: var(--apagado); }
+.lado { text-align: right; font-size: 17px; color: var(--apagado); white-space: nowrap; }
+.lado b { display: block; font-family: var(--pixel); font-size: 8px; color: var(--texto); font-weight: 400; margin-bottom: 3px; }
+.mural { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; min-width: 0; }
+.mural h2 { font-family: var(--pixel); font-size: 11px; margin: 0; padding: 12px; border-bottom: 3px solid var(--borda); color: var(--ouro); }
+.feed { list-style: none; margin: 0; padding: 0; max-height: 78vh; overflow-y: auto; }
+.feed li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; padding: 8px 12px; border-bottom: 2px dashed var(--painel2); align-items: start; }
+.feed li.novo { animation: chega .9s steps(4); }
+@keyframes chega { from { background: var(--painel2); } }
+.feed svg, .trofeu svg { width: 24px; height: 24px; image-rendering: pixelated; flex: none; }
+.feed .txt { font-size: 19px; overflow-wrap: anywhere; }
+.feed .quando { color: var(--apagado); font-size: 16px; }
+.feed .tag { font-family: var(--pixel); font-size: 7px; padding: 2px 4px; margin-right: 6px; color: #0d0b14; vertical-align: 2px; }
+.vazio { padding: 28px 16px; text-align: center; color: var(--apagado); font-size: 20px; }
+.vazio strong { display: block; font-family: var(--pixel); font-size: 11px; color: var(--texto); margin-bottom: 10px; line-height: 1.6; }
+@media (prefers-reduced-motion: reduce) { .pill.vivo .luz, .feed li.novo { animation: none; } }
+html, body { margin: 0; }
+.portao { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: var(--noite); padding: 16px; }
+.portao form { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; padding: 20px; width: min(340px, 100%); display: flex; flex-direction: column; gap: 12px; }
+.portao input { font: 20px var(--corpo); padding: 8px 10px; background: var(--noite); color: var(--texto); border: 2px solid var(--borda); }
+.portao button { font: 11px var(--pixel); padding: 12px; background: var(--ouro); color: #2a1a05; border: 0; cursor: pointer; box-shadow: 3px 3px 0 #7a4b12; }
+.portao .erro { color: var(--perigo); min-height: 20px; }
+.bloco { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; min-width: 0; }
+.bloco h2 { font-family: var(--pixel); font-size: 11px; margin: 0; padding: 12px; border-bottom: 3px solid var(--borda); color: var(--ouro); }
+.graf-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0; }
+.graf { padding: 10px 12px; border-right: 2px dashed var(--painel2); min-width: 0; }
+.graf h3 { font-size: 18px; margin: 0 0 4px; font-weight: 400; color: var(--apagado); }
+.graf svg { width: 100%; height: auto; display: block; }
+.legenda-px { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 8px 12px 0; font-size: 18px; }
+.legenda-px i { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; }
+.aprend { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.aprend section { padding: 10px 12px; border-right: 2px dashed var(--painel2); border-bottom: 2px dashed var(--painel2); min-width: 0; }
+.aprend h3 { font-family: var(--pixel); font-size: 9px; margin: 0 0 8px; line-height: 1.5; }
+.aprend ul { margin: 0; padding-left: 18px; font-size: 18px; display: flex; flex-direction: column; gap: 4px; }
+.aprend li { overflow-wrap: anywhere; }
+.aprend .ok { color: var(--vida); } .aprend .ruim { color: var(--perigo); }
+</style>
+</head><body>
+<div class="portao" id="portao"><form id="entrar">
+  <h1 style="font-size:16px">ARENA SMASH</h1>
+  <label for="senha">Senha</label>
+  <input id="senha" type="password" autocomplete="current-password">
+  <button type="submit">ENTRAR</button>
+  <div class="erro" id="erro"></div>
+</form></div>
+<div class="wrap" id="app" hidden>
+  <header>
+    <div>
+      <h1>ARENA SMASH</h1>
+      <div class="sub">Os 4 clãs disputando o topo do RankUp, ao vivo.</div>
+    </div>
+    <div class="relogio">
+      <span class="pill" id="statusPill"><span class="luz"></span><span id="statusTxt">conectando…</span></span>
+      <span class="pill" id="tempoPill">--</span>
+    </div>
+  </header>
+  <div class="grade">
+    <section class="palcos" id="palcos">
+      <div class="palco vazio"><strong>Esperando a rodada</strong>Quando os jogadores entrarem no servidor, cada clã aparece aqui com os jogadores minerando, pagando e conquistando.</div>
+    </section>
+    <aside class="mural">
+      <h2>ACONTECIMENTOS</h2>
+      <ul class="feed" id="feed"><li><span></span><span class="txt quando">Nada ainda. Os feitos dos clãs aparecem aqui.</span></li></ul>
+    </aside>
+  </div>
+  <section class="bloco"><h2>PROGRESSÃO DOS CLÃS</h2><div class="legenda-px" id="legendaGraf"></div><div class="graf-grade" id="graficos"><p class="vazio">O histórico aparece aqui depois do primeiro minuto da rodada.</p></div></section>
+  <section class="bloco"><h2>O QUE ELES APRENDERAM SOZINHOS</h2><div class="aprend" id="aprend"><p class="vazio">Ainda sem descobertas.</p></div></section>
+</div>
+
+<script>
+const COR = ["#3987e5", "#e0662f", "#22b07a", "#d9a21b"];
+const CAMINHO = { mina: "MINA", plantacoes: "PLANTAÇÕES", spawners: "SPAWNERS", maquinas: "MÁQUINAS" };
+const RANKS = ["Carvão","Ferro","Ouro","Lápis","Redstone","Diamante","Esmeralda","Zumbi","Esqueleto","Aranha","Creeper","Pigman","Enderman","Blaze"];
+const nivel = r => { if (!r) return 0; const p = String(r).split(" "); const b = RANKS.findIndex(x => p[0] && p[0].toLowerCase().startsWith(x.toLowerCase().slice(0, 4))); return b < 0 ? 0 : b * 4 + Math.max(0, ["I","II","III","IV"].indexOf(p[p.length - 1])) + 1; };
+const fmt = v => v >= 1e6 ? (v / 1e6).toFixed(1).replace(".", ",") + "mi" : v >= 1e3 ? (v / 1e3).toFixed(v >= 1e5 ? 0 : 1).replace(".", ",") + "k" : String(Math.round(v || 0));
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hash = s => { let h = 2166136261; for (const ch of String(s)) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); return h >>> 0; };
+const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ---------- ícones pixelados (8x8) pro mural e troféus ----------
+const ICONES = {
+  pagou:    ["..####..", ".#oooo#.", "#oo##oo#", "#o#oo#o#", "#o#oo#o#", "#oo##oo#", ".#oooo#.", "..####.."],
+  rankup:   ["...##...", "..#oo#..", ".#oooo#.", "########", "...oo...", "...oo...", "...oo...", "...oo..."],
+  picareta: [".#####..", "#ccccc#.", "....#c#.", "...#b#..", "..#b#...", ".#b#....", "#b#.....", ".#......"],
+  spawner:  ["########", "#.#..#.#", "########", "#.#ww#.#", "#.#rw#.#", "########", "#.#..#.#", "########"],
+  maquina:  ["..####..", ".#gggg#.", "#gg##gg#", "#g#rr#g#", "#g#rr#g#", "#gg##gg#", ".#gggg#.", "..####.."],
+  terreno:  ["#.......", "#rrrr...", "#rrrrrr.", "#rrrr...", "#.......", "#.......", "#.......", "#ggggggg"],
+  aprendeu: ["..####..", ".#pppp#.", "#pp##pp#", "#p####p#", ".#pppp#.", "..#pp#..", "..####..", "...##..."],
+  plantou:  ["...g....", "..ggg...", ".g.g.g..", "...g....", "...g....", "bbbbbbbb", "b#b#b#bb", "bbbbbbbb"],
+  cla:      ["#######.", "#cccc#..", "#cccc#..", "#cccc#..", "#######.", "#.......", "#.......", "#......."],
+  caiu:     ["..####..", ".#wwww#.", "#w#ww#w#", "#wwwwww#", "#ww##ww#", ".#wwww#.", ".#w#w#w.", "........"],
+  pergunta: ["########", "#wwwwww#", "#ww##ww#", "#wwww#w#", "#www#ww#", "########", ".#w#....", ".##....."],
+};
+const PAL = { "#": "#0d0b14", o: "#f4c64f", c: "#7fe0ff", b: "#9b6a3c", w: "#e9e4f2", r: "#ec6a5c", g: "#6fd08c", p: "#c58cff" };
+function icone(tipo) {
+  const m = ICONES[tipo] || ICONES.cla;
+  let r = "";
+  m.forEach((linha, y) => [...linha].forEach((ch, x) => { if (ch !== ".") r += `<rect x="${x}" y="${y}" width="1" height="1" fill="${PAL[ch]}"/>`; }));
+  return `<svg viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`;
+}
+
+// ---------- boneco 10x15 (estilo Terraria) ----------
+const PELES = ["#f2c7a0", "#d9a27a", "#a8704a", "#7b4d2f", "#f6d7bf"];
+const CABELOS = ["#2b1d14", "#5b3a1e", "#c9a04a", "#1a1a1a", "#8a2f1f", "#d9d0c0", "#3b2a60"];
+function aparencia(nick, cor) {
+  const h = hash(nick);
+  return { pele: PELES[h % PELES.length], cabelo: CABELOS[(h >> 4) % CABELOS.length], camisa: cor,
+           calca: ["#2d3a5c", "#3d2d1f", "#2a2a2a", "#4a3b6b"][(h >> 8) % 4], olho: "#1a1424", estilo: (h >> 12) % 3 };
+}
+function boneco(ctx, x, y, a, quadro, anim, lider, alpha = 1) {
+  ctx.globalAlpha = alpha;
+  const p = (dx, dy, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(x + dx, y + dy, w, h); };
+  const passo = anim === "andando" ? quadro % 2 : 0;
+  // pernas
+  p(3, 11, 2, 3 - passo, a.calca); p(5, 11, 2, 2 + passo, a.calca);
+  p(3, 14 - passo, 2, 1, "#1b140f"); p(5, 13 + passo, 2, 1, "#1b140f");
+  // corpo + braço de trás
+  p(2, 6, 6, 5, a.camisa); p(2, 10, 6, 1, "#0d0b14"); p(1, 6, 1, 4, a.camisa);
+  // cabeça
+  p(2, 1, 6, 5, a.pele); p(6, 3, 1, 1, a.olho); p(4, 3, 1, 1, a.olho);
+  p(2, 0, 6, 2, a.cabelo); p(1, 1, 1, a.estilo === 1 ? 5 : 3, a.cabelo); if (a.estilo === 2) p(7, 1, 1, 2, a.cabelo);
+  if (lider) { p(2, -2, 6, 1, "#f4c64f"); p(2, -3, 1, 1, "#f4c64f"); p(4, -3, 2, 1, "#f4c64f"); p(7, -3, 1, 1, "#f4c64f"); }
+  // braço da frente + ferramenta
+  if (anim === "minerando") {
+    const golpe = quadro % 2;
+    if (golpe) { p(8, 6, 2, 1, a.pele); p(10, 3, 1, 4, "#9b6a3c"); p(9, 2, 3, 1, "#7fe0ff"); }
+    else { p(8, 7, 1, 3, a.pele); p(9, 9, 1, 4, "#9b6a3c"); p(8, 13, 3, 1, "#7fe0ff"); }
+  } else if (anim === "farmando") {
+    const golpe = quadro % 2;
+    p(8, 6 + golpe, 2, 1, a.pele); p(10, 3 + golpe * 2, 1, 4, "#d8dde6");
+  } else {
+    p(7, 6, 1, 4 - (anim === "andando" ? passo : 0), a.pele);
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ---------- cenários ----------
+function fundo(ctx, W, H, cam, quadro, cla) {
+  const p = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); };
+  const chao = H - 14;
+  if (cam === "mina") {
+    p(0, 0, W, H, "#26222e");
+    for (let i = 0; i < 70; i++) { const h = hash("pedra" + i); p(h % W, (h >> 8) % chao, 2, 1, "#312c3b"); }
+    for (let i = 0; i < 16; i++) { const h = hash("min" + i); p(h % W, (h >> 9) % (chao - 6), 2, 2, i % 3 ? "#111015" : "#d7b27a"); }
+    p(0, chao, W, 14, "#4a4452"); p(0, chao, W, 1, "#6a6375");
+    for (let x = 0; x < W; x += 8) p(x, chao + 4 + (x % 16 ? 0 : 4), 3, 2, "#3a3542");
+    [24, W - 24].forEach(tx => { p(tx, chao - 18, 1, 6, "#9b6a3c"); p(tx - 1 + (quadro % 2), chao - 20, 2, 2, quadro % 2 ? "#ffd34d" : "#ff8a3a"); });
+  } else {
+    const ceu = cam === "spawners" ? ["#1c1830", "#2a2347"] : ["#5aa0e0", "#9fd0f2"];
+    for (let y = 0; y < chao; y++) p(0, y, W, 1, y < chao / 2 ? ceu[0] : ceu[1]);
+    if (cam !== "spawners") { p(W - 26, 6, 9, 9, "#ffe27a"); for (let i = 0; i < 3; i++) { const h = hash("nuv" + i); const nx = (h % W + quadro * 0.5) % (W + 30) - 30; p(nx, 8 + i * 7, 18, 4, "#f4f7fb"); p(nx + 4, 5 + i * 7, 9, 3, "#f4f7fb"); } }
+    else for (let i = 0; i < 30; i++) { const h = hash("est" + i); p(h % W, (h >> 8) % (chao - 10), 1, 1, (quadro + i) % 7 ? "#8d86a8" : "#fff"); }
+    p(0, chao, W, 3, cam === "spawners" ? "#3c3a4a" : "#4caf50"); p(0, chao + 3, W, 11, cam === "spawners" ? "#2b2936" : "#7a5230");
+    for (let x = 0; x < W; x += 6) p(x, chao + 6 + (x % 12 ? 0 : 3), 2, 2, cam === "spawners" ? "#23212d" : "#5f3f24");
+    if (cam === "plantacoes") for (let x = 6; x < W; x += 13) { const alt = 8 + hash("cana" + x) % 9; p(x, chao - alt, 2, alt, "#7fcf5a"); p(x, chao - alt + 3, 2, 1, "#4f9a37"); }
+    if (cam === "spawners") for (let i = 0; i < Math.max(1, cla.spawners); i++) {
+      const sx = 14 + i * 22; p(sx, chao - 12, 12, 12, "#1d1b26"); for (let k = 0; k < 12; k += 3) { p(sx + k, chao - 12, 1, 12, "#5a5770"); p(sx, chao - 12 + k, 12, 1, "#5a5770"); }
+      if (cla.spawners) { p(sx + 4, chao - 8, 4, 4, quadro % 2 ? "#ff8a3a" : "#ffd34d"); const gx = sx + 14 + (quadro % 6); p(gx, chao - 5, 4, 4, "#f4f7fb"); p(gx + 3, chao - 6, 2, 2, "#f4f7fb"); p(gx + 4, chao - 6, 1, 1, "#ec6a5c"); }
+    }
+    if (cam === "maquinas") for (let i = 0; i < Math.max(1, cla.maquinas); i++) {
+      const mx = 12 + i * 22; p(mx, chao - 14, 14, 14, cla.maquinas ? "#6b7280" : "#3d4250"); p(mx + 2, chao - 12, 10, 4, "#2a2d36");
+      if (cla.maquinas) { p(mx + 3, chao - 11, (quadro % 4) * 2 + 1, 2, "#6fd08c"); p(mx + 5, chao - 6, 4, 4, "#d9342b"); p(mx + 6, chao - 7, 1, 1, "#6fd08c"); }
+    }
+    if (cla.terreno) { p(W - 14, chao - 22, 1, 22, "#9b6a3c"); p(W - 13, chao - 22, 9, 6, COR_CLA[cla.tag] || "#fff"); }
+  }
+}
+
+// ---------- estado e desenho ----------
+let ESTADO = null, VISTOS = new Set(), PRIMEIRO = true;
+const COR_CLA = {};
+const cenas = new Map();
+let quadro = 0;
+
+function montar(e) {
+  ESTADO = e;
+  const box = document.getElementById("palcos");
+  if (!e || !e.clas || !e.clas.length) return;
+  e.clas.forEach((c, i) => COR_CLA[c.tag] = COR[i % 4]);
+  box.innerHTML = e.clas.map(c => {
+    const melhor = c.membros.reduce((a, m) => nivel(m.rank) > nivel(a?.rank) ? m : a, null);
+    const ef = Math.max(0, ...c.membros.map(m => m.eficiencia || 0));
+    const trof = [
+      [c.terreno, "terreno", c.terreno ? "Terreno" : "Sem terreno"],
+      [c.spawners > 0, "spawner", c.spawners ? `${c.spawners} spawner${c.spawners > 1 ? "s" : ""}` : "Nenhum spawner"],
+      [c.maquinas > 0, "maquina", c.maquinas ? `${c.maquinas} máquina${c.maquinas > 1 ? "s" : ""}` : "Nenhuma máquina"],
+      [ef > 0, "picareta", ef ? `Eficiência ${ef}` : "Picareta comum"],
+    ].map(([ok, ic, txt]) => `<span class="trofeu${ok ? "" : " nao"}">${icone(ic)}${txt}</span>`).join("");
+    const elenco = c.membros.map(m => `<li>
+        <canvas width="10" height="15" data-nick="${esc(m.nick)}" data-cla="${esc(c.tag)}" aria-hidden="true"></canvas>
+        <div><div class="nick">${m.lider ? '<span class="coroa">♛ </span>' : ""}${esc(m.nick)}</div><div class="faz${m.online ? "" : " fora"}">${esc(m.frase)}</div></div>
+        <div class="lado"><b>${esc(m.rank || "—")}</b>${fmt(m.coins)} coins${m.eficiencia ? ` · Ef ${m.eficiencia}` : ""}</div></li>`).join("");
+    return `<article class="palco">
+      <div class="palco-top"><span class="bandeira" style="background:${COR_CLA[c.tag]}"></span><span class="palco-nome">${esc(c.tag)} · ${esc(c.nome)}</span><span class="palco-cam">${CAMINHO[c.caminho] || esc(c.caminho)}</span></div>
+      <div class="cena" data-cla="${esc(c.tag)}"><canvas width="200" height="64"></canvas></div>
+      <dl class="placar">
+        <div><dt>Coins</dt><dd>${fmt(c.coins)}</dd></div>
+        <div><dt>Blocos</dt><dd>${fmt(c.blocos)}</dd></div>
+        <div><dt>Por min</dt><dd>${fmt(c.ganho_min)}</dd></div>
+        <div><dt>Melhor</dt><dd>${esc(melhor?.rank || "—")}</dd></div>
+      </dl>
+      <div class="trofeus">${trof}</div>
+      <ul class="elenco">${elenco}</ul></article>`;
+  }).join("");
+  // etiquetas com o nick em cima de cada boneco
+  box.querySelectorAll(".cena").forEach(div => {
+    const c = e.clas.find(x => x.tag === div.dataset.cla);
+    c.membros.forEach((m, i) => {
+      const t = document.createElement("span");
+      t.className = "etiqueta" + (m.online ? "" : " fora");
+      t.textContent = m.nick;
+      t.dataset.curto = m.nick.replace(/^(x_|xX|Xx|Itz|z|i)(?=[A-Z])/, "").slice(0, 7);
+      t.dataset.i = i;
+      div.append(t);
+    });
+  });
+  box.querySelectorAll(".elenco canvas").forEach(cv => {
+    const ctx = cv.getContext("2d");
+    boneco(ctx, 0, 0, aparencia(cv.dataset.nick, COR_CLA[cv.dataset.cla]), 0, "parado", false);
+  });
+  montarFeed(e.eventos || []);
+  relogio();
+}
+
+function posicoes(n, W) { return Array.from({ length: n }, (_, i) => Math.round((W - 30) * (i + 0.5) / n + 4)); }
+
+function desenhar() {
+  if (!ESTADO) return;
+  document.querySelectorAll(".cena").forEach(div => {
+    const c = ESTADO.clas.find(x => x.tag === div.dataset.cla);
+    if (!c) return;
+    const cv = div.querySelector("canvas"), ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
+    ctx.imageSmoothingEnabled = false;
+    fundo(ctx, W, H, c.caminho, quadro, c);
+    const chao = H - 14, xs = posicoes(c.membros.length, W);
+    const lider = c.membros.findIndex(m => m.lider);
+    c.membros.forEach((m, i) => {
+      const a = aparencia(m.nick, COR_CLA[c.tag]);
+      let x = xs[i];
+      if (m.anim === "andando") x += Math.round(Math.sin((quadro + i * 3) / 3) * 6);
+      const y = chao - 15;
+      const f = quadro + i;
+      if (m.anim === "minerando") {  // bloco na frente + farelos
+        const minerio = c.caminho === "mina" ? ["#8a8a92", "#d7b27a", "#1b1a20"][hash(m.nick + Math.floor(quadro / 8)) % 3] : "#7a5230";
+        ctx.fillStyle = minerio; ctx.fillRect(x + 12, chao - 8, 8, 8); ctx.fillStyle = "#0d0b14"; ctx.fillRect(x + 12, chao - 8, 8, 1);
+        if (f % 2) { ctx.fillStyle = minerio; ctx.fillRect(x + 11, chao - 11 - (f % 4), 1, 1); ctx.fillRect(x + 15, chao - 12 - (f % 3), 1, 1); }
+      }
+      if (m.anim === "pagando" && lider >= 0 && lider !== i) {  // moeda voando até quem recebe
+        const t = (quadro % 10) / 10, x2 = xs[lider] + 5;
+        ctx.fillStyle = "#f4c64f"; ctx.fillRect(Math.round(x + 5 + (x2 - x - 5) * t), Math.round(y - 4 - Math.sin(t * Math.PI) * 14), 2, 2);
+      }
+      if (m.anim === "menu") { ctx.fillStyle = "#9b6a3c"; ctx.fillRect(x + 2, y - 9, 7, 5); ctx.fillStyle = "#f4c64f"; ctx.fillRect(x + 5, y - 7, 1, 1); }
+      if (m.anim === "falando") { ctx.fillStyle = "#f1ead6"; ctx.fillRect(x + 7, y - 9, 8, 5); ctx.fillRect(x + 8, y - 4, 2, 1); ctx.fillStyle = "#0d0b14"; ctx.fillRect(x + 9, y - 7, 1, 1); ctx.fillRect(x + 11, y - 7, 1, 1); ctx.fillRect(x + 13, y - 7, 1, 1); }
+      if (m.anim === "teleporte" || m.anim === "rankup") for (let k = 0; k < 4; k++) { ctx.fillStyle = k % 2 ? "#c58cff" : "#f4c64f"; ctx.fillRect(x + (hash(k + "s" + f) % 12) - 1, y + (hash(k + "t" + f) % 14), 1, 1); }
+      boneco(ctx, x, y, a, f, m.anim, m.lider, m.online ? 1 : (quadro % 2 ? 0.25 : 0.4));
+      const tag = div.querySelector(`.etiqueta[data-i="${i}"]`);
+      if (tag) {
+        const estreito = div.clientWidth < 520;  // celular: nome curto e alternando a altura pra não encostar
+        const txt = estreito ? tag.dataset.curto : m.nick;
+        if (tag.textContent !== txt) tag.textContent = txt;
+        tag.style.left = ((x + 5) / W * 100) + "%";
+        tag.style.top = ((y - (m.lider ? 5 : 2) - (estreito && i % 2 ? 9 : 0)) / H * 100) + "%";
+      }
+    });
+  });
+}
+
+function montarFeed(evs) {
+  const ul = document.getElementById("feed");
+  if (!evs.length) return;
+  ul.innerHTML = evs.map(ev => {
+    const id = ev.t + ev.texto, novo = !PRIMEIRO && !VISTOS.has(id);
+    VISTOS.add(id);
+    const quando = new Date(ev.t * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    const tag = ev.cla ? `<span class="tag" style="background:${COR_CLA[ev.cla] || "#a69fbd"}">${esc(ev.cla)}</span>` : "";
+    return `<li class="${novo ? "novo" : ""}">${icone(ev.tipo)}<div><div class="txt">${tag}${esc(ev.texto)}</div><div class="quando">${quando}</div></div></li>`;
+  }).join("");
+  PRIMEIRO = false;
+}
+
+function relogio() {
+  const pill = document.getElementById("statusPill"), txt = document.getElementById("statusTxt"), tempo = document.getElementById("tempoPill");
+  if (!ESTADO) return;
+  const agora = Date.now() / 1000, idade = agora - ESTADO.atualizado, resta = ESTADO.fim - agora;
+  const acabou = resta <= 0;
+  pill.className = "pill " + (acabou ? "" : idade < 240 ? "vivo" : "velho");
+  txt.textContent = acabou ? "rodada encerrada" : idade < 60 ? "ao vivo" : `atualizado há ${Math.round(idade / 60)} min`;
+  tempo.textContent = acabou ? "fim" : `termina em ${Math.ceil(resta / 60)} min`;
+}
+
+setInterval(relogio, 15000);
+let ultimo = 0;
+function loop(ts) {
+  if (ts - ultimo > 260) { ultimo = ts; quadro++; desenhar(); }
+  if (!reduz) requestAnimationFrame(loop);
+}
+if (reduz) setInterval(() => { quadro++; desenhar(); }, 2000); else requestAnimationFrame(loop);
+
+
+const HASH = "7079e802fd6c1cbb9f84650d3cec5869570ef25fdaf16ace4707e10539621319";
+const API = "https://api.github.com/repos/caiquelopess/smash-group/contents/painel.json?ref=arena-dados";
+const RAW = "https://raw.githubusercontent.com/caiquelopess/smash-group/arena-dados/painel.json";
+let etag = null, painel = null;
+async function sha(t) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); }
+async function buscar() {
+  const txt = document.getElementById("statusTxt");
+  try {
+    const r = await fetch(API, { headers: Object.assign({ Accept: "application/vnd.github.raw+json" }, etag ? { "If-None-Match": etag } : {}), cache: "no-store" });
+    if (r.status === 304) return;
+    if (r.ok) { etag = r.headers.get("etag"); mostrar(await r.json()); return; }
+    const r2 = await fetch(RAW + "?t=" + Date.now(), { cache: "no-store" });  // limite da API: usa a cópia (até 5 min atrasada)
+    if (r2.ok) mostrar(await r2.json());
+  } catch (e) { txt.textContent = "sem internet"; }
+}
+function mostrar(p) {
+  painel = p;
+  montar(p.ao_vivo);
+  graficos(p.historico || []);
+  aprendizado(p.aprendizado || {}, p.ao_vivo);
+}
+function graficos(h) {
+  const box = document.getElementById("graficos");
+  if (!h.length) return;
+  const rod = h[h.length - 1].rodada, linhas = h.filter(x => x.rodada === rod);
+  const gr = [...new Set(linhas.map(x => x.grupo))].sort();
+  gr.forEach((g, i) => COR_CLA[g] = COR_CLA[g] || COR[i % 4]);
+  document.getElementById("legendaGraf").innerHTML = gr.map(g => `<span><i style="background:${COR_CLA[g]}"></i>${esc(g)}</span>`).join("") + `<span style="color:var(--apagado)">rodada ${esc(rod)}</span>`;
+  const ts = linhas.map(x => x.t), t0 = Math.min(...ts), t1 = Math.max(...ts) || t0 + 1;
+  const W = 300, H = 120, L = 46, B = 16;
+  const um = (campo, titulo, f) => {
+    const vs = linhas.map(x => x[campo] || 0), hi = Math.max(1, ...vs) * 1.08, lo = campo === "nivel_max" ? Math.max(0, Math.min(...vs) - 1) : 0;
+    const X = t => L + (t - t0) / Math.max(1, t1 - t0) * (W - L - 6), Y = v => 6 + (1 - (v - lo) / (hi - lo || 1)) * (H - B - 6);
+    let svg = `<line x1="${L}" x2="${W - 6}" y1="${H - B}" y2="${H - B}" stroke="#3d3558"/>`;
+    [lo, (lo + hi) / 2, hi].forEach(v => svg += `<text x="${L - 4}" y="${Y(v) + 4}" text-anchor="end" fill="#a69fbd" font-size="11" font-family="VT323">${f(v)}</text>`);
+    svg += `<text x="${L}" y="${H - 2}" fill="#a69fbd" font-size="11" font-family="VT323">${new Date(t0 * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</text><text x="${W - 6}" y="${H - 2}" text-anchor="end" fill="#a69fbd" font-size="11" font-family="VT323">${new Date(t1 * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</text>`;
+    gr.forEach(g => {
+      const pts = linhas.filter(x => x.grupo === g).sort((a, b) => a.t - b.t);
+      const d = pts.map((p, i) => (i ? (campo === "nivel_max" ? `H${X(p.t).toFixed(1)} V` : `L${X(p.t).toFixed(1)} `) : `M${X(p.t).toFixed(1)} `) + Y(p[campo] || 0).toFixed(1)).join(" ");
+      svg += `<path d="${d}" fill="none" stroke="${COR_CLA[g]}" stroke-width="2" shape-rendering="crispEdges"/>`;
+    });
+    return `<div class="graf"><h3>${titulo}</h3><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${titulo} por clã">${svg}</svg></div>`;
+  };
+  const nomeNivel = n => { n = Math.round(n); return n < 1 ? "-" : RANKS[Math.floor((n - 1) / 4)].slice(0, 4) + " " + ["I","II","III","IV"][(n - 1) % 4]; };
+  box.innerHTML = um("nivel_max", "Melhor rank", nomeNivel) + um("coins", "Coins do clã", fmt) + um("blocos", "Blocos minerados", fmt);
+}
+function aprendizado(a, vivo) {
+  const box = document.getElementById("aprend");
+  const est = (vivo && vivo.clas || []).flatMap(c => c.membros.filter(m => m.estilo).map(m => `<li><b style="color:${COR_CLA[c.tag]}">${esc(m.nick)}</b>: ${esc(m.estilo)}</li>`));
+  const exps = (a.experimentos || []).slice().reverse().map(e => {
+    const cls = /FUNCIONOU/.test(e.resultado || "") ? "ok" : /PIOROU/.test(e.resultado || "") ? "ruim" : "";
+    return `<li><b>${esc(e.nick)}</b> testou: ${esc(e.hipotese)}<br><span class="${cls}">${esc(e.resultado || "medindo...")}</span></li>`;
+  });
+  const fatos = (a.fatos || []).slice().reverse().map(f => `<li>${esc(f.texto)} <span style="color:var(--apagado)">(${esc(f.fonte)})</span></li>`);
+  const lic = Object.entries(a.grupos || {}).flatMap(([g, x]) => (x.licoes || []).map(l => `<li><b style="color:${COR_CLA[g] || "#fff"}">${esc(g)}</b>: ${esc(l)}</li>`));
+  const aj = Object.entries(a.grupos || {}).map(([g, x]) => `<li><b style="color:${COR_CLA[g] || "#fff"}">${esc(g)}</b>: ${Object.entries(x.ajustes || {}).map(([k, v]) => esc(k.replace(/_/g, " ")) + " " + esc(v)).join(" · ")}</li>`);
+  const sec = (t, l, vazio) => `<section><h3>${t}</h3><ul>${l.length ? l.slice(0, 12).join("") : `<li style="list-style:none;margin-left:-18px;color:var(--apagado)">${vazio}</li>`}</ul></section>`;
+  box.innerHTML = sec("ESTILO DE CADA JOGADOR", est, "Cada jogador escolhe o seu na rodada.")
+    + sec("EXPERIMENTOS", exps, "Nenhum experimento ainda.")
+    + sec("DESCOBERTAS", fatos, `Nada ainda. ${a.menus ? a.menus.length : 0} menus lidos.`)
+    + sec("LIÇÕES DOS CLÃS", lic, "Sem lições ainda.")
+    + sec("AJUSTES QUE ELES ACHARAM", aj, "Calibrando.")
+    + sec("COMANDOS QUE NÃO FUNCIONAM", (a.comandos_evitados || []).map(x => `<li>${esc(x)}</li>`), "Nenhum.");
+}
+async function abrir() {
+  document.getElementById("portao").hidden = true;
+  document.getElementById("app").hidden = false;
+  await buscar();
+  setInterval(buscar, 65000);
+}
+document.getElementById("entrar").onsubmit = async e => {
+  e.preventDefault();
+  const v = document.getElementById("senha").value.trim();
+  if (await sha(v) === HASH) { try { localStorage.setItem("arena", HASH); } catch (_) {} abrir(); }
+  else document.getElementById("erro").textContent = "Senha errada.";
+};
+try { if (localStorage.getItem("arena") === HASH) abrir(); } catch (_) {}
+
+</script>
+</body></html>
