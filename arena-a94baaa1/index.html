@@ -79,6 +79,8 @@ h1 { font-family: var(--pixel); font-size: clamp(18px, 4.6vw, 28px); margin: 0; 
 .vazio strong { display: block; font-family: var(--pixel); font-size: 11px; color: var(--texto); margin-bottom: 10px; line-height: 1.6; }
 @media (prefers-reduced-motion: reduce) { .pill.vivo .luz, .feed li.novo { animation: none; } }
 html, body { margin: 0; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
 .portao { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: var(--noite); padding: 16px; }
 .portao form { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; padding: 20px; width: min(340px, 100%); display: flex; flex-direction: column; gap: 12px; }
 .portao input { font: 20px var(--corpo); padding: 8px 10px; background: var(--noite); color: var(--texto); border: 2px solid var(--borda); }
