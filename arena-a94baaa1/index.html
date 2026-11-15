@@ -548,6 +548,7 @@ function visaoGeral(p) {
   document.getElementById("topRenda").innerHTML = barras(ag.filter(a => a.online).sort((a, b) => b.renda - a.renda).slice(0, 8)
     .map(a => ({ r: a.nick, v: a.renda, c: corDe(a.grupo), t: fmt(a.renda) + "/min" })));
   const al = [];
+  if (p.ia && p.ia.evento) al.push(`Evento: ${p.ia.evento.nome}. Aprendizado pausado (não conta como normal)`);
   ag.forEach(a => {
     if (!a.online) al.push(`${a.nick} está fora do jogo`);
     if (a.ciclos) al.push(`${a.nick} ficou preso repetindo uma ação ${a.ciclos}x (já se corrigiu)`);
