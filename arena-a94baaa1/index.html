@@ -63,6 +63,8 @@ h1 { font-family: var(--pixel); font-size: clamp(18px, 4.6vw, 28px); margin: 0; 
 .nick .coroa { color: var(--ouro); }
 .faz { color: var(--texto); font-size: 19px; }
 .faz.fora { color: var(--apagado); }
+.ia { font-size: 16px; color: var(--apagado); overflow-wrap: anywhere; }
+.ia span { color: var(--ouro); }
 .lado { text-align: right; font-size: 17px; color: var(--apagado); white-space: nowrap; }
 .lado b { display: block; font-family: var(--pixel); font-size: 8px; color: var(--texto); font-weight: 400; margin-bottom: 3px; }
 .mural { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; min-width: 0; }
@@ -253,7 +255,7 @@ function montar(e) {
     ].map(([ok, ic, txt]) => `<span class="trofeu${ok ? "" : " nao"}">${icone(ic)}${txt}</span>`).join("");
     const elenco = c.membros.map(m => `<li>
         <canvas width="10" height="15" data-nick="${esc(m.nick)}" data-cla="${esc(c.tag)}" aria-hidden="true"></canvas>
-        <div><div class="nick">${m.lider ? '<span class="coroa">♛ </span>' : ""}${esc(m.nick)}</div><div class="faz${m.online ? "" : " fora"}">${esc(m.frase)}</div></div>
+        <div><div class="nick">${m.lider ? '<span class="coroa">♛ </span>' : ""}${esc(m.nick)}</div><div class="faz${m.online ? "" : " fora"}">${esc(m.frase)}</div>${m.ia ? `<div class="ia">${esc(m.ia.perfil)}${m.ia.perfil !== m.ia.perfil_inicial ? ` <span>(era ${esc(m.ia.perfil_inicial)})</span>` : ""} · ${esc((m.ia.objetivos || {}).curto || "")} · ${m.ia.decisoes} decisões</div>` : ""}</div>
         <div class="lado"><b>${esc(m.rank || "—")}</b>${fmt(m.coins)} coins${m.eficiencia ? ` · Ef ${m.eficiencia}` : ""}</div></li>`).join("");
     return `<article class="palco">
       <div class="palco-top"><span class="bandeira" style="background:${COR_CLA[c.tag]}"></span><span class="palco-nome">${esc(c.tag)} · ${esc(c.nome)}</span><span class="palco-cam">${CAMINHO[c.caminho] || esc(c.caminho)}</span></div>
@@ -418,8 +420,11 @@ function aprendizado(a, vivo) {
   const fatos = (a.fatos || []).slice().reverse().map(f => `<li>${esc(f.texto)} <span style="color:var(--apagado)">(${esc(f.fonte)})</span></li>`);
   const lic = Object.entries(a.grupos || {}).flatMap(([g, x]) => (x.licoes || []).map(l => `<li><b style="color:${COR_CLA[g] || "#fff"}">${esc(g)}</b>: ${esc(l)}</li>`));
   const aj = Object.entries(a.grupos || {}).map(([g, x]) => `<li><b style="color:${COR_CLA[g] || "#fff"}">${esc(g)}</b>: ${Object.entries(x.ajustes || {}).map(([k, v]) => esc(k.replace(/_/g, " ")) + " " + esc(v)).join(" · ")}</li>`);
+  const col = (a.coletivo || []).map(k => `<li>${esc(k.chave)} <span style="color:var(--apagado)">(${k.n} obs., confiança ${Math.round(k.confianca * 100)}%, 1º: ${esc(k.origem)}${k.tipo !== "fato" ? `, média ${fmt(k.media)}` : ""})</span></li>`);
+  const dec = a.decisoes_1h && a.decisoes_1h.decisoes ? [`<li>${a.decisoes_1h.decisoes} decisões na última hora, ${Math.round(100 * a.decisoes_1h.sucessos / a.decisoes_1h.decisoes)}% deram certo</li>`] : [];
   const sec = (t, l, vazio) => `<section><h3>${t}</h3><ul>${l.length ? l.slice(0, 12).join("") : `<li style="list-style:none;margin-left:-18px;color:var(--apagado)">${vazio}</li>`}</ul></section>`;
-  box.innerHTML = sec("ESTILO DE CADA JOGADOR", est, "Cada jogador escolhe o seu na rodada.")
+  box.innerHTML = sec("CONHECIMENTO COLETIVO (VALIDADO)", dec.concat(col), "Ainda sem observações suficientes.")
+    + sec("PERFIL DE CADA JOGADOR", est, "Cada jogador escolhe o seu na rodada.")
     + sec("EXPERIMENTOS", exps, "Nenhum experimento ainda.")
     + sec("DESCOBERTAS", fatos, `Nada ainda. ${a.menus ? a.menus.length : 0} menus lidos.`)
     + sec("LIÇÕES DOS CLÃS", lic, "Sem lições ainda.")
