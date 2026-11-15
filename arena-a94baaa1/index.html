@@ -209,6 +209,7 @@ img { max-width: 100%; }
       <section class="bloco"><h2>O QUE CADA ATIVIDADE RENDE</h2><div class="corpo-bloco" id="valorAtiv"></div></section>
       <section class="bloco"><h2>ENCANTAMENTOS (EFEITO MEDIDO)</h2><div class="corpo-bloco" id="equip"></div></section>
     </div>
+    <section class="bloco"><h2>EXPERIMENTOS CONTROLADOS (TRATAMENTO × CONTROLE)</h2><div class="corpo-bloco tabela-px" id="experimentos"></div></section>
     <section class="bloco"><h2>FATOS DO SERVIDOR QUE ELES CONFIRMARAM</h2><div class="corpo-bloco tabela-px" id="fatosIA"></div></section>
   </section>
   <section class="aba" id="aba-atividades" hidden>
@@ -475,7 +476,7 @@ const BLOCOS = {1:"Pedra",4:"Pedregulho",13:"Cascalho",14:"Minério de ouro",15:
   152:"Bloco de redstone",173:"Bloco de carvão",24:"Arenito",3:"Terra",2:"Grama"};
 const ATIV = {minerar:"Minerar",farmar:"Farmar",consultar_rank:"Ver o rank",evoluir_rank:"Rankup",melhorar_picareta:"Picareta",
   coletar_premios:"Prêmios",ajudar_cla:"Vaquinha",investir:"Investir",vender:"Vender",explorar:"Explorar",socializar:"Conversar",
-  ver_boss:"Ver boss",enfrentar_boss:"Lutar com boss",renda_passiva:"Renda passiva",consertar:"Consertar",prestigio:"Prestígio"};
+  ver_boss:"Ver boss",enfrentar_boss:"Lutar com boss",renda_passiva:"Renda passiva",consertar:"Consertar",prestigio:"Prestígio",experimento:"Experimento"};
 const TRACOS = {risco:"Risco",economia:"Economia",competitivo:"Competitivo",curiosidade:"Curiosidade",social:"Social",cooperacao:"Cooperação",combate:"Combate"};
 const nomeAtiv = a => ATIV[a] || a || "—";
 const corDe = g => COR_CLA[g] || "#a69fbd";
@@ -595,6 +596,17 @@ function inteligenciaIA(p) {
   document.getElementById("fatosIA").innerHTML = f.length ? `<table><thead><tr><th>FATO</th><th>CONFIRMAÇÕES</th><th>QUEM VIU PRIMEIRO</th></tr></thead><tbody>` +
     f.map(x => `<tr><td style="white-space:normal">${esc(x.texto)}</td><td class="num">${x.n}</td><td>${esc(x.origem)}</td></tr>`).join("") + `</tbody></table>` : `<p style="margin:0;color:var(--apagado)">Nenhum fato confirmado por 2 jogadores ainda.</p>`;
 }
+function experimentosIA(p) {
+  const ex = (p.ia && p.ia.experimentos) || {};
+  const e = ex.em_andamento;
+  let h = e ? `<div class="alerta" style="border-color:var(--ouro)">Agora: ${esc(e.tratamento.join(", "))} compraram <b>${esc(e.alvo)}</b> no Máximo; ${esc(e.controle.join(", "))} ficam de controle. Resultado em ${Math.ceil(e.restam_s / 60)} min.</div>` : "";
+  h += `<table><thead><tr><th>HIPÓTESE</th><th>TESTES</th><th>EFEITO MÉDIO</th><th>CONFIANÇA</th></tr></thead><tbody>` +
+    (ex.hipoteses || []).map(x => `<tr><td style="white-space:normal">${esc(x.hipotese)}</td><td class="num">${x.testes}</td>
+      <td class="num ${x.efeito > 0 ? "ok" : x.efeito < 0 ? "ruim" : ""}">${x.efeito == null ? "—" : (x.efeito > 0 ? "+" : "") + fmt(x.efeito) + "/min"}</td>
+      <td class="num">${x.testes ? Math.round(x.confianca * 100) + "%" : "—"}</td></tr>`).join("") + `</tbody></table>
+    <p style="margin:6px 0 0;color:var(--apagado);font-size:13px">Efeito = mudança na renda de quem comprou menos a de quem ficou sem comprar no mesmo período. Vira estratégia com 3 testes.</p>`;
+  document.getElementById("experimentos").innerHTML = h;
+}
 function atividadesIA(p) {
   const at = (p.ia && p.ia.atividades) || {};
   document.getElementById("porAtiv").innerHTML = barras((at.por_atividade || []).map(x => ({ r: nomeAtiv(x.atividade), v: x.n,
@@ -607,7 +619,7 @@ function mostrar(p) {
   montar(p.ao_vivo);
   graficos(p.historico || []);
   aprendizado(p.aprendizado || {}, p.ao_vivo);
-  try { visaoGeral(p); jogadores(p); inteligenciaIA(p); atividadesIA(p); } catch (e) { console.error(e); }
+  try { visaoGeral(p); jogadores(p); inteligenciaIA(p); atividadesIA(p); experimentosIA(p); } catch (e) { console.error(e); }
 }
 function graficos(h) {
   const box = document.getElementById("graficos");
