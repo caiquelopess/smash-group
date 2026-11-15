@@ -205,7 +205,6 @@ img { max-width: 100%; }
     <dl class="kpis" id="kpisIA"></dl>
     <div class="duas">
       <section class="bloco"><h2>VALOR DOS MINÉRIOS (APRENDIDO)</h2><div class="corpo-bloco" id="minerios"></div></section>
-      <section class="bloco"><h2>SETORES DA MINA</h2><div class="corpo-bloco" id="setores"></div></section>
       <section class="bloco"><h2>O QUE CADA ATIVIDADE RENDE</h2><div class="corpo-bloco" id="valorAtiv"></div></section>
       <section class="bloco"><h2>ENCANTAMENTOS (EFEITO MEDIDO)</h2><div class="corpo-bloco" id="equip"></div></section>
     </div>
@@ -555,7 +554,6 @@ function ficha(p) {
   const a = ((p.ia && p.ia.agentes) || []).find(x => x.nick === FICHA);
   if (!a) { box.innerHTML = `<p style="color:var(--apagado);margin:0 0 4px">Toque num jogador pra ver a ficha completa.</p>`; return; }
   const falta = a.need ? Math.max(0, a.need[0] - (a.coins || 0)) : null;
-  const setores = Object.entries(a.variantes || {}).filter(([k]) => k.startsWith("minerar:")).map(([k, v]) => ({ r: k.split(":")[1], v: v.media, t: `${fmt(v.media)}/min (${v.n}x)` }));
   const pic = Object.entries(a.variantes || {}).filter(([k]) => k.startsWith("picareta:")).map(([k, v]) => ({ r: k.split(":")[1], v: v.media, t: `${v.media > 0 ? "+" : ""}${fmt(v.media)}/min` }));
   box.innerHTML = `<article class="ficha">
     <div class="ficha-top"><canvas width="10" height="15" id="fichaAv" aria-hidden="true"></canvas>
@@ -571,7 +569,7 @@ function ficha(p) {
       <div><h4>OBJETIVOS</h4><ul><li>Curto: ${esc((a.objetivos || {}).curto || "—")}</li><li>Médio: ${esc((a.objetivos || {}).medio || "—")}</li><li>Longo: ${esc((a.objetivos || {}).longo || "—")}</li></ul></div>
       <div><h4>PERSONALIDADE (MUDA COM A EXPERIÊNCIA)</h4>${barras(Object.entries(a.tracos || {}).map(([k, v]) => ({ r: TRACOS[k] || k, v: v * 100, t: Math.round(v * 100) + "%", c: corDe(a.grupo) })))}</div>
       <div><h4>QUANTO CADA ATIVIDADE RENDEU PRA ELE</h4>${barras(Object.entries(a.valor || {}).map(([k, v]) => ({ r: nomeAtiv(k), v: v.media, t: `${fmt(v.media)} (${v.n}x)` })).sort((x, y) => y.v - x.v))}</div>
-      <div><h4>SETORES DA MINA</h4>${barras(setores, { vazio: "Ainda testando os setores." })}<h4 style="margin-top:12px">COMPRAS NA PICARETA</h4>${barras(pic, { vazio: "Nenhuma compra medida ainda." })}</div>
+      <div><h4>COMPRAS NA PICARETA</h4>${barras(pic, { vazio: "Nenhuma compra medida ainda." })}</div>
       <div><h4>O QUE ELE SABE</h4><ul>${(a.conhece || []).slice().reverse().map(f => `<li>${esc(f)}</li>`).join("") || "<li>Nada ainda.</li>"}</ul></div>
       <div><h4>ÚLTIMAS DECISÕES</h4><ul>${(a.historico || []).slice().reverse().map(h => `<li class="${/falhou/.test(h) ? "ruim" : ""}">${esc(h.replace(/(\w+):/, (m, x) => nomeAtiv(x) + ":"))}</li>`).join("") || "<li>—</li>"}</ul>
         ${Object.keys(a.falhas || {}).length ? `<h4 style="margin-top:12px">FALHAS RECENTES</h4><ul>${Object.entries(a.falhas).map(([k, n]) => `<li class="ruim">${esc(nomeAtiv(k))}: ${n}x</li>`).join("")}</ul>` : ""}</div>
@@ -585,11 +583,10 @@ function inteligenciaIA(p) {
   document.getElementById("kpisIA").innerHTML = [
     ["Conhecimento validado", `${ia.validados || 0}`, `de ${ia.total || 0} registros`],
     ["Minérios medidos", String((ia.minerios || []).length), "valor por bloco"],
-    ["Setores testados", String((ia.setores || []).length), "de 4 quartos da mina"],
+    ["Experimentos feitos", String(((p.ia && p.ia.experimentos && p.ia.experimentos.hipoteses) || []).reduce((s, h) => s + h.testes, 0)), "tratamento × controle"],
     ["Fatos confirmados", String((ia.fatos || []).filter(f => f.n >= 2).length), "por 2+ jogadores"],
   ].map(([t, v, d]) => `<div class="kpi"><dt>${t}</dt><dd>${v}</dd><small>${d}</small></div>`).join("");
   document.getElementById("minerios").innerHTML = barras((ia.minerios || []).map(k => ({ r: BLOCOS[k.chave] || "Bloco " + k.chave, v: k.media, t: `${k.media.toFixed(1)}/bloco`, dica: conf(k) })).sort((a, b) => b.v - a.v), { vazio: "Medindo quanto cada bloco vale." });
-  document.getElementById("setores").innerHTML = barras((ia.setores || []).map(k => ({ r: k.chave.replace("setor", "Setor "), v: k.media, t: `${fmt(k.media)}/min · ${k.n}x`, dica: conf(k) })).sort((a, b) => b.v - a.v), { vazio: "Ainda testando." });
   document.getElementById("valorAtiv").innerHTML = barras((ia.atividades || []).map(k => ({ r: nomeAtiv(k.chave), v: k.media, t: `${fmt(k.media)} · ${k.n}x`, dica: conf(k) })).sort((a, b) => b.v - a.v));
   document.getElementById("equip").innerHTML = barras((ia.equipamentos || []).map(k => ({ r: k.chave, v: k.media, t: `${k.media > 0 ? "+" : ""}${fmt(k.media)}/min · ${k.n}x`, dica: conf(k) })), { vazio: "Esperando compras na picareta serem medidas (8 min depois)." });
   const f = (ia.fatos || []).filter(x => x.n >= 2);
