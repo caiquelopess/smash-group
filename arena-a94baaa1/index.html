@@ -255,7 +255,7 @@ function montar(e) {
     ].map(([ok, ic, txt]) => `<span class="trofeu${ok ? "" : " nao"}">${icone(ic)}${txt}</span>`).join("");
     const elenco = c.membros.map(m => `<li>
         <canvas width="10" height="15" data-nick="${esc(m.nick)}" data-cla="${esc(c.tag)}" aria-hidden="true"></canvas>
-        <div><div class="nick">${m.lider ? '<span class="coroa">♛ </span>' : ""}${esc(m.nick)}</div><div class="faz${m.online ? "" : " fora"}">${esc(m.frase)}</div>${m.ia ? `<div class="ia">${esc(m.ia.perfil)}${m.ia.perfil !== m.ia.perfil_inicial ? ` <span>(era ${esc(m.ia.perfil_inicial)})</span>` : ""} · ${esc((m.ia.objetivos || {}).curto || "")} · ${m.ia.decisoes} decisões</div>` : ""}</div>
+        <div><div class="nick">${m.lider ? '<span class="coroa">♛ </span>' : ""}${esc(m.nick)}</div><div class="faz${m.online ? "" : " fora"}">${esc(m.frase)}</div>${m.ia ? `<div class="ia">${esc(m.ia.perfil)}${m.ia.perfil !== m.ia.perfil_inicial ? ` <span>(era ${esc(m.ia.perfil_inicial)})</span>` : ""} · ${esc((m.ia.objetivos || {}).curto || "")} · ${m.ia.decisoes} decisões · ${m.ia.taxa_sucesso ?? 0}% certas · online ${m.ia.online_min ?? 0} min${m.ia.erros ? ` · ${m.ia.erros} erros` : ""}${m.ia.ciclos ? ` · ${m.ia.ciclos} ciclos evitados` : ""}${m.ia.descobertas ? ` · ${m.ia.descobertas} descobertas` : ""}</div>` : ""}</div>
         <div class="lado"><b>${esc(m.rank || "—")}</b>${fmt(m.coins)} coins${m.eficiencia ? ` · Ef ${m.eficiencia}` : ""}</div></li>`).join("");
     return `<article class="palco">
       <div class="palco-top"><span class="bandeira" style="background:${COR_CLA[c.tag]}"></span><span class="palco-nome">${esc(c.tag)} · ${esc(c.nome)}</span><span class="palco-cam">${CAMINHO[c.caminho] || esc(c.caminho)}</span></div>
