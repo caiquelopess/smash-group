@@ -170,14 +170,14 @@ img { max-width: 100%; }
     </div>
   </header>
   <nav class="abas" role="tablist" aria-label="Seções do painel">
-    <button role="tab" data-aba="geral" aria-selected="true">VISÃO GERAL</button>
-    <button role="tab" data-aba="clas" aria-selected="false">CLÃS</button>
+    <button role="tab" data-aba="clas" aria-selected="true">AO VIVO</button>
+    <button role="tab" data-aba="geral" aria-selected="false">VISÃO GERAL</button>
     <button role="tab" data-aba="jogadores" aria-selected="false">JOGADORES</button>
     <button role="tab" data-aba="inteligencia" aria-selected="false">INTELIGÊNCIA</button>
     <button role="tab" data-aba="atividades" aria-selected="false">ATIVIDADES</button>
     <button role="tab" data-aba="progressao" aria-selected="false">PROGRESSÃO</button>
   </nav>
-  <section class="aba" id="aba-geral">
+  <section class="aba" id="aba-geral" hidden>
     <dl class="kpis" id="kpis"><div class="kpi"><dt>Esperando dados</dt><dd>—</dd></div></dl>
     <div class="duas">
       <section class="bloco"><h2>CORRIDA DOS CLÃS</h2><div class="corpo-bloco" id="corrida"></div></section>
@@ -186,7 +186,7 @@ img { max-width: 100%; }
       <section class="bloco"><h2>ÚLTIMAS DECISÕES</h2><div class="corpo-bloco" id="ultimasGeral"></div></section>
     </div>
   </section>
-  <section class="aba" id="aba-clas" hidden>
+  <section class="aba" id="aba-clas">
   <div class="grade">
     <section class="palcos" id="palcos">
       <div class="palco vazio"><strong>Esperando a rodada</strong>Quando os jogadores entrarem no servidor, cada clã aparece aqui com os jogadores minerando, pagando e conquistando.</div>
@@ -486,7 +486,7 @@ function barras(itens, opts = {}) {
     <span class="trilho"><span class="enche" style="width:${Math.max(2, Math.abs(i.v) / max * 100)}%;background:${i.c || (i.v < 0 ? "var(--perigo)" : "var(--ouro)")}"></span></span>
     <span class="val">${i.t ?? fmt(i.v)}</span></div>`).join("");
 }
-let ABA = "geral", FICHA = null;
+let ABA = "clas", FICHA = null;
 function abrirAba(id) {
   ABA = id;
   document.querySelectorAll(".abas button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.aba === id)));
