@@ -4,7 +4,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Arena Smash</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@400;500;700&display=swap">
 <style>
 /* Layout: noite de pixel. Cabeçalho com relógio da rodada, um "palco" pixelado por clã (cena + placar + elenco)
    e o mural de acontecimentos; no celular tudo numa coluna, no computador palcos à esquerda e mural à direita. */
@@ -13,21 +13,22 @@
   --noite: #15121f; --painel: #201b2f; --painel2: #2a2440; --borda: #3d3558;
   --texto: #f1ead6; --apagado: #a69fbd; --ouro: #f4c64f; --vida: #6fd08c; --perigo: #ec6a5c;
   --c1: #3987e5; --c2: #e0662f; --c3: #22b07a; --c4: #d9a21b;
-  --pixel: "Press Start 2P", "Courier New", monospace;
-  --corpo: "VT323", "Courier New", monospace;
+  --pixel: "Rubik", "Segoe UI", Roboto, Arial, sans-serif;
+  --titulo: "Bungee", "Rubik", Arial, sans-serif;
+  --corpo: "Rubik", "Segoe UI", Roboto, Arial, sans-serif;
 }
 * { box-sizing: border-box; }
-body { background: var(--noite); color: var(--texto); font-family: var(--corpo); font-size: 20px; line-height: 1.15;
+body { background: var(--noite); color: var(--texto); font-family: var(--corpo); font-size: 15px; line-height: 1.45;
   background-image: radial-gradient(var(--borda) 1px, transparent 1px); background-size: 24px 24px; }
 .wrap { max-width: 1180px; margin: 0 auto; padding-block: 18px 40px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: flex; flex-direction: column; gap: 16px; }
 header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
-h1 { font-family: var(--pixel); font-size: clamp(18px, 4.6vw, 28px); margin: 0; color: var(--ouro);
+h1 { font-family: var(--titulo); font-weight: 400; font-size: clamp(18px, 4.6vw, 28px); margin: 0; color: var(--ouro);
   text-shadow: 3px 3px 0 #7a4b12; letter-spacing: 1px; }
-.sub { color: var(--apagado); font-size: 19px; margin-top: 6px; }
+.sub { color: var(--apagado); font-size: 14.5px; margin-top: 6px; }
 .relogio { display: flex; gap: 8px; flex-wrap: wrap; }
-.pill { font-family: var(--pixel); font-size: 10px; padding: 8px 10px; border: 2px solid var(--borda); background: var(--painel);
+.pill { font-family: var(--pixel); font-weight: 700; font-size: 13px; padding: 8px 10px; border: 2px solid var(--borda); background: var(--painel);
   display: inline-flex; align-items: center; gap: 8px; box-shadow: 3px 3px 0 #0b0911; }
 .pill .luz { width: 8px; height: 8px; background: var(--apagado); }
 .pill.vivo .luz { background: var(--vida); animation: pisca 1.2s steps(2) infinite; }
@@ -40,72 +41,118 @@ h1 { font-family: var(--pixel); font-size: clamp(18px, 4.6vw, 28px); margin: 0; 
 .palco { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; min-width: 0; }
 .palco-top { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 3px solid var(--borda); }
 .bandeira { width: 14px; height: 18px; flex: none; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%); }
-.palco-nome { font-family: var(--pixel); font-size: 12px; line-height: 1.4; }
-.palco-cam { margin-left: auto; font-family: var(--pixel); font-size: 8px; color: var(--apagado); border: 2px solid var(--borda); padding: 5px 6px; white-space: nowrap; }
+.palco-nome { font-family: var(--pixel); font-weight: 700; font-size: 15px; line-height: 1.4; }
+.palco-cam { margin-left: auto; font-family: var(--pixel); font-weight: 700; font-size: 11px; color: var(--apagado); border: 2px solid var(--borda); padding: 5px 6px; white-space: nowrap; }
 .cena { position: relative; background: #000; }
 .cena canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; }
-.etiqueta { position: absolute; transform: translate(-50%, -100%); font-family: var(--pixel); font-size: 7px; white-space: nowrap;
+.etiqueta { position: absolute; transform: translate(-50%, -100%); font-family: var(--pixel); font-weight: 700; font-size: 11px; white-space: nowrap;
   background: rgb(10 8 16 / .72); padding: 3px 4px; color: var(--texto); pointer-events: none; }
 .etiqueta.fora { color: var(--apagado); }
 .placar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 3px solid var(--borda); }
 .placar div { padding: 8px 10px; border-right: 2px solid var(--borda); min-width: 0; }
 .placar div:last-child { border-right: 0; }
-.placar dt { font-size: 16px; color: var(--apagado); }
-.placar dd { margin: 2px 0 0; font-family: var(--pixel); font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
+.placar dt { font-size: 12.5px; color: var(--apagado); }
+.placar dd { margin: 2px 0 0; font-family: var(--pixel); font-weight: 700; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
 .trofeus { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border-bottom: 3px solid var(--borda); min-height: 20px; }
-.trofeu { display: inline-flex; align-items: center; gap: 6px; font-size: 18px; background: var(--painel2); padding: 2px 8px 2px 4px; border: 2px solid var(--borda); }
+.trofeu { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; background: var(--painel2); padding: 2px 8px 2px 4px; border: 2px solid var(--borda); }
 .trofeu.nao { opacity: .38; }
 .elenco { list-style: none; margin: 0; padding: 4px 0; }
 .elenco li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 6px 12px; }
 .elenco li + li { border-top: 2px dashed var(--painel2); }
 .elenco canvas { width: 30px; height: 45px; image-rendering: pixelated; }
-.nick { font-family: var(--pixel); font-size: 9px; line-height: 1.6; overflow-wrap: anywhere; }
+.nick { font-family: var(--pixel); font-weight: 700; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
 .nick .coroa { color: var(--ouro); }
-.faz { color: var(--texto); font-size: 19px; }
+.faz { color: var(--texto); font-size: 14.5px; }
 .faz.fora { color: var(--apagado); }
-.ia { font-size: 16px; color: var(--apagado); overflow-wrap: anywhere; }
+.ia { font-size: 12.5px; color: var(--apagado); overflow-wrap: anywhere; }
 .ia span { color: var(--ouro); }
-.lado { text-align: right; font-size: 17px; color: var(--apagado); white-space: nowrap; }
-.lado b { display: block; font-family: var(--pixel); font-size: 8px; color: var(--texto); font-weight: 400; margin-bottom: 3px; }
+.lado { text-align: right; font-size: 13px; color: var(--apagado); white-space: nowrap; }
+.lado b { display: block; font-family: var(--pixel); font-weight: 700; font-size: 11px; color: var(--texto); font-weight: 400; margin-bottom: 3px; }
 .mural { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; min-width: 0; }
-.mural h2 { font-family: var(--pixel); font-size: 11px; margin: 0; padding: 12px; border-bottom: 3px solid var(--borda); color: var(--ouro); }
+.mural h2 { font-family: var(--pixel); font-weight: 700; font-size: 14px; margin: 0; padding: 12px; border-bottom: 3px solid var(--borda); color: var(--ouro); }
 .feed { list-style: none; margin: 0; padding: 0; max-height: 78vh; overflow-y: auto; }
 .feed li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; padding: 8px 12px; border-bottom: 2px dashed var(--painel2); align-items: start; }
 .feed li.novo { animation: chega .9s steps(4); }
 @keyframes chega { from { background: var(--painel2); } }
 .feed svg, .trofeu svg { width: 24px; height: 24px; image-rendering: pixelated; flex: none; }
-.feed .txt { font-size: 19px; overflow-wrap: anywhere; }
-.feed .quando { color: var(--apagado); font-size: 16px; }
-.feed .tag { font-family: var(--pixel); font-size: 7px; padding: 2px 4px; margin-right: 6px; color: #0d0b14; vertical-align: 2px; }
-.vazio { padding: 28px 16px; text-align: center; color: var(--apagado); font-size: 20px; }
-.vazio strong { display: block; font-family: var(--pixel); font-size: 11px; color: var(--texto); margin-bottom: 10px; line-height: 1.6; }
+.feed .txt { font-size: 14.5px; overflow-wrap: anywhere; }
+.feed .quando { color: var(--apagado); font-size: 12.5px; }
+.feed .tag { font-family: var(--pixel); font-weight: 700; font-size: 11px; padding: 2px 4px; margin-right: 6px; color: #0d0b14; vertical-align: 2px; }
+.vazio { padding: 28px 16px; text-align: center; color: var(--apagado); font-size: 15px; }
+.vazio strong { display: block; font-family: var(--pixel); font-weight: 700; font-size: 14px; color: var(--texto); margin-bottom: 10px; line-height: 1.6; }
 @media (prefers-reduced-motion: reduce) { .pill.vivo .luz, .feed li.novo { animation: none; } }
 html, body { margin: 0; }
 [hidden] { display: none !important; }
 img { max-width: 100%; }
+
+.abas { display: flex; gap: 6px; flex-wrap: wrap; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--noite); padding-block: 8px; }
+.abas button { font: 700 13px var(--pixel); padding: 10px 12px; background: var(--painel); color: var(--apagado);
+  border: 2px solid var(--borda); cursor: pointer; box-shadow: 2px 2px 0 #0b0911; }
+.abas button[aria-selected="true"] { background: var(--ouro); color: #2a1a05; border-color: var(--ouro); }
+.abas button:focus-visible { outline: 2px solid var(--texto); outline-offset: 2px; }
+.aba { display: flex; flex-direction: column; gap: 16px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--painel); border: 3px solid var(--borda); padding: 10px 12px; box-shadow: 3px 3px 0 #0b0911; min-width: 0; }
+.kpi dt { font-size: 13px; color: var(--apagado); }
+.kpi dd { margin: 4px 0 0; font: 700 18px var(--pixel); line-height: 1.4; overflow-wrap: anywhere; }
+.kpi small { display: block; font-size: 12.5px; color: var(--apagado); margin-top: 4px; }
+.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.corpo-bloco { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.barra { display: grid; grid-template-columns: minmax(80px, 34%) 1fr auto; gap: 8px; align-items: center; font-size: 14px; }
+.barra .rot { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.barra .trilho { height: 12px; background: var(--noite); border: 2px solid var(--borda); position: relative; }
+.barra .enche { position: absolute; inset: 0 auto 0 0; }
+.barra .val { font-family: var(--pixel); font-weight: 700; font-size: 12px; color: var(--texto); white-space: nowrap; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.card { background: var(--painel); border: 3px solid var(--borda); padding: 10px; display: grid; grid-template-columns: 30px minmax(0,1fr);
+  gap: 4px 10px; cursor: pointer; text-align: left; color: var(--texto); font: inherit; box-shadow: 3px 3px 0 #0b0911; }
+.card:hover, .card:focus-visible { border-color: var(--ouro); outline: none; }
+.card canvas { width: 30px; height: 45px; image-rendering: pixelated; grid-row: span 3; }
+.card .n { font: 700 12px var(--pixel); line-height: 1.5; overflow-wrap: anywhere; }
+.card .d { font-size: 13px; color: var(--apagado); }
+.chip { display: inline-block; font: 700 11px var(--pixel); padding: 3px 5px; border: 2px solid var(--borda); margin-right: 4px; }
+.chip.on { color: var(--vida); border-color: var(--vida); } .chip.off { color: var(--apagado); }
+.ficha { background: var(--painel); border: 3px solid var(--ouro); box-shadow: 4px 4px 0 #0b0911; }
+.ficha-top { display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 3px solid var(--borda); flex-wrap: wrap; }
+.ficha-top canvas { width: 40px; height: 60px; image-rendering: pixelated; }
+.ficha-top h3 { font: 700 17px var(--pixel); margin: 0; line-height: 1.5; }
+.ficha-top button { margin-left: auto; font: 700 12px var(--pixel); padding: 8px; background: var(--painel2); color: var(--texto); border: 2px solid var(--borda); cursor: pointer; }
+.ficha .grade-f { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.ficha .grade-f > div { padding: 10px 12px; border-right: 2px dashed var(--painel2); border-bottom: 2px dashed var(--painel2); min-width: 0; }
+.ficha h4 { font: 700 12px var(--pixel); margin: 0 0 8px; color: var(--ouro); line-height: 1.5; }
+.ficha ul { margin: 0; padding-left: 18px; font-size: 14px; display: flex; flex-direction: column; gap: 3px; }
+.ficha li { overflow-wrap: anywhere; }
+.tabela-px { overflow-x: auto; }
+.tabela-px table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tabela-px th, .tabela-px td { padding: 5px 8px; border-bottom: 2px dashed var(--painel2); text-align: left; white-space: nowrap; }
+.tabela-px th { font: 700 11px var(--pixel); color: var(--apagado); }
+.tabela-px td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.ok { color: var(--vida); } .ruim { color: var(--perigo); }
+.alerta { border-left: 4px solid var(--perigo); padding: 6px 10px; background: var(--painel2); font-size: 14px; }
 .portao { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: var(--noite); padding: 16px; }
 .portao form { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; padding: 20px; width: min(340px, 100%); display: flex; flex-direction: column; gap: 12px; }
-.portao input { font: 20px var(--corpo); padding: 8px 10px; background: var(--noite); color: var(--texto); border: 2px solid var(--borda); }
-.portao button { font: 11px var(--pixel); padding: 12px; background: var(--ouro); color: #2a1a05; border: 0; cursor: pointer; box-shadow: 3px 3px 0 #7a4b12; }
+.portao input { font: 15px var(--corpo); padding: 8px 10px; background: var(--noite); color: var(--texto); border: 2px solid var(--borda); }
+.portao button { font: 700 14px var(--pixel); padding: 12px; background: var(--ouro); color: #2a1a05; border: 0; cursor: pointer; box-shadow: 3px 3px 0 #7a4b12; }
 .portao .erro { color: var(--perigo); min-height: 20px; }
 .bloco { background: var(--painel); border: 3px solid var(--borda); box-shadow: 4px 4px 0 #0b0911; min-width: 0; }
-.bloco h2 { font-family: var(--pixel); font-size: 11px; margin: 0; padding: 12px; border-bottom: 3px solid var(--borda); color: var(--ouro); }
+.bloco h2 { font-family: var(--pixel); font-weight: 700; font-size: 14px; margin: 0; padding: 12px; border-bottom: 3px solid var(--borda); color: var(--ouro); }
 .graf-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0; }
 .graf { padding: 10px 12px; border-right: 2px dashed var(--painel2); min-width: 0; }
-.graf h3 { font-size: 18px; margin: 0 0 4px; font-weight: 400; color: var(--apagado); }
+.graf h3 { font-size: 14px; margin: 0 0 4px; font-weight: 400; color: var(--apagado); }
 .graf svg { width: 100%; height: auto; display: block; }
-.legenda-px { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 8px 12px 0; font-size: 18px; }
+.legenda-px { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 8px 12px 0; font-size: 14px; }
 .legenda-px i { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; }
 .aprend { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 .aprend section { padding: 10px 12px; border-right: 2px dashed var(--painel2); border-bottom: 2px dashed var(--painel2); min-width: 0; }
-.aprend h3 { font-family: var(--pixel); font-size: 9px; margin: 0 0 8px; line-height: 1.5; }
-.aprend ul { margin: 0; padding-left: 18px; font-size: 18px; display: flex; flex-direction: column; gap: 4px; }
+.aprend h3 { font-family: var(--pixel); font-weight: 700; font-size: 12px; margin: 0 0 8px; line-height: 1.5; }
+.aprend ul { margin: 0; padding-left: 18px; font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
 .aprend li { overflow-wrap: anywhere; }
 .aprend .ok { color: var(--vida); } .aprend .ruim { color: var(--perigo); }
 </style>
 </head><body>
 <div class="portao" id="portao"><form id="entrar">
-  <h1 style="font-size:16px">ARENA SMASH</h1>
+  <h1 style="font-size:20px">ARENA SMASH</h1>
   <label for="senha">Senha</label>
   <input id="senha" type="password" autocomplete="current-password">
   <button type="submit">ENTRAR</button>
@@ -122,6 +169,24 @@ img { max-width: 100%; }
       <span class="pill" id="tempoPill">--</span>
     </div>
   </header>
+  <nav class="abas" role="tablist" aria-label="Seções do painel">
+    <button role="tab" data-aba="geral" aria-selected="true">VISÃO GERAL</button>
+    <button role="tab" data-aba="clas" aria-selected="false">CLÃS</button>
+    <button role="tab" data-aba="jogadores" aria-selected="false">JOGADORES</button>
+    <button role="tab" data-aba="inteligencia" aria-selected="false">INTELIGÊNCIA</button>
+    <button role="tab" data-aba="atividades" aria-selected="false">ATIVIDADES</button>
+    <button role="tab" data-aba="progressao" aria-selected="false">PROGRESSÃO</button>
+  </nav>
+  <section class="aba" id="aba-geral">
+    <dl class="kpis" id="kpis"><div class="kpi"><dt>Esperando dados</dt><dd>—</dd></div></dl>
+    <div class="duas">
+      <section class="bloco"><h2>CORRIDA DOS CLÃS</h2><div class="corpo-bloco" id="corrida"></div></section>
+      <section class="bloco"><h2>QUEM MAIS RENDE AGORA</h2><div class="corpo-bloco" id="topRenda"></div></section>
+      <section class="bloco"><h2>ATENÇÃO</h2><div class="corpo-bloco" id="alertas"></div></section>
+      <section class="bloco"><h2>ÚLTIMAS DECISÕES</h2><div class="corpo-bloco" id="ultimasGeral"></div></section>
+    </div>
+  </section>
+  <section class="aba" id="aba-clas" hidden>
   <div class="grade">
     <section class="palcos" id="palcos">
       <div class="palco vazio"><strong>Esperando a rodada</strong>Quando os jogadores entrarem no servidor, cada clã aparece aqui com os jogadores minerando, pagando e conquistando.</div>
@@ -131,8 +196,32 @@ img { max-width: 100%; }
       <ul class="feed" id="feed"><li><span></span><span class="txt quando">Nada ainda. Os feitos dos clãs aparecem aqui.</span></li></ul>
     </aside>
   </div>
+  </section>
+  <section class="aba" id="aba-jogadores" hidden>
+    <div id="ficha"></div>
+    <div class="cards" id="cards"></div>
+  </section>
+  <section class="aba" id="aba-inteligencia" hidden>
+    <dl class="kpis" id="kpisIA"></dl>
+    <div class="duas">
+      <section class="bloco"><h2>VALOR DOS MINÉRIOS (APRENDIDO)</h2><div class="corpo-bloco" id="minerios"></div></section>
+      <section class="bloco"><h2>SETORES DA MINA</h2><div class="corpo-bloco" id="setores"></div></section>
+      <section class="bloco"><h2>O QUE CADA ATIVIDADE RENDE</h2><div class="corpo-bloco" id="valorAtiv"></div></section>
+      <section class="bloco"><h2>ENCANTAMENTOS (EFEITO MEDIDO)</h2><div class="corpo-bloco" id="equip"></div></section>
+    </div>
+    <section class="bloco"><h2>FATOS DO SERVIDOR QUE ELES CONFIRMARAM</h2><div class="corpo-bloco tabela-px" id="fatosIA"></div></section>
+  </section>
+  <section class="aba" id="aba-atividades" hidden>
+    <div class="duas">
+      <section class="bloco"><h2>DECISÕES NA ÚLTIMA HORA</h2><div class="corpo-bloco" id="porAtiv"></div></section>
+      <section class="bloco"><h2>RITMO (A CADA 10 MIN)</h2><div class="corpo-bloco" id="ritmo"></div></section>
+    </div>
+    <section class="bloco"><h2>LINHA DO TEMPO</h2><div class="corpo-bloco tabela-px" id="linha"></div></section>
+  </section>
+  <section class="aba" id="aba-progressao" hidden>
   <section class="bloco"><h2>PROGRESSÃO DOS CLÃS</h2><div class="legenda-px" id="legendaGraf"></div><div class="graf-grade" id="graficos"><p class="vazio">O histórico aparece aqui depois do primeiro minuto da rodada.</p></div></section>
   <section class="bloco"><h2>O QUE ELES APRENDERAM SOZINHOS</h2><div class="aprend" id="aprend"><p class="vazio">Ainda sem descobertas.</p></div></section>
+  </section>
 </div>
 
 <script>
@@ -379,11 +468,146 @@ async function buscar() {
     if (r2.ok) mostrar(await r2.json());
   } catch (e) { txt.textContent = "sem internet"; }
 }
+
+const BLOCOS = {1:"Pedra",4:"Pedregulho",13:"Cascalho",14:"Minério de ouro",15:"Minério de ferro",16:"Minério de carvão",
+  21:"Minério de lápis",56:"Minério de diamante",73:"Minério de redstone",74:"Minério de redstone",129:"Minério de esmeralda",
+  153:"Quartzo",41:"Bloco de ouro",42:"Bloco de ferro",22:"Bloco de lápis",57:"Bloco de diamante",133:"Bloco de esmeralda",
+  152:"Bloco de redstone",173:"Bloco de carvão",24:"Arenito",3:"Terra",2:"Grama"};
+const ATIV = {minerar:"Minerar",farmar:"Farmar",consultar_rank:"Ver o rank",evoluir_rank:"Rankup",melhorar_picareta:"Picareta",
+  coletar_premios:"Prêmios",ajudar_cla:"Vaquinha",investir:"Investir",vender:"Vender",explorar:"Explorar",socializar:"Conversar",
+  ver_boss:"Ver boss",enfrentar_boss:"Lutar com boss",renda_passiva:"Renda passiva",consertar:"Consertar",prestigio:"Prestígio"};
+const TRACOS = {risco:"Risco",economia:"Economia",competitivo:"Competitivo",curiosidade:"Curiosidade",social:"Social",cooperacao:"Cooperação",combate:"Combate"};
+const nomeAtiv = a => ATIV[a] || a || "—";
+const corDe = g => COR_CLA[g] || "#a69fbd";
+function barras(itens, opts = {}) {
+  if (!itens.length) return `<p style="color:var(--apagado);margin:0">${opts.vazio || "Sem dados ainda."}</p>`;
+  const max = Math.max(...itens.map(i => Math.abs(i.v)), 1);
+  return itens.map(i => `<div class="barra" title="${esc(i.dica || "")}"><span class="rot">${esc(i.r)}</span>
+    <span class="trilho"><span class="enche" style="width:${Math.max(2, Math.abs(i.v) / max * 100)}%;background:${i.c || (i.v < 0 ? "var(--perigo)" : "var(--ouro)")}"></span></span>
+    <span class="val">${i.t ?? fmt(i.v)}</span></div>`).join("");
+}
+let ABA = "geral", FICHA = null;
+function abrirAba(id) {
+  ABA = id;
+  document.querySelectorAll(".abas button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.aba === id)));
+  document.querySelectorAll(".aba").forEach(s => s.hidden = s.id !== "aba-" + id);
+  try { history.replaceState(null, "", "#" + id); } catch (_) {}
+}
+document.querySelectorAll(".abas button").forEach(b => b.onclick = () => abrirAba(b.dataset.aba));
+if (/^#(geral|clas|jogadores|inteligencia|atividades|progressao)$/.test(location.hash)) abrirAba(location.hash.slice(1));
+
+function visaoGeral(p) {
+  const ag = (p.ia && p.ia.agentes) || [], vivo = p.ao_vivo || {}, at = (p.ia && p.ia.atividades) || {}, ia = (p.ia && p.ia.inteligencia) || {};
+  const on = ag.filter(a => a.online).length;
+  const coins = (vivo.clas || []).reduce((s, c) => s + (c.coins || 0), 0);
+  const renda = ag.reduce((s, a) => s + (a.online ? a.renda || 0 : 0), 0);
+  const r = at.resumo || {};
+  const rankups = (vivo.eventos || []).filter(e => e.tipo === "rankup").length;
+  const mudaram = ag.filter(a => a.perfil !== a.perfil_inicial).length;
+  const kp = [
+    ["Online", `${on}/${ag.length || 20}`, "agentes jogando agora"],
+    ["Coins dos clãs", fmt(coins), "somando quem está online"],
+    ["Renda total", fmt(renda) + "/min", "sem contar vaquinha"],
+    ["Decisões (1h)", fmt(r.decisoes || 0), r.decisoes ? `${Math.round(100 * (r.sucessos || 0) / r.decisoes)}% deram certo` : ""],
+    ["Rankups na rodada", String(rankups), "vistos no mural"],
+    ["Conhecimento validado", `${ia.validados || 0}/${ia.total || 0}`, "com 3+ observações"],
+    ["Mudaram de perfil", String(mudaram), "aprenderam outro jeito de jogar"],
+    ["Descobertas", String(ag.reduce((s, a) => s + (a.descobertas || 0), 0)), "estratégias melhores achadas"],
+  ];
+  document.getElementById("kpis").innerHTML = kp.map(([t, v, d]) => `<div class="kpi"><dt>${t}</dt><dd>${v}</dd><small>${esc(d)}</small></div>`).join("");
+  document.getElementById("corrida").innerHTML = barras((vivo.clas || []).map(c => {
+    const melhor = Math.max(0, ...c.membros.map(m => nivel(m.rank)));
+    return { r: `${c.tag} · ${CAMINHO[c.caminho] || c.caminho}`, v: c.coins, c: corDe(c.tag), t: `${fmt(c.coins)} · ${fmt(c.ganho_min)}/min` };
+  }).sort((a, b) => b.v - a.v));
+  document.getElementById("topRenda").innerHTML = barras(ag.filter(a => a.online).sort((a, b) => b.renda - a.renda).slice(0, 8)
+    .map(a => ({ r: a.nick, v: a.renda, c: corDe(a.grupo), t: fmt(a.renda) + "/min" })));
+  const al = [];
+  ag.forEach(a => {
+    if (!a.online) al.push(`${a.nick} está fora do jogo`);
+    if (a.ciclos) al.push(`${a.nick} ficou preso repetindo uma ação ${a.ciclos}x (já se corrigiu)`);
+    Object.entries(a.falhas || {}).forEach(([k, n]) => { if (n >= 3) al.push(`${a.nick}: "${nomeAtiv(k)}" falhou ${n}x seguidas`); });
+  });
+  document.getElementById("alertas").innerHTML = al.length ? al.slice(0, 10).map(t => `<div class="alerta">${esc(t)}</div>`).join("") : `<p style="margin:0;color:var(--vida)">Tudo certo: ninguém travado.</p>`;
+  document.getElementById("ultimasGeral").innerHTML = linhaDoTempo((at.ultimas || []).slice(0, 10));
+}
+function linhaDoTempo(l) {
+  if (!l.length) return `<p style="margin:0;color:var(--apagado)">Sem decisões ainda.</p>`;
+  return `<table><thead><tr><th>HORA</th><th>JOGADOR</th><th>DECIDIU</th><th>RESULTADO</th></tr></thead><tbody>` + l.map(d =>
+    `<tr><td>${new Date(d.t * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</td><td>${esc(d.nick)}</td>
+     <td>${esc(nomeAtiv(d.atividade))}${d.variante ? " (" + esc(d.variante) + ")" : ""}</td>
+     <td class="${d.ok ? "ok" : "ruim"}">${d.ok ? "deu certo" : "falhou"}${d.recompensa ? " · " + fmt(d.recompensa) : ""}</td></tr>`).join("") + `</tbody></table>`;
+}
+function jogadores(p) {
+  const ag = (p.ia && p.ia.agentes) || [];
+  const box = document.getElementById("cards");
+  box.innerHTML = ag.map(a => `<button class="card" type="button" data-nick="${esc(a.nick)}">
+    <canvas width="10" height="15" data-nick="${esc(a.nick)}" data-cla="${esc(a.grupo)}" aria-hidden="true"></canvas>
+    <span class="n" style="color:${corDe(a.grupo)}">${esc(a.nick)}</span>
+    <span class="d"><span class="chip ${a.online ? "on" : "off"}">${a.online ? "ON" : "OFF"}</span>${esc(a.perfil)}${a.perfil !== a.perfil_inicial ? " ↺" : ""}</span>
+    <span class="d">${esc(nomeAtiv(a.atividade))} · ${esc(a.rank || "—")} · ${fmt(a.renda || 0)}/min</span></button>`).join("") || `<p class="vazio">Os agentes aparecem aqui na próxima rodada.</p>`;
+  box.querySelectorAll("canvas").forEach(cv => boneco(cv.getContext("2d"), 0, 0, aparencia(cv.dataset.nick, corDe(cv.dataset.cla)), 0, "parado", false));
+  box.querySelectorAll(".card").forEach(c => c.onclick = () => { FICHA = c.dataset.nick; ficha(p); document.getElementById("ficha").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  ficha(p);
+}
+function ficha(p) {
+  const box = document.getElementById("ficha");
+  const a = ((p.ia && p.ia.agentes) || []).find(x => x.nick === FICHA);
+  if (!a) { box.innerHTML = `<p style="color:var(--apagado);margin:0 0 4px">Toque num jogador pra ver a ficha completa.</p>`; return; }
+  const falta = a.need ? Math.max(0, a.need[0] - (a.coins || 0)) : null;
+  const setores = Object.entries(a.variantes || {}).filter(([k]) => k.startsWith("minerar:")).map(([k, v]) => ({ r: k.split(":")[1], v: v.media, t: `${fmt(v.media)}/min (${v.n}x)` }));
+  const pic = Object.entries(a.variantes || {}).filter(([k]) => k.startsWith("picareta:")).map(([k, v]) => ({ r: k.split(":")[1], v: v.media, t: `${v.media > 0 ? "+" : ""}${fmt(v.media)}/min` }));
+  box.innerHTML = `<article class="ficha">
+    <div class="ficha-top"><canvas width="10" height="15" id="fichaAv" aria-hidden="true"></canvas>
+      <div><h3 style="color:${corDe(a.grupo)}">${esc(a.nick)}</h3><div class="d" style="font-size:14px">${esc(a.grupo)} · começou ${esc(a.perfil_inicial)}, hoje ${esc(a.perfil)} · confia ${Math.round(a.confia * 100)}% no coletivo</div></div>
+      <button type="button" id="fecharFicha">FECHAR</button></div>
+    <dl class="kpis" style="padding:10px 12px">
+      <div class="kpi"><dt>Rank</dt><dd>${esc(a.rank || "—")}</dd><small>${falta != null ? `faltam ${fmt(falta)}` : "custo ainda não lido"}</small></div>
+      <div class="kpi"><dt>Coins</dt><dd>${fmt(a.coins || 0)}</dd><small>${fmt(a.renda || 0)}/min</small></div>
+      <div class="kpi"><dt>Tokens</dt><dd>${fmt(a.tokens || 0)}</dd><small>${fmt(a.blocos || 0)} blocos</small></div>
+      <div class="kpi"><dt>Decisões</dt><dd>${a.decisoes}</dd><small>${a.taxa_sucesso}% certas · ${a.online_min} min online</small></div>
+    </dl>
+    <div class="grade-f">
+      <div><h4>OBJETIVOS</h4><ul><li>Curto: ${esc((a.objetivos || {}).curto || "—")}</li><li>Médio: ${esc((a.objetivos || {}).medio || "—")}</li><li>Longo: ${esc((a.objetivos || {}).longo || "—")}</li></ul></div>
+      <div><h4>PERSONALIDADE (MUDA COM A EXPERIÊNCIA)</h4>${barras(Object.entries(a.tracos || {}).map(([k, v]) => ({ r: TRACOS[k] || k, v: v * 100, t: Math.round(v * 100) + "%", c: corDe(a.grupo) })))}</div>
+      <div><h4>QUANTO CADA ATIVIDADE RENDEU PRA ELE</h4>${barras(Object.entries(a.valor || {}).map(([k, v]) => ({ r: nomeAtiv(k), v: v.media, t: `${fmt(v.media)} (${v.n}x)` })).sort((x, y) => y.v - x.v))}</div>
+      <div><h4>SETORES DA MINA</h4>${barras(setores, { vazio: "Ainda testando os setores." })}<h4 style="margin-top:12px">COMPRAS NA PICARETA</h4>${barras(pic, { vazio: "Nenhuma compra medida ainda." })}</div>
+      <div><h4>O QUE ELE SABE</h4><ul>${(a.conhece || []).slice().reverse().map(f => `<li>${esc(f)}</li>`).join("") || "<li>Nada ainda.</li>"}</ul></div>
+      <div><h4>ÚLTIMAS DECISÕES</h4><ul>${(a.historico || []).slice().reverse().map(h => `<li class="${/falhou/.test(h) ? "ruim" : ""}">${esc(h.replace(/(\w+):/, (m, x) => nomeAtiv(x) + ":"))}</li>`).join("") || "<li>—</li>"}</ul>
+        ${Object.keys(a.falhas || {}).length ? `<h4 style="margin-top:12px">FALHAS RECENTES</h4><ul>${Object.entries(a.falhas).map(([k, n]) => `<li class="ruim">${esc(nomeAtiv(k))}: ${n}x</li>`).join("")}</ul>` : ""}</div>
+    </div></article>`;
+  boneco(document.getElementById("fichaAv").getContext("2d"), 0, 0, aparencia(a.nick, corDe(a.grupo)), 0, "parado", false);
+  document.getElementById("fecharFicha").onclick = () => { FICHA = null; ficha(p); };
+}
+function inteligenciaIA(p) {
+  const ia = (p.ia && p.ia.inteligencia) || {};
+  const conf = k => `${k.n} obs. · confiança ${Math.round(k.confianca * 100)}% · 1º: ${k.origem}`;
+  document.getElementById("kpisIA").innerHTML = [
+    ["Conhecimento validado", `${ia.validados || 0}`, `de ${ia.total || 0} registros`],
+    ["Minérios medidos", String((ia.minerios || []).length), "valor por bloco"],
+    ["Setores testados", String((ia.setores || []).length), "de 4 quartos da mina"],
+    ["Fatos confirmados", String((ia.fatos || []).filter(f => f.n >= 2).length), "por 2+ jogadores"],
+  ].map(([t, v, d]) => `<div class="kpi"><dt>${t}</dt><dd>${v}</dd><small>${d}</small></div>`).join("");
+  document.getElementById("minerios").innerHTML = barras((ia.minerios || []).map(k => ({ r: BLOCOS[k.chave] || "Bloco " + k.chave, v: k.media, t: `${k.media.toFixed(1)}/bloco`, dica: conf(k) })).sort((a, b) => b.v - a.v), { vazio: "Medindo quanto cada bloco vale." });
+  document.getElementById("setores").innerHTML = barras((ia.setores || []).map(k => ({ r: k.chave.replace("setor", "Setor "), v: k.media, t: `${fmt(k.media)}/min · ${k.n}x`, dica: conf(k) })).sort((a, b) => b.v - a.v), { vazio: "Ainda testando." });
+  document.getElementById("valorAtiv").innerHTML = barras((ia.atividades || []).map(k => ({ r: nomeAtiv(k.chave), v: k.media, t: `${fmt(k.media)} · ${k.n}x`, dica: conf(k) })).sort((a, b) => b.v - a.v));
+  document.getElementById("equip").innerHTML = barras((ia.equipamentos || []).map(k => ({ r: k.chave, v: k.media, t: `${k.media > 0 ? "+" : ""}${fmt(k.media)}/min · ${k.n}x`, dica: conf(k) })), { vazio: "Esperando compras na picareta serem medidas (8 min depois)." });
+  const f = (ia.fatos || []).filter(x => x.n >= 2);
+  document.getElementById("fatosIA").innerHTML = f.length ? `<table><thead><tr><th>FATO</th><th>CONFIRMAÇÕES</th><th>QUEM VIU PRIMEIRO</th></tr></thead><tbody>` +
+    f.map(x => `<tr><td style="white-space:normal">${esc(x.texto)}</td><td class="num">${x.n}</td><td>${esc(x.origem)}</td></tr>`).join("") + `</tbody></table>` : `<p style="margin:0;color:var(--apagado)">Nenhum fato confirmado por 2 jogadores ainda.</p>`;
+}
+function atividadesIA(p) {
+  const at = (p.ia && p.ia.atividades) || {};
+  document.getElementById("porAtiv").innerHTML = barras((at.por_atividade || []).map(x => ({ r: nomeAtiv(x.atividade), v: x.n,
+    t: `${x.n}x · ${Math.round(100 * x.ok / Math.max(1, x.n))}% ok`, c: x.ok / Math.max(1, x.n) < .5 ? "var(--perigo)" : "var(--vida)" })));
+  document.getElementById("ritmo").innerHTML = barras((at.ritmo || []).slice(-12).map(x => ({ r: new Date(x.t * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), v: x.n, t: `${x.n} decisões` })), { vazio: "Sem histórico ainda." });
+  document.getElementById("linha").innerHTML = linhaDoTempo((at.ultimas || []).slice(0, 60));
+}
 function mostrar(p) {
   painel = p;
   montar(p.ao_vivo);
   graficos(p.historico || []);
   aprendizado(p.aprendizado || {}, p.ao_vivo);
+  try { visaoGeral(p); jogadores(p); inteligenciaIA(p); atividadesIA(p); } catch (e) { console.error(e); }
 }
 function graficos(h) {
   const box = document.getElementById("graficos");
@@ -398,8 +622,8 @@ function graficos(h) {
     const vs = linhas.map(x => x[campo] || 0), hi = Math.max(1, ...vs) * 1.08, lo = campo === "nivel_max" ? Math.max(0, Math.min(...vs) - 1) : 0;
     const X = t => L + (t - t0) / Math.max(1, t1 - t0) * (W - L - 6), Y = v => 6 + (1 - (v - lo) / (hi - lo || 1)) * (H - B - 6);
     let svg = `<line x1="${L}" x2="${W - 6}" y1="${H - B}" y2="${H - B}" stroke="#3d3558"/>`;
-    [lo, (lo + hi) / 2, hi].forEach(v => svg += `<text x="${L - 4}" y="${Y(v) + 4}" text-anchor="end" fill="#a69fbd" font-size="11" font-family="VT323">${f(v)}</text>`);
-    svg += `<text x="${L}" y="${H - 2}" fill="#a69fbd" font-size="11" font-family="VT323">${new Date(t0 * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</text><text x="${W - 6}" y="${H - 2}" text-anchor="end" fill="#a69fbd" font-size="11" font-family="VT323">${new Date(t1 * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</text>`;
+    [lo, (lo + hi) / 2, hi].forEach(v => svg += `<text x="${L - 4}" y="${Y(v) + 4}" text-anchor="end" fill="#a69fbd" font-size="10" font-family="Rubik, Arial, sans-serif">${f(v)}</text>`);
+    svg += `<text x="${L}" y="${H - 2}" fill="#a69fbd" font-size="10" font-family="Rubik, Arial, sans-serif">${new Date(t0 * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</text><text x="${W - 6}" y="${H - 2}" text-anchor="end" fill="#a69fbd" font-size="10" font-family="Rubik, Arial, sans-serif">${new Date(t1 * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</text>`;
     gr.forEach(g => {
       const pts = linhas.filter(x => x.grupo === g).sort((a, b) => a.t - b.t);
       const d = pts.map((p, i) => (i ? (campo === "nivel_max" ? `H${X(p.t).toFixed(1)} V` : `L${X(p.t).toFixed(1)} `) : `M${X(p.t).toFixed(1)} `) + Y(p[campo] || 0).toFixed(1)).join(" ");
